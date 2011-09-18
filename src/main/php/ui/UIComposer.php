@@ -80,7 +80,7 @@ class UIComposer
 		$atRows = '';
 		if ($this->security->isViewAttachmentsAllowed())
 		{
-			if (isset($attachmentRows))
+			if (isset($attachmentRows) && (count($attachmentRows) > 0))
 			{
 				foreach($attachmentRows as $row)
 				{
