@@ -141,7 +141,7 @@ class RequestHandler
 
 	function onSkinAfterBottomScripts($skin, &$text)
 	{
-		$this->webBrowser->registerOnLoadHook($skin, $text);
+		//$this->webBrowser->registerOnLoadHook($skin, $text);
 		return true;
 	}
 
