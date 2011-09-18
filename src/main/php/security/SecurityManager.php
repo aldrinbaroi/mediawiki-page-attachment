@@ -145,35 +145,35 @@ class SecurityManager
 			{
 				# Check if all groups are allowed to perform the specific action
 				if (isset($wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL]))
+			{
+				$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL];
+			}
+			# Check if user's one of the effective groups are allowed to perform
+			# the specific action
+			if (!$actionAllowed)
+			{
+				$effectiveGroups = $wgUser->getEffectiveGroups();
+				foreach($effectiveGroups as $group)
 				{
-					$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL];
-				}
-				# Check if user's one of the effective groups are allowed to perform
-				# the specific action
-				if (!$actionAllowed)
-				{
-					$effectiveGroups = $wgUser->getEffectiveGroups();
-					foreach($effectiveGroups as $group)
+					if (isset($wgPageAttachment_permissions[$action][PA_GROUP][$group]))
 					{
-						if (isset($wgPageAttachment_permissions[$action][PA_GROUP][$group]))
+						$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][$group];
+						if ($actionAllowed == true)
 						{
-							$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][$group];
-							if ($actionAllowed == true)
-							{
-								break;
-							}
+							break;
 						}
 					}
 				}
-				# Check if this user is allowed to perform the specific action
-				if (!$actionAllowed)
+			}
+			# Check if this user is allowed to perform the specific action
+			if (!$actionAllowed)
+			{
+				$userId = $wgUser->getName();
+				if (isset($wgPageAttachment_permissions[$action][PA_USER][$userId]))
 				{
-					$userId = $wgUser->getName(); 
-					if (isset($wgPageAttachment_permissions[$action][PA_USER][$userId]))
-					{
-						$actionAllowed = $wgPageAttachment_permissions[$action][PA_USER][$userId];
-					}
+					$actionAllowed = $wgPageAttachment_permissions[$action][PA_USER][$userId];
 				}
+			}
 			}
 		}
 		else
@@ -285,27 +285,36 @@ class SecurityManager
 			return false;
 		}
 	}
-	
+
 	function isAuditLogViewRequireLogin()
 	{
 		return $this->isLoginRequired(PA_VIEW_AUDIT_LOG);
 	}
-	
+
 	function isAuditLogViewAllowed()
 	{
-		return $this->isAllowed(PA_VIEW_AUDIT_LOG);
+		global $wgPageAttachment_enableAuditLog;
+
+		if (isset($wgPageAttachment_enableAuditLog) && $wgPageAttachment_enableAuditLog == true)
+		{
+			return $this->isAllowed(PA_VIEW_AUDIT_LOG);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	function isHistoryViewRequireLogin()
 	{
 		return $this->isLoginRequired(PA_VIEW_HISTORY_LOG);
 	}
-	
+
 	function isHistoryViewAllowed()
 	{
 		return $this->isAllowed(PA_VIEW_HISTORY_LOG);
 	}
-	
+
 	function newRequestValidationToken()
 	{
 		$requestValidationToken = hash('sha256', dechex(mt_rand()));
