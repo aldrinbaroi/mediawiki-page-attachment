@@ -37,6 +37,7 @@
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
 	<target name="distribute">
+		<delete file="${distribution.zipfile}" />
 		<zip destfile="${distribution.zipfile}">
 			<zipfileset dir="${source.main.dir}" prefix="${extension.name}" />
 			<zipfileset dir="${resources.main.dir}" prefix="${extension.name}" />
