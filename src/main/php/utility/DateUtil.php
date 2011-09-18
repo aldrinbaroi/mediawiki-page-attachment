@@ -116,7 +116,7 @@ class DateUtil
 			$tzName = $tzUser->getName();
 			if ($tzName == 'UTC')
 			{
-				$tzNameUserLang = \wfMsg($tzName);
+				$tzNameUserLang = \wfMsg('utc');
 			}
 			else
 			{
