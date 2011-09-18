@@ -1,0 +1,246 @@
+<?php
+/**
+ *
+ * Copyright (C) 2011 Aldrin Edison Baroi
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the
+ *     Free Software Foundation, Inc.,
+ *     51 Franklin Street, Fifth Floor
+ *     Boston, MA 02110-1301, USA.
+ *     http://www.gnu.org/copyleft/gpl.html
+ *
+ * @category   MediaWiki Extension
+ * @package    PageAttachment
+ * @author     Aldrin Edison Baroi <aldrin.baroi@gmail.com>
+ * @copyright  Copyright (C) 2011 Aldrin Edison Baroi
+ * @license    http://www.gnu.org/copyleft/gpl.html   GPL License 3.0 or later
+ * @version    SVN: $Id$
+ * @since      File available since Release 1.0
+ * 
+ */
+
+namespace PageAttachment;
+
+if (!defined('MEDIAWIKI'))
+{
+	echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
+	exit( 1 );
+}
+
+class RequestHandler
+{
+	private $pageURL = '';
+	private $pageId = -1;
+	private $pageNS = -1;
+	private $page;
+	private $requestHelper;
+	private $security;
+	private $session;
+	private $attachmentManager;
+	private $webBrowser;
+	private $resource;
+	private $auditLogManager;
+	private $downloadManager;
+
+	function __construct()
+	{
+		$this->requestHelper = new \PageAttachment\Request\RequestHelper();
+		$this->security = new \PageAttachment\Security\SecurityManager();
+		$this->session = new \PageAttachment\Session\Session($this->security);
+		$this->auditLogManager = new \PageAttachment\AuditLog\AuditLogManager();
+		$this->attachmentManager = new \PageAttachment\Attachment\AttachmentManager($this->security, $this->session, $this->auditLogManager);
+		$this->resource = new \PageAttachment\UI\Resource($this->security, $this->session);
+		$this->webBrowser = new \PageAttachment\UI\WebBrowser($this->security, $this->requestHelper, $this->session, $this->attachmentManager, $this->resource);
+		$this->downloadManager = new \PageAttachment\Download\DownloadManager($this->security, $this->session, $this->attachmentManager);
+	}
+
+	function setupDatabase()
+	{
+			
+		$databaseHelper = new \PageAttachment\Setup\SetupDatabase();
+		$databaseHelper->setupDatabase();
+		return true;
+	}
+
+	function onBeforeInitialize(&$title, &$article, &$output, &$user, $request, $mediaWiki)
+	{
+		global $wgRequest;
+
+		$action = $wgRequest->getVal('action');
+		$currentViewPage = new \PageAttachment\Session\Page($title);
+		$viewPageId = $currentViewPage->getId();
+		$viewPageNS = $currentViewPage->getNameSpace();
+		$viewPageTitle = $currentViewPage->getPrefixedURL();
+
+		// Set attach to page
+		if ($viewPageTitle == 'Special:PageAttachmentUpload'
+		|| $viewPageTitle == 'Special:PageAttachmentListFiles'
+		|| $viewPageTitle == 'Special:PageAttachmentAuditLogViewer')
+		{
+			$previousPage = $this->session->getCurrentPage();
+			$this->session->setAttachToPage($previousPage);
+		}
+		// For Browse/Search & attach attachment function
+		if ($action == 'AttachFile')
+		{
+			$this->attachmentManager->attachExistingFile($title, $article, $output, $user, $request, $mediaWiki);
+		}
+		if ($viewPageId > 0)
+		{
+			$this->session->setCurrentPage($currentViewPage);
+			$this->session->setViewPageSpecial(false);
+		}
+		else
+		{
+			if (preg_match('/^Special/', $viewPageTitle))
+			{
+				$this->session->setViewPageSpecial(true);
+			}
+			else
+			{
+				$this->session->setCurrentPage(null);
+			}
+		}
+		return true;
+	}
+
+	function onEditPageImportFormData($editpage, $request)
+	{
+		$this->requestHelper->setPageMode($editpage, $request);
+		return true;
+	}
+
+	function onArticleSaveComplete(&$article, &$user, $text, $summary, $minoredit, $watchthis, $sectionanchor, &$flags, $revision, &$status, $baseRevId, &$redirect)
+	{
+		$this->session->setForceReload(true);
+		return true;
+	}
+
+	function onBeforePageDisplay(&$out, &$sk)
+	{
+		$this->webBrowser->addResources($out, $sk);
+		return true;
+	}
+
+	function onSkinAfterContent(&$data)
+	{
+		$this->webBrowser->setupAttachmentListSection($data);
+		return true;
+	}
+
+	function onSkinAfterBottomScripts($skin, &$text)
+	{
+		$this->webBrowser->registerOnLoadHook($skin, $text);
+		return true;
+	}
+
+	function onUploadComplete(&$image)
+	{
+		$this->attachmentManager->attachUploadedFile($image);
+		return true;
+	}
+
+	function onSpecialUploadComplete($form)
+	{
+		$this->webBrowser->setRedirectPage($form);
+		$this->session->setUploadAndAttachFileInitiated(false);
+		$this->session->setAttachToPage(null);
+		$this->security->setDownloadRequestValid(false);
+		return true;
+	}
+
+	/**
+	 * Fulfils Ajax request to remove page attachment
+	 *
+	 */
+	function removeAttachment($pageTitle, $attachmentName, $rvt)
+	{
+		$this->attachmentManager->removeAttachment($attachmentName, $rvt);
+		return $this->webBrowser->renderAttachmentList($pageTitle);
+	}
+
+	/**
+	 * Fulfils Ajax request get attachment list for a page
+	 *
+	 */
+	function getAttachments($pageTitle)
+	{
+		return $this->webBrowser->renderAttachmentList($pageTitle);
+	}
+
+	function onUserLoginComplete(&$user, &$inject_html)
+	{
+		$this->session->setLoginLogoutTime();
+		$this->session->setForceReload(true);
+		// Need this, since when auto redirected to the original page, browser doesn't execute
+		// the javascript to load the page attachment list <-- why?. Need a way to fix this
+		// without forcing display of successfull login page.
+		$inject_html = '<br/>';
+		return true;
+	}
+
+	function onUserLogoutComplete(&$user, &$inject_html, $old_name)
+	{
+		$this->session->setLoginLogoutTime();
+		$this->session->setForceReload(true);
+		return true;
+	}
+
+	function sendRequestedFile()
+	{
+		$this->downloadManager->sendRequestedFile();
+	}
+
+	function onArticleDelete(Article &$article, User &$user, &$reason, &$error)
+	{
+		$title  = $article->getTitle();
+		$page = new \PageAttachment\Session\Page($title);
+		if ($page->getNameSpace() == NS_FILE)
+		{
+			$this->session->storeDeletedFileInfo($page);
+		}
+		return true;
+	}
+
+
+	function onFileDeleteComplete($file, $oldimage, $article, $user, $reason)
+	{
+		if (isset($article))
+		{
+			$page = $this->session->retrieveDeletedFileInfo();
+			if (isset($page))
+			{
+				$this->attachmentManager->removeDeletedAttachment($page);
+			}
+			else
+			{
+				// Something went wrong!
+				// Should or, Should not set PageAttachment status message; since, this funciton was triggered
+				// as a result of MediaWiki's image deletion action ?
+				\wfDebugLog("PageAttachment", "File [] was being deleted, however, article info not set in session!");
+			}
+		}
+		return true;
+	}
+
+	function onFileUndeleteComplete($file, $fileVersions, $user, $reason)
+	{
+		$page = new \PageAttachment\Session\Page($file);
+		$this->attachmentManager->restoreDeletedAttachment($page, $user);
+		return true;
+	}
+
+}
+
+## :: END ::
