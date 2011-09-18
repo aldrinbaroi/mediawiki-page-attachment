@@ -127,4 +127,8 @@ function pageAttachment_registerOnPageShow()
 		};
 	}
 }
+
+pageAttachment_registerOnLoad(); 
+pageAttachment_registerOnPageShow();
+
 // ::End::
