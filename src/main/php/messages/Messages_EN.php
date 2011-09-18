@@ -87,7 +87,7 @@ $messages['en'] = array(
     'activity_type'                            => 'Activity',
     'activity_detail'                          => 'Activity Detail',
     //
-    'UTC'                                      => 'UTC',
+    'utc'                                      => 'UTC',
     'unableToDetermineDownloadFromPage'        => 'Unable to Determine Download from Page',
     'unableToDetermineDownloadFileName'        => 'Unable to Determine Download File Name',
     'requestedDownloadFileDoesNotExist'        => 'Requested Download File Does Not Exist',
