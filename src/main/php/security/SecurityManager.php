@@ -50,8 +50,12 @@ define('PA_USER',              'user');
 
 class SecurityManager
 {
+	private $mediaWikiSecurityManager;
+
 	function __construct()
 	{
+		$factory = new \PageAttachment\Security\MediaWiki\MediaWikiSecurityManagerFactory();
+		$this->mediaWikiSecurityManager = $factory->createMediaWikiSecurityManager();
 	}
 
 	function isPageInAllowedNameSpaces($pageId, $pageNS)
@@ -78,7 +82,7 @@ class SecurityManager
 	// Check if upload is enabled in MediaWiki configuration
 	private function isUploadEnabled()
 	{
-		if(\UploadBase::isEnabled())
+		if ($this->mediaWikiSecurityManager->isUploadEnabled())
 		{
 			return true;
 		}
@@ -86,16 +90,23 @@ class SecurityManager
 		{
 			return false;
 		}
+
 	}
 
 	// Check if upload is allowed in MediaWiki configuration
 	private function isUploadAllowed()
 	{
-		global $wgUser;
-
-		if( $wgUser->isAllowed('upload') && !$wgUser->isBlocked() && !\wfReadOnly())
+		if ($this->mediaWikiSecurityManager->isUploadAllowed() == true)
 		{
-			return true;
+			if ($this->mediaWikiSecurityManager->isUserBlocked() ||
+			$this->mediaWikiSecurityManager->isWikiInReadonlyMode())
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 		else
 		{
@@ -132,7 +143,6 @@ class SecurityManager
 		return ($loginRequired == true) ? true : false;
 	}
 
-	// No MediaWiki permission check -- Specifically needed for view permission check
 	private function __isAllowed($action)
 	{
 		global $wgUser;
@@ -143,37 +153,37 @@ class SecurityManager
 		{
 			if ($this->isLoggedIn())
 			{
-				# Check if all groups are allowed to perform the specific action
+				// Check if all groups are allowed to perform the specific action
 				if (isset($wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL]))
-			{
-				$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL];
-			}
-			# Check if user's one of the effective groups are allowed to perform
-			# the specific action
-			if (!$actionAllowed)
-			{
-				$effectiveGroups = $wgUser->getEffectiveGroups();
-				foreach($effectiveGroups as $group)
 				{
-					if (isset($wgPageAttachment_permissions[$action][PA_GROUP][$group]))
+					$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL];
+				}
+				// Check if user's one of the effective groups are allowed to perform
+				// the specific action
+				if (!$actionAllowed)
+				{
+					$effectiveGroups = $wgUser->getEffectiveGroups();
+					foreach($effectiveGroups as $group)
 					{
-						$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][$group];
-						if ($actionAllowed == true)
+						if (isset($wgPageAttachment_permissions[$action][PA_GROUP][$group]))
 						{
-							break;
+							$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][$group];
+							if ($actionAllowed == true)
+							{
+								break;
+							}
 						}
 					}
 				}
-			}
-			# Check if this user is allowed to perform the specific action
-			if (!$actionAllowed)
-			{
-				$userId = $wgUser->getName();
-				if (isset($wgPageAttachment_permissions[$action][PA_USER][$userId]))
+				// Check if this user is allowed to perform the specific action
+				if (!$actionAllowed)
 				{
-					$actionAllowed = $wgPageAttachment_permissions[$action][PA_USER][$userId];
+					$userId = $wgUser->getName();
+					if (isset($wgPageAttachment_permissions[$action][PA_USER][$userId]))
+					{
+						$actionAllowed = $wgPageAttachment_permissions[$action][PA_USER][$userId];
+					}
 				}
-			}
 			}
 		}
 		else
@@ -220,7 +230,9 @@ class SecurityManager
 
 		if ($wgEnableUploads == true)
 		{
-			if ($this->isViewAttachmentsAllowed())
+			if ($this->isViewAttachmentsAllowed()
+			&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
+			&& !$this->mediaWikiSecurityManager->isUserBlocked())
 			{
 				return $this->isAllowed(PA_UPLOAD_AND_ATTACH);
 			}
@@ -242,7 +254,9 @@ class SecurityManager
 
 	function isBrowseSearchAttachAllowed()
 	{
-		if ($this->isViewAttachmentsAllowed())
+		if ($this->isViewAttachmentsAllowed()
+		&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
+		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
 			return $this->isAllowed(PA_BROWSE_SEARCH);
 		}
@@ -259,7 +273,9 @@ class SecurityManager
 
 	function isAttachmentRemovalAllowed()
 	{
-		if ($this->isViewAttachmentsAllowed())
+		if ($this->isViewAttachmentsAllowed()
+		&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
+		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
 			return $this->isAllowed(PA_REMOVE);
 		}
@@ -276,7 +292,8 @@ class SecurityManager
 
 	function isAttachmentDownloadAllowed()
 	{
-		if ($this->isViewAttachmentsAllowed())
+		if ($this->isViewAttachmentsAllowed()
+		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
 			return $this->isAllowed(PA_DOWNLOAD);
 		}
@@ -295,7 +312,10 @@ class SecurityManager
 	{
 		global $wgPageAttachment_enableAuditLog;
 
-		if (isset($wgPageAttachment_enableAuditLog) && $wgPageAttachment_enableAuditLog == true)
+		if (isset($wgPageAttachment_enableAuditLog)
+		&& $wgPageAttachment_enableAuditLog == true
+		&& $this->isViewAttachmentsAllowed()
+		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
 			return $this->isAllowed(PA_VIEW_AUDIT_LOG);
 		}
@@ -312,7 +332,15 @@ class SecurityManager
 
 	function isHistoryViewAllowed()
 	{
-		return $this->isAllowed(PA_VIEW_HISTORY_LOG);
+		if ($this->isViewAttachmentsAllowed()
+		&& !$this->mediaWikiSecurityManager->isUserBlocked())
+		{
+			return $this->isAllowed(PA_VIEW_HISTORY_LOG);
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	function newRequestValidationToken()
