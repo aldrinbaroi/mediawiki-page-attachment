@@ -41,7 +41,7 @@ class MediaWikiSecurityManager
 
 	function isWikiInReadonlyMode()
 	{
-		if (wfReadOnly() == true)
+		if (\wfReadOnly() == true)
 		{
 			return true;
 		}

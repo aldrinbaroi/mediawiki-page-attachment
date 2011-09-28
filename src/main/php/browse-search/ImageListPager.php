@@ -32,7 +32,7 @@ if (!defined('MEDIAWIKI'))
 
 define('PA_FN__ADD_ATTACHMENT', 'AddAttachment');
 
-class PageAttachmentImageListPager extends \ImageListPager
+class ImageListPager extends \ImageListPager
 {
 
 	private $security;

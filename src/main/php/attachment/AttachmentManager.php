@@ -295,8 +295,8 @@ class AttachmentManager
 				}
 				catch(Exception $e)
 				{
-					wfDebugLog('PageAttachment','Failed to remove attachment link');
-					wfDebugLog('PageAttachment','DB Error: ' . $e->getMessage());
+					\wfDebugLog('PageAttachment','Failed to remove attachment link');
+					\wfDebugLog('PageAttachment','DB Error: ' . $e->getMessage());
 					$this->session->setStatusMessage('FailedToRemoveAttachment');
 				}
 			}

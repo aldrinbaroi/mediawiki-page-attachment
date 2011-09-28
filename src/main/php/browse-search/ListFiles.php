@@ -30,7 +30,7 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class PageAttachmentListFiles extends \SpecialPage
+class ListFiles extends \SpecialPage
 {
 
 	function __construct()
@@ -63,11 +63,11 @@ class PageAttachmentListFiles extends \SpecialPage
 			else
 			{
 				$this->setHeaders();
-				$pager = new PageAttachmentImageListPager();
+				$pager = new ImageListPager();
 				$limit = $pager->getForm();
 				$body = $pager->getBody();
 				$nav = $pager->getNavigationBar();
-				$msgAttachToPageName = wfMsg('AttachToPageName', $pageTitle);
+				$msgAttachToPageName = \wfMsg('AttachToPageName', $pageTitle);
 				$wgOut->addHTML("$limit<br />\n$body<br />\n$nav");
 			}
 		}

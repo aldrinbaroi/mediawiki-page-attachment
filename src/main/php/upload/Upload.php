@@ -30,7 +30,7 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class PageAttachmentUpload extends \SpecialUpload
+class Upload extends \SpecialUpload
 {
 
 	function __construct()
@@ -73,7 +73,7 @@ class PageAttachmentUpload extends \SpecialUpload
 
 				if ($abort == true)
 				{
-					$title = Title::newFromText($attachToPage->getPageTitle());
+					$title = \Title::newFromText($attachToPage->getPageTitle());
 					$wgOut->redirect($title->getFullURL());
 				}
 				else
@@ -87,7 +87,7 @@ class PageAttachmentUpload extends \SpecialUpload
 		else
 		{
 			$session->setStatusMessage('UnableToDetermineAttachToPage');
-			$title = Title::newFromText("Main_Page");
+			$title = \Title::newFromText("Main_Page");
 			$wgOut->redirect($title->getFullURL());
 		}
 	}

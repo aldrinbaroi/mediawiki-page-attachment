@@ -190,11 +190,11 @@ class Session
 		{
 			if (isset($messageArg))
 			{
-				$message = wfMsgNoTrans($messageKey, $messageArg);
+				$message = \wfMsgNoTrans($messageKey, $messageArg);
 			}
 			else
 			{
-				$message = wfMsg($messageKey);
+				$message = \wfMsg($messageKey);
 			}
 			$_SESSION[PA_MESSAGE] = $message;
 		}

@@ -90,9 +90,9 @@ $wgAutoloadClasses['PageAttachment\\Session\\Page']                             
 $wgAutoloadClasses['PageAttachment\\Attachment\\AttachmentData']                  = $dir . 'attachment/AttachmentData.php';
 $wgAutoloadClasses['PageAttachment\\Attachment\\AttachmentDataFactory']           = $dir . 'attachment/AttachmentDatafactory.php';
 $wgAutoloadClasses['PageAttachment\\Attachment\\AttachmentManager']               = $dir . 'attachment/AttachmentManager.php';
-$wgAutoloadClasses['PageAttachment\\BrowseSearch\\PageAttachmentImageListPager']  = $dir . 'browse-search/ImageListPager.php';
-$wgAutoloadClasses['PageAttachment\\BrowseSearch\\PageAttachmentListFiles']       = $dir . 'browse-search/ListFiles.php';
-$wgAutoloadClasses['PageAttachment\\Upload\\PageAttachmentUpload']                = $dir . 'upload/Upload.php';
+$wgAutoloadClasses['PageAttachment\\BrowseSearch\\ImageListPager']                = $dir . 'browse-search/ImageListPager.php';
+$wgAutoloadClasses['PageAttachment\\BrowseSearch\\ListFiles']                     = $dir . 'browse-search/ListFiles.php';
+$wgAutoloadClasses['PageAttachment\\Upload\\Upload']                              = $dir . 'upload/Upload.php';
 $wgAutoloadClasses['PageAttachment\\Download\\FileStreamer']                      = $dir . 'download/FileStreamer.php';
 $wgAutoloadClasses['PageAttachment\\Download\\DownloadManager']                   = $dir . 'download/DownloadManager.php';
 $wgAutoloadClasses['PageAttachment\\UI\\HTML']                                    = $dir . 'ui/HTML.php';
@@ -127,8 +127,8 @@ $wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\get
 $wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachment';
 
 ## Special Pages (Unlisted)
-$wgSpecialPages['PageAttachmentListFiles']        = '\\PageAttachment\\BrowseSearch\\PageAttachmentListFiles';
-$wgSpecialPages['PageAttachmentUpload']           = '\\PageAttachment\\Upload\PageAttachmentUpload';
+$wgSpecialPages['PageAttachmentListFiles']        = '\\PageAttachment\\BrowseSearch\\ListFiles';
+$wgSpecialPages['PageAttachmentUpload']           = '\\PageAttachment\\Upload\\Upload';
 $wgSpecialPages['PageAttachmentAuditLogViewer']   = '\\PageAttachment\\AuditLog\\AuditLogViewer';
 
 ## ::END::

@@ -59,12 +59,12 @@ class AuditLogPager extends \TablePager
 			global $wgMiserMode;
 
 			$this->mFieldNames = array(
-				'attached_to_page_id'  => wfMsg('attached_to_page_id'),
-				'attachment_file_name' => wfMsg('attachment_file_name'),
-				'user_id'              => wfMsg('user_id'),
-				'activity_time'        => wfMsg('activity_time'),
-				'activity_type'        => wfMsg('activity_type'),
-				'activity_detail'      => wfMsg('activity_detail'),
+				'attached_to_page_id'  => \wfMsg('attached_to_page_id'),
+				'attachment_file_name' => \wfMsg('attachment_file_name'),
+				'user_id'              => \wfMsg('user_id'),
+				'activity_time'        => \wfMsg('activity_time'),
+				'activity_type'        => \wfMsg('activity_type'),
+				'activity_detail'      => \wfMsg('activity_detail'),
 			);
 		}
 		return $this->mFieldNames;

@@ -35,7 +35,7 @@ class FileStreamer
 
 	function streamFile($downloadFileName)
 	{
-		$aTitle = \Title::newFromText($downloadFileName);
+		$aTitle = \Title::newFromText($downloadFileName, NS_FILE);
 		$fileName =  $aTitle->getText();
 		$file = \wfFindFile($aTitle);
 		$fileUrl = $file->getFullUrl(); 

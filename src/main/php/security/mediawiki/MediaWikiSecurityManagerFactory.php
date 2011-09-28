@@ -54,10 +54,10 @@ class MediaWikiSecurityManagerFactory
 				switch($minorVersion)
 				{
 					case 16:
-						$uploadPermissionChecker = new \PageAttachment\Security\MediaWiki\Upload\UploadPermissionChecker_MediaWiki_v1162();
+						$uploadPermissionChecker = new Upload\UploadPermissionChecker_MediaWiki_v1162();
 						break;
 					case 17:
-						$uploadPermissionChecker = new \PageAttachment\Security\MediaWiki\Upload\UploadPermissionChecker_MediaWiki_v1170();
+						$uploadPermissionChecker = new Upload\UploadPermissionChecker_MediaWiki_v1170();
 						break;
 					default:
 						$versionSupported = false;
@@ -73,7 +73,7 @@ class MediaWikiSecurityManagerFactory
 			}
 			else
 			{
-				throw new Exception("MediaWiki version [" + $mwv->getVersion() + "] is not supported!");
+				throw new \Exception("MediaWiki version [" + $mwv->getVersion() + "] is not supported!");
 			}
 		}
 		return $this->mediaWikiSecurityManager;

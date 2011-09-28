@@ -54,7 +54,7 @@ class SecurityManager
 
 	function __construct()
 	{
-		$factory = new \PageAttachment\Security\MediaWiki\MediaWikiSecurityManagerFactory();
+		$factory = new MediaWiki\MediaWikiSecurityManagerFactory();
 		$this->mediaWikiSecurityManager = $factory->createMediaWikiSecurityManager();
 	}
 
