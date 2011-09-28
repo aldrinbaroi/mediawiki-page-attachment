@@ -116,34 +116,34 @@ class Command
 
 	private function getViewAuditLogCommandURL($fileName)
 	{
-		return $this->urlPrefix . 'Special:PageAttachmentAuditLogViewer&attachmentName=' . $fileName . '&rvt=' . $this->rvt;
+		return $this->urlPrefix . 'Special:PageAttachmentAuditLogViewer&rvt=' . $this->rvt . '&attachmentName=' . rawurlencode($fileName);
 	}
 
 	private function getDownloadCommandURL($fileName)
 	{
 		global $wgScriptPath;
 
-		return $wgScriptPath . '/extensions/PageAttachment/download/Download.php?rvt=' . $this->rvt	. '&downloadFileName=' . urlencode($fileName);
+		return $wgScriptPath . '/extensions/PageAttachment/download/Download.php?rvt=' . $this->rvt	. '&downloadFileName=' . rawurlencode($fileName);
 	}
 
 	private function getViewHistoryCommandURL($fileName)
 	{
 		global $wgScriptPath;
 
-		return $wgScriptPath . '/index.php/File:'  . $fileName;
+		return $wgScriptPath . '/index.php/File:'  . rawurldecode($fileName);
 	}
 
 	private function getRemoveAttachmentCommandURL($fileName)
 	{
 		$page = $this->session->getCurrentPage();
 		$pageURL = $page->getURL();
-		return $this->urlPrefix . $pageURL . '&action=RemoveAttachment&rvt=' . $this->rvt . '&attachmentName=' . $fileName;
+		return $this->urlPrefix . $pageURL . '&action=RemoveAttachment&rvt=' . $this->rvt . '&attachmentName=' . rawurlencode($fileName);
 	}
 
 	private function getAttachFileCommandURL($fileName)
 	{
 		$attachToPage = $this->session->getAttachToPage();
-		return $this->urlPrefix . $attachToPage->getRedirectURL() . '&action=AttachFile&rvt=' . $this->rvt . '&fileName=' . $fileName;
+		return $this->urlPrefix . $attachToPage->getRedirectURL() . '&action=AttachFile&rvt=' . $this->rvt . '&fileName=' . rawurlencode($fileName);
 	}
 
 	private static function getViewUserPageCommandURL($userName)
