@@ -30,12 +30,21 @@ class SetupDatabase
 
 	function setupDatabase()
 	{
+		global $wgDBtype;
 		global $wgDatabase;
 		global $wgExtNewTables;
 		global $wgExtNewIndexes;
 		global $wgPageAttachment_useInternalCache;
 		global $wgPageAttachment_internalCacheType;
 		global $wgPageAttachment_enableAuditLog;
+		
+		switch ($wgDBtype)
+		{
+			case 'mysql':
+				break;
+			default:
+				throw new ErrorException('Fatal Error: [' . $wgDBtype . '] is not yet supported!');
+		}
 
 		$sqlFileDir = dirname( __FILE__ ) . '/sql/';
 		
@@ -46,17 +55,17 @@ class SetupDatabase
 
 		# Attacment Delete Data Table
 		$tableName['deleteData'] = 'page_attachment_delete_data';
-		$tableSqlFile['deleteData'] = $sqlFileDir . 'deletedata.table.sql';
+		$tableSqlFile['deleteData'] = $sqlFileDir . $wgDBtype . '/deletedata.table.sql';
 		$indexSqlFile['deleteData'] = $sqlFileDir . 'deletedata.index.sql';
 
 		# Cache Table
 		$tableName['cache'] = 'page_attachment_cache';
-		$tableSqlFile['cache'] = $sqlFileDir . 'cache.table.sql';
+		$tableSqlFile['cache'] = $sqlFileDir . $wgDBtype . '/cache.table.sql';
 		$indexSqlFile['cache'] = $sqlFileDir . 'cache.table.sql';
 
 		# Audit Log Table
 		$tableName['auditLog'] = 'page_attachment_audit_log';
-		$tableSqlFile['auditLog'] = $sqlFileDir . 'auditlog.table.sql';
+		$tableSqlFile['auditLog'] = $sqlFileDir . $wgDBtype . '/auditlog.table.sql';
 		$indexSqlFile['auditLog'] = $sqlFileDir . 'auditlog.index.sql';
 		
 		$wgExtNewTables[]  = array($tableName['data'], $tableSqlFile['data']);
