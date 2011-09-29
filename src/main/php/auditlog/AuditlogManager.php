@@ -67,7 +67,6 @@ class AuditLogManager
 						'activity_type'        => $dbw->strencode($auditLogData->getActivityType()),
 						'activity_detail'      => $dbw->strencode($auditLogData->getActivityDetail()) 
 			);
-			$dbw = \wfGetDB( DB_MASTER );
 			$dbw->insert('page_attachment_audit_log',  $data);
 		}
 	}
