@@ -23,7 +23,7 @@
 
 CREATE TABLE /*_*/page_attachment_delete_data
 (
-	attachment_file_name char(255) not null,
+	attachment_file_name char(255) character set utf8 not null,
     attached_to_page_id  int not null
 ) /*$wgDBTableOptions*/;
 

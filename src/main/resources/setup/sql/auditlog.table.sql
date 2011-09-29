@@ -24,10 +24,10 @@
 CREATE TABLE /*_*/page_attachment_audit_log 
 ( 
     attached_to_page_id  int NOT NULL, 
-    attachment_file_name char(100) not null, 
+    attachment_file_name char(100) character set utf8 not null, 
     user_id              int NOT NULL, 
     activity_time        timestamp NOT NULL, 
-    activity_type        char(30) NOT NULL, 
+    activity_type        char(30) character set utf8 NOT NULL, 
     activity_detail      varchar(255) NOT NULL 
 ) /*$wgDBTableOptions*/;
 

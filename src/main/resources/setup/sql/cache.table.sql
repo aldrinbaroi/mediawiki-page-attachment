@@ -23,7 +23,7 @@
 
 CREATE TABLE /*_*/page_attachment_cache
 (
-    id    char(20) not null,
+    id    char(20) character set utf8 not null,
     data  blob not null
 ) /*$wgDBTableOptions*/;
 
