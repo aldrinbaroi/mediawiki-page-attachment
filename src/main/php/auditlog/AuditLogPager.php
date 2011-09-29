@@ -81,10 +81,9 @@ class AuditLogPager extends \TablePager
 		if (isset($this->attachmentName))
 		{
 			$dbr =  \wfGetDB( DB_SLAVE );
-			$this->mQueryConds = array(
-				'attached_to_page_id' => $this->attachToPage->getId(),  
-				'attachment_file_name' => $dbr->strencode($this->attachmentName)
-			);
+			$this->mQueryConds = array();
+			$this->mQueryConds[] = ' attached_to_page_id  = ' . $this->attachToPage->getId();
+			$this->mQueryConds[] = ' attachment_file_name = \'' . $dbr->strencode($this->attachmentName) . '\'';
 		}
 		else
 		{
