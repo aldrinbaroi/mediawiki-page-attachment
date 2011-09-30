@@ -74,7 +74,7 @@ class ListFiles extends \SpecialPage
 		else
 		{
 			$session->setStatusMessage('UnableToDetermineAttachToPage');
-			$title = \Title::newFromText("Main_Page");
+			$title = \Title::newFromText(\wfMsg('mainpage'));
 			$wgOut->redirect($title->getFullURL());
 		}
 	}

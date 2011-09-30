@@ -94,7 +94,7 @@ class DownloadManager
 			}
 			if (!isset($downloadFromPage))
 			{
-				$downloadFromPage = 'Main_Page';
+				$downloadFromPage = \wfMsg('mainpage');
 			}
 			$redirectPage = $wgScriptPath . '/index.php/' . $downloadFromPage;
 			header("Location: " . $redirectPage);
