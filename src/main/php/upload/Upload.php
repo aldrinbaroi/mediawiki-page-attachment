@@ -87,7 +87,7 @@ class Upload extends \SpecialUpload
 		else
 		{
 			$session->setStatusMessage('UnableToDetermineAttachToPage');
-			$title = \Title::newFromText(\wfMsg('mainpage'));
+			$title = \Title::newFromText(\wfMsgForContent('mainpage'));
 			$wgOut->redirect($title->getFullURL());
 		}
 	}
