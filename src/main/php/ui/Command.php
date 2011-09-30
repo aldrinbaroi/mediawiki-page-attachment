@@ -116,7 +116,8 @@ class Command
 
 	private function getViewAuditLogCommandURL($fileName)
 	{
-		return $this->urlPrefix . 'Special:PageAttachmentAuditLogViewer&rvt=' . $this->rvt . '&attachmentName=' . rawurlencode($fileName);
+		$__fileName = base64_encode($fileName);
+		return $this->urlPrefix . 'Special:PageAttachmentAuditLogViewer&rvt=' . $this->rvt . '&attachmentName=' . rawurlencode($__fileName);
 	}
 
 	private function getDownloadCommandURL($fileName)

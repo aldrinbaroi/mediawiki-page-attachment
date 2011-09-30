@@ -62,7 +62,11 @@ class AuditLogViewer extends \SpecialPage
 			}
 			else
 			{
-				$attachmentName = $wgRequest->getVal("attachmentName");
+				$attachmentName = $wgRequest->getVal("attachmentName", null);
+				if (isset($attachmentName))
+				{
+					$attachmentName = base64_decode($attachmentName);
+				}
 				$this->setHeaders();
 				$pager = new AuditLogPager($attachToPage, $attachmentName);
 				$limit = $pager->getForm();
