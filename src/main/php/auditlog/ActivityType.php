@@ -32,13 +32,13 @@ if (!defined('MEDIAWIKI'))
 
 class ActivityType
 {
-	const UPLOADED_AND_ATTACHED   = 'Uploaded & attached file';
-	const UPLOADED_AND_REATTACHED = 'Uploaded & reattached file';
-	const ATTACHED_EXISTING       = 'Attached existing file';
-	const REATTACHED_EXISTING     = 'Reattached existing file';
-	const REMOVED                 = 'Removed file';
-	const REMOVED_DELETED         = 'Removed deleted file';
-	const REATTACHED_UNDELETED    = 'Reattached undeleted file';
+	const UPLOADED_AND_ATTACHED   = 'uploadedAndAttachedFile';
+	const UPLOADED_AND_REATTACHED = 'uploadedAndReattachedFile';
+	const ATTACHED_EXISTING       = 'attachedExistingFile';
+	const REATTACHED_EXISTING     = 'reattachedExistingFile';
+	const REMOVED                 = 'removedFile';
+	const REMOVED_DELETED         = 'removedDeletedFile';
+	const REATTACHED_UNDELETED    = 'reattachedUndeletedFile';
 }
 
 ## :: END ::

@@ -69,6 +69,19 @@ class DateUtil
 		return $formattedDate;
 	}
 
+	/**
+	 *
+	 * Note: currently only supports timestamp format returned by MediaWiki in tablepager class
+	 * @param $sqlDatetime
+	 */
+	function formatSQLDate($sqlDatetime)
+	{
+		// Format returned by MediaWiki [2011-07-21 08:37:01]
+		$timestamp = str_replace(array('-',':', ' '), '', $sqlDatetime);
+		return $this->formatDate($timestamp);
+	}
+
+
 	function getUserTimeZone()
 	{
 		if (!isset($this->userTimezone))

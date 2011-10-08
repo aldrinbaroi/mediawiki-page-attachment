@@ -36,6 +36,7 @@ class AuditLogPager extends \TablePager
 	private $attachToPage;
 	private $attachmentName;
 	private $cacheManager;
+	private $dateHelper;
 	
 	var $mFieldNames = null;
 	var $mQueryConds = array();
@@ -50,6 +51,7 @@ class AuditLogPager extends \TablePager
 		$this->attachmentName = $attachmentName;
 		$this->userManager = new \PageAttachment\User\UserManager();
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
+		$this->dateHelper = new \PageAttachment\Utility\DateUtil();
 	}
 
 	function getFieldNames()
@@ -139,11 +141,21 @@ class AuditLogPager extends \TablePager
 				break;
 
 			case 'activity_time':
-				return $value;
+				//return $value;
+				try
+				{
+				return $this->dateHelper->formatSQLDate($value);
+				}
+				catch (Exception $e)
+				{
+					\wfDebugLog('PageAttachment',$e->getMessage());
+					return $value;
+				}
 				break;
 					
 			case 'activity_type':
-				return $value;
+				//return $value;
+				return \wfMsg($value);
 				break;
 
 			case 'activity_detail':

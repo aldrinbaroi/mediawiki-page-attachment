@@ -78,7 +78,7 @@ $messages['en'] = array(
     'pageattachmentlistfiles'                  => 'Browse/Search & Attach File',
     'pageattachmentupload'                     => 'Upload & Attach File',
     'pageattachmentauditlogviewer'             => 'Page Attachment Audit Log Viewer',
-    // Activity Log Viewer 
+    // Audit Log Viewer 
     'auditLog'                                 => 'Audit Log',
     'attached_to_page_id'                      => 'Attached to Page Name',
     'attachment_file_name'                     => 'Attachment Name',
@@ -86,6 +86,14 @@ $messages['en'] = array(
     'activity_time'                            => 'Activity Time',
     'activity_type'                            => 'Activity',
     'activity_detail'                          => 'Activity Detail',
+    // Activity Types
+    'uploadedAndAttachedFile'                  => 'Uploaded & Attached File',
+    'uploadedAndReattachedFile'                => 'Uploaded & Reattached File',
+    'attachedExistingFile'                     => 'Attached Existing File',
+    'reattachedExistingFile'                   => 'Reattached Existing File',
+    'removedFile'                              => 'Removed File',
+    'removedDeletedFile'                       => 'Removed Deleted File',
+    'reattachedUndeletedFile'                  => 'Reattached Undeleted File',
     //
     'utc'                                      => 'UTC',
     'unableToDetermineDownloadFromPage'        => 'Unable to Determine Download from Page',
