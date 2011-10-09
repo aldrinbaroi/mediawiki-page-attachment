@@ -37,7 +37,7 @@ class AuditLogPager extends \TablePager
 	private $attachmentName;
 	private $cacheManager;
 	private $dateHelper;
-	
+
 	var $mFieldNames = null;
 	var $mQueryConds = array();
 
@@ -141,10 +141,9 @@ class AuditLogPager extends \TablePager
 				break;
 
 			case 'activity_time':
-				//return $value;
 				try
 				{
-				return $this->dateHelper->formatSQLDate($value);
+					return $this->dateHelper->formatSQLDate($value);
 				}
 				catch (Exception $e)
 				{
@@ -154,7 +153,6 @@ class AuditLogPager extends \TablePager
 				break;
 					
 			case 'activity_type':
-				//return $value;
 				return \wfMsg($value);
 				break;
 
