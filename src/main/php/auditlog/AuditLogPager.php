@@ -65,8 +65,7 @@ class AuditLogPager extends \TablePager
 				'attachment_file_name' => \wfMsg('attachment_file_name'),
 				'user_id'              => \wfMsg('user_id'),
 				'activity_time'        => \wfMsg('activity_time'),
-				'activity_type'        => \wfMsg('activity_type'),
-				'activity_detail'      => \wfMsg('activity_detail'),
+				'activity_type'        => \wfMsg('activity_type')
 			);
 		}
 		return $this->mFieldNames;
@@ -154,10 +153,6 @@ class AuditLogPager extends \TablePager
 					
 			case 'activity_type':
 				return \wfMsg($value);
-				break;
-
-			case 'activity_detail':
-				return $value;
 				break;
 					
 			default:

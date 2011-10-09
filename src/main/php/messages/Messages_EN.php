@@ -85,7 +85,6 @@ $messages['en'] = array(
     'user_id'                                  => 'User ID/Name',
     'activity_time'                            => 'Activity Time',
     'activity_type'                            => 'Activity',
-    'activity_detail'                          => 'Activity Detail',
     // Activity Types
     'uploadedAndAttachedFile'                  => 'Uploaded & Attached File',
     'uploadedAndReattachedFile'                => 'Uploaded & Reattached File',

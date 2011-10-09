@@ -64,8 +64,7 @@ class AuditLogManager
 						'attachment_file_name' => $dbw->strencode($auditLogData->getAttachmentFileName()),
 						'user_id'              => $auditLogData->getUserId(),
 						'activity_time'        => $dbw->timestamp($auditLogData->getActivityTime()),
-						'activity_type'        => $dbw->strencode($auditLogData->getActivityType()),
-						'activity_detail'      => $dbw->strencode($auditLogData->getActivityDetail()) 
+						'activity_type'        => $dbw->strencode($auditLogData->getActivityType())
 			);
 			$dbw->insert('page_attachment_audit_log',  $data);
 		}
