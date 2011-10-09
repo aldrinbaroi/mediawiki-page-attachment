@@ -3,3 +3,6 @@ syntax: regexp
 ^dist$
 syntax: regexp
 ^src/test/php/Test\.php$
+syntax: regexp
+^src/test/html$
+
