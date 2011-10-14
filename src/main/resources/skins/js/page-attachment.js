@@ -80,53 +80,68 @@ function pageAttachment_removePageAttachment(attachmentName, rvt,
 			], div);
 	}
 }
+
+
+function pageAttachment_onLoad(evt)
+{
+	pageAttachment_loadPageAttachments();
+}
+
+
+function pageAttachment_onPageShow(evt)
+{
+	var event = window.event ? window.event : evt;
+	if (event.persisted)
+	{
+		pageAttachment_loadPageAttachments();
+	}
+}
+
 /**
  * 
  */
 function pageAttachment_registerOnLoad()
 {
-	if (typeof window.onload == "function")
+	if (window.addEventListener)
 	{
-		var existingOnLoad = window.onload;
-		window.onload = function()
-		{
-			existingOnLoad();
-			pageAttachment_loadPageAttachments();
-		};
+		window.addEventListener("load", pageAttachment_onLoad, false);
+	}
+	else if (window.attachEvent)
+	{
+		// For IE < version 9.0
+		window.attachEvent("load", pageAttachment_onLoad, false);
 	}
 	else
 	{
-		window.onload = pageAttachment_loadPageAttachments;
+		if (typeof window.onload == "function")
+		{
+			var existingOnLoad = window.onload;
+			window.onload = function()
+			{
+				existingOnLoad();
+				pageAttachment_loadPageAttachments();
+			};
+		}
+		else
+		{
+			window.onload = pageAttachment_loadPageAttachments;
+		}	
 	}
 }
+
+
 /**
  * 
  */
 function pageAttachment_registerOnPageShow()
 {
-	if (typeof window.onpageshow == "function")
+	if (window.addEventListener)
 	{
-		var existingOnPageShow = window.onpageshow;
-		window.onpageshow = function(evt)
-		{
-			var event = window.event ? window.event : evt;
-			if (event.persisted)
-			{
-				existingOnPageShow();
-				pageAttachment_loadPageAttachments();
-			}
-		};
+		window.addEventListener("pageshow", pageAttachment_onPageShow, false);
 	}
-	else
+	else 
 	{
-		window.onpageshow = function(evt)
-		{
-			var event = window.event ? window.event : evt;
-			if (event.persisted)
-			{
-				pageAttachment_loadPageAttachments();
-			}
-		};
+		// pageshow event not supported
 	}
 }
 
