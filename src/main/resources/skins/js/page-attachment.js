@@ -109,7 +109,7 @@ function pageAttachment_registerOnLoad()
 	else if (window.attachEvent)
 	{
 		// For IE < version 9.0
-		window.attachEvent("load", pageAttachment_onLoad, false);
+		window.attachEvent("onload", pageAttachment_onLoad, false);
 	}
 	else
 	{
