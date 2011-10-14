@@ -107,8 +107,9 @@ function pageAttachment_registerOnPageShow()
 	if (typeof window.onpageshow == "function")
 	{
 		var existingOnPageShow = window.onpageshow;
-		window.onpageshow = function()
+		window.onpageshow = function(evt)
 		{
+			var event = window.event ? window.event : evt;
 			if (event.persisted)
 			{
 				existingOnPageShow();
@@ -118,8 +119,9 @@ function pageAttachment_registerOnPageShow()
 	}
 	else
 	{
-		window.onpageshow = function()
+		window.onpageshow = function(evt)
 		{
+			var event = window.event ? window.event : evt;
 			if (event.persisted)
 			{
 				pageAttachment_loadPageAttachments();
