@@ -81,13 +81,19 @@ function pageAttachment_removePageAttachment(attachmentName, rvt,
 	}
 }
 
-
+/**
+ * 
+ * @param evt
+ */
 function pageAttachment_onLoad(evt)
 {
 	pageAttachment_loadPageAttachments();
 }
 
-
+/**
+ * 
+ * @param evt
+ */
 function pageAttachment_onPageShow(evt)
 {
 	var event = window.event ? window.event : evt;
@@ -113,6 +119,7 @@ function pageAttachment_registerOnLoad()
 	}
 	else
 	{
+		// For older browsers, IE6 & the likes
 		if (typeof window.onload == "function")
 		{
 			var existingOnLoad = window.onload;
