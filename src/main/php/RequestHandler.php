@@ -76,7 +76,8 @@ class RequestHandler
 	function onBeforeInitialize(&$title, &$article, &$output, &$user, $request, $mediaWiki)
 	{
 		global $wgRequest;
-
+		
+		$this->session->startSessionIfNotStarted();
 		$action = $wgRequest->getVal('action');
 		$currentViewPage = new \PageAttachment\Session\Page($title);
 		$viewPageId = $currentViewPage->getId();

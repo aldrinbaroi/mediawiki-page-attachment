@@ -52,6 +52,16 @@ class Session
 	{
 		$this->security = $security;
 	}
+	
+	function startSessionIfNotStarted()
+	{
+		\wfSuppressWarnings();
+		if(!isset($_SESSION))
+		{
+			session_start();
+		}
+		\wfRestoreWarnings();
+	}
 
 	function setCurrentPage($page)
 	{
