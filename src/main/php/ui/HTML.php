@@ -96,7 +96,7 @@ class HTML
 
 	static function buildLabel($title, $labelText)
 	{
-		return \HTML::rawElement('span', array('title' => $title), $labelText);
+		return \HTML::rawElement('span', array('title' => \wfMsg($title)), $labelText);
 	}
 
 }
