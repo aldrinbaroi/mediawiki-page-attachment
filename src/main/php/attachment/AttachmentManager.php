@@ -197,8 +197,7 @@ class AttachmentManager
 				{
 					$activityType = \PageAttachment\AuditLog\ActivityType::REATTACHED_EXISTING;
 				}
-				$activityDetail = '';
-				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType, $activityDetail);
+				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType);
 			}
 		}
 		else
@@ -218,8 +217,7 @@ class AttachmentManager
 					{
 						$activityType = \PageAttachment\AuditLog\ActivityType::ATTACHED_EXISTING;
 					}
-					$activityDetail = '';
-					$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType, $activityDetail);
+					$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType);
 				}
 			}
 			catch(Exception $e)
@@ -289,8 +287,7 @@ class AttachmentManager
 					if ($this->auditLogManager->isAuditLogEnabled())
 					{
 						$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED;
-						$activityDetail = '';
-						$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType, $activityDetail);
+						$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
 					}
 				}
 				catch(Exception $e)
@@ -344,9 +341,11 @@ class AttachmentManager
 			$this->session->setForceReload(true);
 			if ($this->auditLogManager->isAuditLogEnabled())
 			{
-				$activityType = PageAttachment\AuditLog\ActivityType::REMOVED_DELETED;
-				$activityDetail = '';
-				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType, $activityDetail);
+				$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED_DELETED;
+				foreach($attachedToPageIds as $attachedToPageId)
+				{
+					$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+				}
 			}
 
 		}
@@ -388,8 +387,7 @@ class AttachmentManager
 			if ($this->auditLogManager->isAuditLogEnabled())
 			{
 				$activityType = PageAttachment\AuditLog\ActivityType::REATTACHED_UNDELETED;
-				$activityDetail = '';
-				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType, $activityDetail);
+				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType);
 			}
 		}
 	}

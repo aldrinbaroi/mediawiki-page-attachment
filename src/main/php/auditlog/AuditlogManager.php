@@ -53,12 +53,12 @@ class AuditLogManager
 		return $this->auditLogEnabled;
 	}
 
-	function createLog($attachedToPageId, $attachmentFileName, $activityType, $activityDetail)
+	function createLog($attachedToPageId, $attachmentFileName, $activityType)
 	{
 		if ($this->auditLogEnabled == true)
 		{
 			$dbw = \wfGetDB( DB_MASTER );
-			$auditLogData = new AuditLogData($attachedToPageId, $attachmentFileName, $activityType, $activityDetail);
+			$auditLogData = new AuditLogData($attachedToPageId, $attachmentFileName, $activityType);
 			$data = array(
 						'attached_to_page_id'  => $auditLogData->getAttachedToPageId(),
 						'attachment_file_name' => $dbw->strencode($auditLogData->getAttachmentFileName()),

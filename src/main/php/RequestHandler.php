@@ -203,7 +203,7 @@ class RequestHandler
 		$this->downloadManager->sendRequestedFile();
 	}
 
-	function onArticleDelete(Article &$article, User &$user, &$reason, &$error)
+	function onArticleDelete(&$article, &$user, &$reason, &$error)
 	{
 		$title  = $article->getTitle();
 		$page = new \PageAttachment\Session\Page($title);

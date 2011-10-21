@@ -39,7 +39,7 @@ class AuditLogData
 	private $activityType;
 	private $activityDetail;
 
-	function __construct($attachedToPageId, $attachmentFileName, $activityType, $activityDetail,
+	function __construct($attachedToPageId, $attachmentFileName, $activityType,
 						$userId = null, $activityTime = null)
 	{
 		global $wgUser;
@@ -49,7 +49,6 @@ class AuditLogData
 		$this->userId = ($userId == null) ?  $wgUser->getId() : $userId;
 		$this->activityTime = ($activityTime == null) ? time() : $activityTime;
 		$this->activityType = $activityType;
-		$this->activityDetail = $activityDetail;
 	}
 
 	function getAttachedToPageId()
@@ -75,11 +74,6 @@ class AuditLogData
 	function getActivityType()
 	{
 		return $this->activityType;
-	}
-
-	function getActivityDetail()
-	{
-		return $this->activityDetail;
 	}
 
 }
