@@ -147,6 +147,37 @@ class RequestHelper
 		}
 	}
 
+	function isSpecialPage(&$title)
+	{
+		if (isset($title) && $title instanceof \Title)
+		{
+			if ($title->getNamespace() == NS_SPECIAL)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function isPageAttachmentSpecialPage(&$title, $viewPageTitle)
+	{
+		if ($this->isSpecialPage($title))
+		{
+			$nameParts = explode( ':', $viewPageTitle);
+			if (count($nameParts) == 2)
+			{
+				$specialPageName = $nameParts[1];
+				if ($specialPageName == 'PageAttachmentUpload'
+				|| $specialPageName == 'PageAttachmentListFiles'
+				|| $specialPageName == 'PageAttachmentAuditLogViewer')
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 }
 
 ## ::END::

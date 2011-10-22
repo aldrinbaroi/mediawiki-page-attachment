@@ -85,9 +85,7 @@ class RequestHandler
 		$viewPageTitle = $currentViewPage->getPrefixedURL();
 
 		// Set attach to page
-		if ($viewPageTitle == 'Special:PageAttachmentUpload'
-		|| $viewPageTitle == 'Special:PageAttachmentListFiles'
-		|| $viewPageTitle == 'Special:PageAttachmentAuditLogViewer')
+		if ($this->requestHelper->isPageAttachmentSpecialPage($title, $viewPageTitle))
 		{
 			$previousPage = $this->session->getCurrentPage();
 			$this->session->setAttachToPage($previousPage);
@@ -104,7 +102,7 @@ class RequestHandler
 		}
 		else
 		{
-			if (preg_match('/^Special/', $viewPageTitle))
+			if ($this->requestHelper->isSpecialPage($title))
 			{
 				$this->session->setViewPageSpecial(true);
 			}
