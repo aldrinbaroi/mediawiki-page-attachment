@@ -81,6 +81,19 @@ function pageAttachment_removePageAttachment(attachmentName, rvt,
 	}
 }
 
+function pageAttachment_removePageAttachmentPermanently(attachmentName, rvt, confirmRemoveMessage)
+{
+	if (confirm(confirmRemoveMessage))
+	{
+		var pageTitle = pageAttachment_getAttachToPageTitle();
+		var div = document.getElementById("PageAttachment");
+		sajax_do_call("\\PageAttachment\\Ajax\\removePageAttachmentPermanently",
+			[
+					pageTitle, attachmentName, rvt
+			], div);
+	}
+}
+
 /**
  * 
  * @param evt
