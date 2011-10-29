@@ -32,14 +32,15 @@ if (!defined('MEDIAWIKI'))
 
 class ActivityType
 {
-	const UPLOADED_AND_ATTACHED   = 'uploadedAndAttachedFile';
-	const UPLOADED_AND_REATTACHED = 'uploadedAndReattachedFile';
-	const ATTACHED_EXISTING       = 'attachedExistingFile';
-	const REATTACHED_EXISTING     = 'reattachedExistingFile';
-	const REMOVED                 = 'removedFile';
-	const REMOVED_PERMANENTLY     = 'removedFilePermanently';
-	const REMOVED_DELETED         = 'removedDeletedFile';
-	const REATTACHED_UNDELETED    = 'reattachedUndeletedFile';
+	const UPLOADED_AND_ATTACHED     = 'uploadedAndAttachedFile';
+	const UPLOADED_AND_REATTACHED   = 'uploadedAndReattachedFile';
+	const ATTACHED_EXISTING         = 'attachedExistingFile';
+	const REATTACHED_EXISTING       = 'reattachedExistingFile';
+	const REMOVED                   = 'removedFile';
+	const REMOVED_PERMANENTLY       = 'removedFilePermanently';
+	const REMOVE_PERMANENTLY_FAILED = 'removeFilePermanentlyFailed';
+	const REMOVED_DELETED           = 'removedDeletedFile';
+	const REATTACHED_UNDELETED      = 'reattachedUndeletedFile';
 }
 
 ## :: END ::
