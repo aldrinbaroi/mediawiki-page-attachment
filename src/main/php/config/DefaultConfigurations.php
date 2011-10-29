@@ -128,6 +128,21 @@ $wgPageAttachment_statusMessageFormat['default'] = '&nbsp;&#187; STATUS_MESSAGE 
 $wgPageAttachment_enableAuditLog = false;
 
 # ---------------------------------------------------------------------------
+# Attachment Removal
+# ---------------------------------------------------------------------------
+# TODO Need to complete the verbiage
+#
+# Attachment files are not permanently deleted when attachments are removed
+# from a page for the following reasons:
+#    1. By default, MediaWiki only allow user's with admin rights to delete file // TODO Check if this is statement is correct
+#    2. The file maybe embedded in a Wiki page
+#
+# To permanently delete a file, set t...
+#
+$wgPageAttachment_removeAttachments['permanently']      = false;
+$wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
+
+# ---------------------------------------------------------------------------
 # Permissions
 # ---------------------------------------------------------------------------
 #
