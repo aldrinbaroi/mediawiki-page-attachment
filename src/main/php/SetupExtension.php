@@ -70,6 +70,7 @@ $wgAutoloadClasses['PageAttachment\\Cache\\AttachmentDataCache']                
 $wgAutoloadClasses['PageAttachment\\Cache\\AttachmentListCache']                  = $dir . 'cache/AttachmentListCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\ArticleNameCache']                     = $dir . 'cache/ArticleNameCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\UserCache']                            = $dir . 'cache/UserCache.php';
+$wgAutoloadClasses['PageAttachment\\Cache\\FileCache']                            = $dir . 'cache/FileCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\CacheFactory']                         = $dir . 'cache/CacheFactory.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\CacheManager']                         = $dir . 'cache/CacheManager.php';
 $wgAutoloadClasses['PageAttachment\\Security\\MediaWiki\\Upload\\IUploadPermissionChecker']                 = $dir . 'security/mediawiki/upload/IUploadPermissionChecker.php';
@@ -102,6 +103,8 @@ $wgAutoloadClasses['PageAttachment\\UI\\UIComposer']                            
 $wgAutoloadClasses['PageAttachment\\UI\\WebBrowser']                              = $dir . 'ui/WebBrowser.php';
 $wgAutoloadClasses['PageAttachment\\User\\User']                                  = $dir . 'user/User.php';
 $wgAutoloadClasses['PageAttachment\\User\\UserManager']                           = $dir . 'user/UserManager.php';
+$wgAutoloadClasses['PageAttachment\\File\\File']                                  = $dir . 'file/File.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileManager']                           = $dir . 'file/FileManager.php';
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
 
 ## Hooks
