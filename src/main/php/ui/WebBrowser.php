@@ -39,6 +39,7 @@ class WebBrowser
 	private $attachmentManager;
 	private $resource;
 	private $runtimeConfig;
+	private $fileManager;
 
 
 	function __construct($security, $requestHelper, $session, $attachmentManager, $resource)
@@ -52,6 +53,7 @@ class WebBrowser
 		$this->attachmentManager = $attachmentManager;
 		$this->resource = $resource;
 		$this->runtimeConfig = new \PageAttachment\Config\RuntimeConfig();
+		$this->fileManager = new \PageAttachment\File\FileManager($this->security);
 	}
 
 	function setRedirectPage( $form )
@@ -237,7 +239,15 @@ class WebBrowser
 				}
 				if ($this->security->isAttachmentRemovalAllowed())
 				{
-					$attachmentRows[$aCount][4] .= $command->getRemoveAttachmentCommandLink($fileName);
+					if ( 1 == 2)
+					{
+						$attachmentRows[$aCount][4] .= $command->getRemoveAttachmentCommandLink($fileName);
+					}
+					else
+					{
+						$file = $this->fileManager->getFile($fileName);
+						$attachmentRows[$aCount][4] .= $command->getRemoveAttachmentPermanentlyCommandLink($file);
+					}
 				}
 				if ($attachmentRows[$aCount][4] == '')
 				{

@@ -94,9 +94,42 @@ class HTML
 		return self::buildImageCommandLink($titleMsgArgs, $jsRemoveAttachment, $imageURL);
 	}
 
+	static function buildRemoveAttachmentPermanentlyCommandLink($titleMsgArgs, $file, $imageURL, $rvt)
+	{
+		$attachmentName = $file->getName();
+		if ($file->isEmbbededInAPage())
+		{
+			$fileList = self::buildUnorderedList($file->getEmbbededInPagesNames());
+			$confirmMessage = \wfMsg('PleaseConfirmRemoveAttachmentPermanently2', $attachmentName, $fileList);
+		}
+		else
+		{
+			$confirmMessage = \wfMsg('PleaseConfirmRemoveAttachmentPermanently1', $attachmentName);
+		}
+		$jsRemoveAttachment = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $confirmMessage . '");';
+		return self::buildImageCommandLink($titleMsgArgs, $jsRemoveAttachment, $imageURL);
+	}
+
 	static function buildLabel($title, $labelText)
 	{
 		return \HTML::rawElement('span', array('title' => \wfMsg($title)), $labelText);
+	}
+
+	static function buildUnorderedList($itemList)
+	{
+		$unorderedList = '';
+		if (is_array($itemList))
+		{
+			$itemCount = count($itemList);
+			if ($itemCount > 0)
+			{
+				for ($i = 0; $i < $itemCount; $i++)
+				{
+					$unorderedList .= '' . ($i + 1) . ') ' . $itemList[$i] . '\n';
+				}
+			}
+		}
+		return $unorderedList;
 	}
 
 }
