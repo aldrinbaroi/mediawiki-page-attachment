@@ -93,6 +93,8 @@ $messages['en'] = array(
     'attachedExistingFile'                      => 'Attached Existing File',
     'reattachedExistingFile'                    => 'Reattached Existing File',
     'removedFile'                               => 'Removed File',
+    'removedFilePermanently'                    => 'Removed File Permanently',
+    'removeFilePermanentlyFailed'               => 'Remove File Permanently Failed',
     'removedDeletedFile'                        => 'Removed Deleted File',
     'reattachedUndeletedFile'                   => 'Reattached Undeleted File',
     //
