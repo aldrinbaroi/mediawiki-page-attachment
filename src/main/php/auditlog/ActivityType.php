@@ -37,6 +37,7 @@ class ActivityType
 	const ATTACHED_EXISTING       = 'attachedExistingFile';
 	const REATTACHED_EXISTING     = 'reattachedExistingFile';
 	const REMOVED                 = 'removedFile';
+	const REMOVED_PERMANENTLY     = 'removedFilePermanently';
 	const REMOVED_DELETED         = 'removedDeletedFile';
 	const REATTACHED_UNDELETED    = 'reattachedUndeletedFile';
 }
