@@ -128,6 +128,7 @@ $wgHooks['FileUndeleteComplete'][]                = array($requestHandler, 'onFi
 ## Ajax Hooks
 $wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\getPageAttachments';
 $wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachment';
+$wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachmentPermanently';
 
 ## Special Pages (Unlisted)
 $wgSpecialPages['PageAttachmentListFiles']        = '\\PageAttachment\\BrowseSearch\\ListFiles';

@@ -64,7 +64,7 @@ class FileManager
 					break;
 				}
 				$title = \Title::makeTitle( $pageData->page_namespace, $pageData->page_title );
-				$embeddedInPagesNames[] =  $title->getText(); 
+				$embeddedInPagesNames[] =  $title->getText();
 			}
 			$file = new File($fileName, $embeddedInPagesNames);
 		}
@@ -73,7 +73,23 @@ class FileManager
 
 	function removeFilePermanently($fileName)
 	{
+		$deleteSuccess = false;
 
+		try
+		{
+			$title = \Title::newFromText($fileName, NS_FILE);
+			$file = \wfFindFile( $title, array( 'ignoreRedirect' => true ) );
+			$oldimage = null; // Leave it to null to delete all
+			$reason = \wfMsg('attachmentRemovedPermanently');
+			$suppress = false; // Do not hide revision log
+			$status = \FileDeleteForm::doDelete( $title, $file, $oldimage, $reason, $suppress );
+			$deleteSuccess =  ($status->isGood()) ? true : false;
+		}
+		catch(Exception $e)
+		{
+			$deleteSuccess = false;	
+		}
+		return $deleteSuccess;
 	}
 }
 

@@ -65,6 +65,7 @@ $messages['en'] = array(
     'attachmentAdded'                           => 'Attachment Added :: $1',
     'attachmentUpdated'                         => 'Attachment Updated :: $1',
     'attachmentRemoved'                         => 'Attachment Removed :: $1',
+    'attachmentRemovedPermanently'              => 'Attachment Removed Permanently :: $1',
     'failedToAddAttachment'                     => 'Error: Failed to add attachment. File Name: $1',
     'failedToRemoveAttachment'                  => 'Error: Failed to remove attachment',
     'attachFile'                                => 'Attach this File',

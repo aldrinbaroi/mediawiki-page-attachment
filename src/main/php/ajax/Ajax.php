@@ -63,5 +63,13 @@ function removePageAttachment($pageTitle, $attachmentName, $rvt)
 	return $ajaxResponse;
 }
 
+function removePageAttachmentPermanently($pageTitle, $attachmentName, $rvt)
+{
+	$requestDispatcher = new \PageAttachment\RequestHandler();
+	$ajaxResponse = new \AjaxResponse($requestDispatcher->removeAttachmentPermanently($pageTitle, $attachmentName, $rvt));
+	setAjaxCacheDuration($ajaxResponse);
+	return $ajaxResponse;	
+}
+
 ## ::END::
 

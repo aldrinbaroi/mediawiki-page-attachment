@@ -39,6 +39,7 @@ class AttachmentManager
 	private $session;
 	private $auditLogManager;
 	private $cacheManager;
+	private $fileManager;
 
 
 	function __construct($security, $session, $auditLogManager)
@@ -47,6 +48,7 @@ class AttachmentManager
 		$this->session = $session;
 		$this->auditLogManager = $auditLogManager;
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
+		$this->fileManager = new \PageAttachment\File\FileManager($security);
 	}
 
 	function getAttachmentIds($attachedToPageId)
@@ -286,23 +288,29 @@ class AttachmentManager
 					$this->session->setStatusMessage('AttachmentRemoved', $fileName);
 					if ($removePermanently == true)
 					{
-						$fileManager = new \PageAttahcment\File\FileManager($this->security);
-						$deleted = $fileManager->removeFilePermanently($fileName);
-						if ($this->auditLogManager->isAuditLogEnabled())
+						$deleted = $this->fileManager->removeFilePermanently($fileName);
+						if ($deleted == true)
 						{
-							if ($deleted == true)
+							$this->session->setStatusMessage('AttachmentRemovedPermanently', $fileName);
+							if ($this->auditLogManager->isAuditLogEnabled())
 							{
 								$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED_PERMANENTLY;
+								$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
 							}
-							else
+						}
+						else
+						{
+							$this->session->setStatusMessage('FailedToRemovedAttachmentPermanently', $fileName);
+							if ($this->auditLogManager->isAuditLogEnabled())
 							{
 								$activityType = \PageAttachment\AuditLog\ActivityType::REMOVE_PERMANENTLY_FAILED;
+								$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
 							}
-							$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
 						}
 					}
 					else
 					{
+						$this->session->setStatusMessage('AttachmentRemoved', $fileName);
 						if ($this->auditLogManager->isAuditLogEnabled())
 						{
 							$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED;
@@ -332,12 +340,14 @@ class AttachmentManager
 
 	function removeAttachmentPermanently($attachmentName, $rvt)
 	{
+		// TODO Need to add mediawiki's security check for file deletion
 		$this->removeAttachment($attachmentName, $rvt, true);
 	}
 
 	/**
 	 * NOTE:  This function is triggered when someone with MediaWiki image delete
-	 *        permission deletes an image, so no additional security check is done.
+	 *        permission deletes an image, or when permanent attachment deletion is
+	 *        enabled, so no additional security check is done.
 	 */
 	function removeDeletedAttachment($page)
 	{

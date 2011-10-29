@@ -160,7 +160,7 @@ class RequestHandler
 	}
 
 	/**
-	 * Fulfils Ajax request to remove page attachment
+	 * Fulfils Ajax request to remove a page attachment
 	 *
 	 */
 	function removeAttachment($pageTitle, $attachmentName, $rvt)
@@ -168,7 +168,18 @@ class RequestHandler
 		$this->attachmentManager->removeAttachment($attachmentName, $rvt);
 		return $this->webBrowser->renderAttachmentList($pageTitle);
 	}
-
+	
+	/**
+	* Fulfils Ajax request to remove a page attachment permanently
+	*
+	*/
+	function removeAttachmentPermanently($pageTitle, $attachmentName, $rvt)
+	{
+		$this->attachmentManager->removeAttachmentPermanently($attachmentName, $rvt);
+		return $this->webBrowser->renderAttachmentList($pageTitle);
+	}
+	
+	
 	/**
 	 * Fulfils Ajax request get attachment list for a page
 	 *
