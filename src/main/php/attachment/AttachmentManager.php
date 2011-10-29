@@ -233,7 +233,7 @@ class AttachmentManager
 		$this->session->setForceReload(true);
 	}
 
-	function removeAttachment($attachmentName, $rvt)
+	function removeAttachment($attachmentName, $rvt, $removePermanently = false)
 	{
 		global $wgRequest;
 
@@ -284,10 +284,30 @@ class AttachmentManager
 					$dbw = \wfGetDB( DB_MASTER );
 					$dbw->delete('page_attachment_data', array('attached_to_page_id' => $attachedToPageId, 'attachment_page_id' => $attachmentId));
 					$this->session->setStatusMessage('AttachmentRemoved', $fileName);
-					if ($this->auditLogManager->isAuditLogEnabled())
+					if ($removePermanently == true)
 					{
-						$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED;
-						$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+						$fileManager = new \PageAttahcment\File\FileManager($this->security);
+						$deleted = $fileManager->removeFilePermanently($fileName);
+						if ($this->auditLogManager->isAuditLogEnabled())
+						{
+							if ($deleted == true)
+							{
+								$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED_PERMANENTLY;
+							}
+							else
+							{
+								$activityType = \PageAttachment\AuditLog\ActivityType::REMOVE_PERMANENTLY_FAILED;
+							}
+							$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+						}
+					}
+					else
+					{
+						if ($this->auditLogManager->isAuditLogEnabled())
+						{
+							$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED;
+							$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+						}
 					}
 				}
 				catch(Exception $e)
@@ -307,6 +327,12 @@ class AttachmentManager
 			$this->cacheManager->removeAttachmentList($attachedToPageId);
 		}
 		$this->session->setForceReload(true);
+	}
+
+
+	function removeAttachmentPermanently($attachmentName, $rvt)
+	{
+		$this->removeAttachment($attachmentName, $rvt, true);
 	}
 
 	/**
