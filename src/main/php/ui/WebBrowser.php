@@ -239,14 +239,16 @@ class WebBrowser
 				}
 				if ($this->security->isAttachmentRemovalAllowed())
 				{
-					if ( 1 == 2)
+					if ($this->security->isRemoveAttachmentPermanentlyEnabled())
 					{
-						$attachmentRows[$aCount][4] .= $command->getRemoveAttachmentCommandLink($fileName);
+						$file = $this->fileManager->getFile($fileName);
+						$removeAttachmentPermanentlyEvenIfEmbedded = $this->security->isRemoveAttachmentPermanentlyEvenIfEmbedded();
+						$attachmentRows[$aCount][4] .=
+						$command->getRemoveAttachmentPermanentlyCommandLink($file, $removeAttachmentPermanentlyEvenIfEmbedded);
 					}
 					else
 					{
-						$file = $this->fileManager->getFile($fileName);
-						$attachmentRows[$aCount][4] .= $command->getRemoveAttachmentPermanentlyCommandLink($file);
+						$attachmentRows[$aCount][4] .= $command->getRemoveAttachmentCommandLink($fileName);
 					}
 				}
 				if ($attachmentRows[$aCount][4] == '')

@@ -94,20 +94,29 @@ class HTML
 		return self::buildImageCommandLink($titleMsgArgs, $jsRemoveAttachment, $imageURL);
 	}
 
-	static function buildRemoveAttachmentPermanentlyCommandLink($titleMsgArgs, $file, $imageURL, $rvt)
+	static function buildRemoveAttachmentPermanentlyCommandLink($titleMsgArgs, $file, $imageURL, $rvt, $removeAttachmentPermanentlyEvenIfEmbedded)
 	{
 		$attachmentName = $file->getName();
 		if ($file->isEmbbededInAPage())
 		{
-			$fileList = self::buildUnorderedList($file->getEmbbededInPagesNames());
-			$confirmMessage = \wfMsg('PleaseConfirmRemoveAttachmentPermanently2', $attachmentName, $fileList);
+			$fileList = self::buildList($file->getEmbbededInPagesNames());
+			if ($removeAttachmentPermanentlyEvenIfEmbedded == true)
+			{
+				$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently2', $attachmentName, $fileList);
+				$js = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $message . '");';
+			}
+			else
+			{
+				$message = \wfMsg('UnableToFulfillRemoveAttachmentPermanentlyRequest', $attachmentName, $fileList);
+				$js = 'javascript:pageAttachment_unableToFulfillRemoveAttachmentPermanentlyRequest("' . $message . '");';
+			}
 		}
 		else
 		{
-			$confirmMessage = \wfMsg('PleaseConfirmRemoveAttachmentPermanently1', $attachmentName);
+			$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently1', $attachmentName);
+			$js = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $message . '");';
 		}
-		$jsRemoveAttachment = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $confirmMessage . '");';
-		return self::buildImageCommandLink($titleMsgArgs, $jsRemoveAttachment, $imageURL);
+		return self::buildImageCommandLink($titleMsgArgs, $js, $imageURL);
 	}
 
 	static function buildLabel($title, $labelText)
@@ -115,9 +124,9 @@ class HTML
 		return \HTML::rawElement('span', array('title' => \wfMsg($title)), $labelText);
 	}
 
-	static function buildUnorderedList($itemList)
+	static function buildList($itemList)
 	{
-		$unorderedList = '';
+		$list = '';
 		if (is_array($itemList))
 		{
 			$itemCount = count($itemList);
@@ -125,11 +134,11 @@ class HTML
 			{
 				for ($i = 0; $i < $itemCount; $i++)
 				{
-					$unorderedList .= '' . ($i + 1) . ') ' . $itemList[$i] . '\n';
+					$list .= '  ' . ($i + 1) . ') ' . $itemList[$i] . '\n';
 				}
 			}
 		}
-		return $unorderedList;
+		return $list;
 	}
 
 }

@@ -74,7 +74,6 @@ class FileManager
 	function removeFilePermanently($fileName)
 	{
 		$deleteSuccess = false;
-
 		try
 		{
 			$title = \Title::newFromText($fileName, NS_FILE);

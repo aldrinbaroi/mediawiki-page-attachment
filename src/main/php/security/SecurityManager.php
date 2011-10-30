@@ -33,20 +33,25 @@ if (!defined('MEDIAWIKI'))
 # The following constants are used for session attributes
 define('PA_REQUEST_VALIDATION_TOKEN', 'REQUEST_VALIDATION_TOKEN');
 define('PA_DOWNLOAD_REQUEST_VALID',   'PA_DOWNLOAD_REQUEST_VALID');
-#
+
 # The following constants are used for permissions
-define('PA_VIEW',              'view');
-define('PA_VIEW_AUDIT_LOG',    'viewAuditLog');
-define('PA_VIEW_HISTORY_LOG',  'viewHistory');
-define('PA_UPLOAD_AND_ATTACH', 'uploadAndAttach');
-define('PA_BROWSE_SEARCH',     'browseSearch');
-define('PA_REMOVE',            'remove');
-define('PA_DOWNLOAD',          'download');
-define('PA_LOGIN_REQUIRED',    'loginRequired');
-define('PA_ALLOWED',           'allowed');
-define('PA_GROUP',             'group');
-define('PA_GROUP_ALL',         '*');
-define('PA_USER',              'user');
+define('PA_VIEW',               'view');
+define('PA_VIEW_AUDIT_LOG',     'viewAuditLog');
+define('PA_VIEW_HISTORY_LOG',   'viewHistory');
+define('PA_UPLOAD_AND_ATTACH',  'uploadAndAttach');
+define('PA_BROWSE_SEARCH',      'browseSearch');
+define('PA_REMOVE',             'remove');
+define('PA_REMOVE_PERMANENTLY', 'removePermanently');
+define('PA_DOWNLOAD',           'download');
+define('PA_LOGIN_REQUIRED',     'loginRequired');
+define('PA_ALLOWED',            'allowed');
+define('PA_GROUP',              'group');
+define('PA_GROUP_ALL',          '*');
+define('PA_USER',               'user');
+
+# Permanent file removal
+define('PA_PERMANENTLY',         'permanently');
+define('PA_IGNORE_IF_EMBEDDED',  'ignoreIfEmbedded');
 
 class SecurityManager
 {
@@ -271,13 +276,65 @@ class SecurityManager
 		return $this->isLoginRequired(PA_REMOVE);
 	}
 
+	function isRemoveAttachmentPermanentlyEnabled()
+	{
+		global $wgPageAttachment_removeAttachments;
+
+		if (isset($wgPageAttachment_removeAttachments['permanently']))
+		{
+			return  true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function isRemoveAttachmentPermanentlyEvenIfEmbedded()
+	{
+		global $wgPageAttachment_removeAttachments;
+
+		if (isset($wgPageAttachment_removeAttachments['ignoreIfEmbedded']))
+		{
+			return  ($wgPageAttachment_removeAttachments['ignoreIfEmbedded'] == true) ? true : false;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function isUserAllowedToDeleteFile()
+	{
+		return $this->mediaWikiSecurityManager->isUserAllowedToDeleteFile();
+	}
+
 	function isAttachmentRemovalAllowed()
 	{
 		if ($this->isViewAttachmentsAllowed()
 		&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(PA_REMOVE);
+			if ($this->isAllowed(PA_REMOVE))
+			{
+				global $wgPageAttachment_removeAttachments;
+
+				if (isset($wgPageAttachment_removeAttachments['permanently']))
+				{
+					if ($this->isUserAllowedToDeleteFile())
+					{
+						return  ($wgPageAttachment_removeAttachments['permanently']) ? true : false;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return true;
+				}
+			}
 		}
 		else
 		{

@@ -39,3 +39,8 @@ if (!defined('MEDIAWIKI'))
 #$wgPageAttachment_allowedNameSpaces[] = NS_FILE;
 
 $wgPageAttachment_enableAuditLog = true;
+
+$wgPageAttachment_removeAttachments['permanently']      = true;
+$wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
+
+

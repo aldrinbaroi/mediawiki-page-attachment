@@ -340,7 +340,6 @@ class AttachmentManager
 
 	function removeAttachmentPermanently($attachmentName, $rvt)
 	{
-		// TODO Need to add mediawiki's security check for file deletion
 		$this->removeAttachment($attachmentName, $rvt, true);
 	}
 

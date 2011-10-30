@@ -33,10 +33,10 @@ if (!defined('MEDIAWIKI'))
 class MediaWikiSecurityManager
 {
 	private $uploadPermissionChecker;
-	
+
 	function __construct(\PageAttachment\Security\MediaWiki\Upload\IUploadPermissionChecker $uploadPermissionChecker)
 	{
-		$this->uploadPermissionChecker = $uploadPermissionChecker;	
+		$this->uploadPermissionChecker = $uploadPermissionChecker;
 	}
 
 	function isWikiInReadonlyMode()
@@ -69,10 +69,26 @@ class MediaWikiSecurityManager
 	{
 		return $this->uploadPermissionChecker->isUploadEnabled();
 	}
-	
+
 	function isUploadAllowed()
 	{
 		return $this->uploadPermissionChecker->isUploadAllowed();
+	}
+
+	function isUserAllowedToDeleteFile()
+	{
+		global $wgUser;
+
+		$title = \Title::newFromText(\wfMsgForContent('mainpage'));
+		$permission_errors = $title->getUserPermissionsErrors('delete', $wgUser);
+		if (count($permission_errors)>0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 }
 

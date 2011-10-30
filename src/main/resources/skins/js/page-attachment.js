@@ -80,7 +80,11 @@ function pageAttachment_removePageAttachment(attachmentName, rvt,
 			], div);
 	}
 }
-
+/**
+ * @param attachmentName
+ * @param rvt
+ * @param confirmRemoveMessage
+ */
 function pageAttachment_removePageAttachmentPermanently(attachmentName, rvt, confirmRemoveMessage)
 {
 	if (confirm(confirmRemoveMessage))
@@ -93,7 +97,14 @@ function pageAttachment_removePageAttachmentPermanently(attachmentName, rvt, con
 			], div);
 	}
 }
-
+/**
+ * 
+ * @param message
+ */
+function pageAttachment_unableToFulfillRemoveAttachmentPermanentlyRequest(message)
+{
+	alert(message);
+}
 /**
  * 
  * @param evt

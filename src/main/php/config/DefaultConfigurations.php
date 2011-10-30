@@ -130,17 +130,25 @@ $wgPageAttachment_enableAuditLog = false;
 # ---------------------------------------------------------------------------
 # Attachment Removal
 # ---------------------------------------------------------------------------
-# TODO Need to complete the verbiage
 #
 # Attachment files are not permanently deleted when attachments are removed
 # from a page for the following reasons:
-#    1. By default, MediaWiki only allow user's with admin rights to delete file // TODO Check if this is statement is correct
+#    1. By default, MediaWiki only allow user's with admin rights to delete file 
 #    2. The file maybe embedded in a Wiki page
 #
-# To permanently delete a file, set t...
+# To permanently delete a file, do the following:
+#    1. Allow user to delete file through MediaWiki permission settings
+#       See: http://www.mediawiki.org/wiki/Manual:User_rights
+#    2. Set $wgPageAttachment_removeAttachments['permanently'] = true to
+#       allow file deletion.  Please, note that if the file is embedded
+#       in a page through file or media link, then file removal request
+#       will not honored.
+#    3. Set $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] to true
+#       to allow removal of a file even it is embedded in a page through
+#       file or media link.
 #
 $wgPageAttachment_removeAttachments['permanently']      = false;
-$wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
+$wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = false;
 
 # ---------------------------------------------------------------------------
 # Permissions
