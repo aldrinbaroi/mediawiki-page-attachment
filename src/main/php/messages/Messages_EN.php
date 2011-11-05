@@ -58,10 +58,25 @@ $messages['en'] = array(
     'youMustBeLoggedInToViewAuditLog'           => 'You Must be Logged in to View AuditLog',
     'attachmentsNone'                           => 'Attachments: None',
     'attachToPageName'                          => 'Attach to Page Name: $1',
-    'pleaseConfirmRemoveAttachment'                     => 'Please Confirm:\n\nRemove the following attachment?\n\n>> $1 <<\n\n',
-    'pleaseConfirmRemoveAttachmentPermanently1'         => 'Please Confirm:\n\nRemove the following attachment, permanently?\n\n>> $1 <<\n\n',
-    'pleaseConfirmRemoveAttachmentPermanently2'         => 'Please Confirm:\n\nRemove the following attachment, permanently?\n\n>> $1 <<\n\nNote: This attachment is embedded in the following pages:\n\n$2',
-    'unableToFulfillRemoveAttachmentPermanentlyRequest' => 'Unable to Fulfill Remove Attachment Permanently Request.\n\nThe following attachment:\n\n>> $1 <<\n\nis embedded in the following pages:\n\n$2',
+    'pleaseConfirmRemoveAttachment'                      => 'Please Confirm:\n\nRemove the following attachment?\n\n>> $1 <<\n\n',
+    'pleaseConfirmRemoveAttachmentPermanently'           => 'Please Confirm:\n\nRemove the following attachment, permanently?\n\n>> $1 <<\n\n',
+    'pleaseConfirmRemoveAttachmentPermanently1'          => 'Please Confirm:\n\nRemove the following attachment, permanently?\n\n>> $1 <<\n\n' .
+                                                            'Note: This attachment is attached to the following pages:\n\n$2\n\n' .
+                                                            'And embedded in the following pages:\n\n$3',
+    'pleaseConfirmRemoveAttachmentPermanently2'          => 'Please Confirm:\n\nRemove the following attachment, permanently?\n\n>> $1 <<\n\n' .
+                                                            'Note: This attachment is attached to the following pages:\n\n$2',
+    'pleaseConfirmRemoveAttachmentPermanently3'          => 'Please Confirm:\n\nRemove the following attachment, permanently?\n\n>> $1 <<\n\n' .
+                                                            'Note: This attachment is embedded in the following pages:\n\n$2',
+    'unableToFulfillRemoveAttachmentPermanentlyRequest1' => 'Unable to Fulfill Remove Attachment Permanently Request.\n\n' . 
+                                                            'The following attachment:\n\n>> $1 <<\n\n' . 
+                                                            'is attached to the following pages:\n\n$2\n\n' . 
+                                                            'and is embedded in the following pages:\n\n$3',
+    'unableToFulfillRemoveAttachmentPermanentlyRequest2' => 'Unable to Fulfill Remove Attachment Permanently Request.\n\n' .
+                                                            'The following attachment:\n\n>> $1 <<\n\n' . 
+                                                            'is attached to the following pages:\n\n$2',
+    'unableToFulfillRemoveAttachmentPermanentlyRequest3' => 'Unable to Fulfill Remove Attachment Permanently Request.\n\n' .
+                                                            'The following attachment:\n\n>> $1 <<\n\n' . 
+                                                            'is embedded in the following pages:\n\n$2',
     'displayTimeZone'                           => 'Display Time Zone',
     'attachmentAdded'                           => 'Attachment Added :: $1',
     'attachmentUpdated'                         => 'Attachment Updated :: $1',

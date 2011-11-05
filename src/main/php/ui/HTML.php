@@ -94,26 +94,65 @@ class HTML
 		return self::buildImageCommandLink($titleMsgArgs, $jsRemoveAttachment, $imageURL);
 	}
 
-	static function buildRemoveAttachmentPermanentlyCommandLink($titleMsgArgs, $file, $imageURL, $rvt, $removeAttachmentPermanentlyEvenIfEmbedded)
+	// TODO Need to complete the implementation
+	static function buildRemoveAttachmentPermanentlyCommandLink($titleMsgArgs, $imageURL, $rvt, $attachmentData, $removeAttachmentPermanentlyEvenIfAttached, $file, $removeAttachmentPermanentlyEvenIfEmbedded)
 	{
 		$attachmentName = $file->getName();
-		if ($file->isEmbbededInAPage())
+		$attachedToMoreThanOnePage = $attachmentData->isAttachedToMoreThanOnePage();
+		$embeddedInAPage = $file->isEmbbededInAPage();
+		if (($attachedToMoreThanOnePage == true) || ($embeddedInAPage == true))
 		{
-			$fileList = self::buildList($file->getEmbbededInPagesNames());
-			if ($removeAttachmentPermanentlyEvenIfEmbedded == true)
+			if (($attachedToMoreThanOnePage == true) && ($embeddedInAPage == true))
 			{
-				$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently2', $attachmentName, $fileList);
-				$js = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $message . '");';
+				$attachedToPagesList = self::buildList($attachmentData->getAttachedToPages());
+				$embeddedInPagesList = self::buildList($file->getEmbbededInPagesNames());
+				if (($removeAttachmentPermanentlyEvenIfAttached == true) && ($removeAttachmentPermanentlyEvenIfEmbedded == true))
+				{
+					$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently1', $attachmentName, $attachedToPagesList, $embeddedInPagesList);
+					$js = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $message . '");';
+				}
+				else
+				{
+					$message = \wfMsg('UnableToFulfillRemoveAttachmentPermanentlyRequest1', $attachmentName, $attachedToPagesList, $embeddedInPagesList);
+					$js = 'javascript:pageAttachment_unableToFulfillRemoveAttachmentPermanentlyRequest("' . $message . '");';
+				}
+			}
+			else if ($attachedToMoreThanOnePage == true)
+			{
+				$attachedToPagesList = self::buildList($attachmentData->getAttachedToPages());
+				if ($removeAttachmentPermanentlyEvenIfAttached == true)
+				{
+					$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently2', $attachmentName, $attachedToPagesList);
+					$js = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $message . '");';
+				}
+				else
+				{
+					$message = \wfMsg('UnableToFulfillRemoveAttachmentPermanentlyRequest2', $attachmentName, $attachedToPagesList);
+					$js = 'javascript:pageAttachment_unableToFulfillRemoveAttachmentPermanentlyRequest("' . $message . '");';
+				}
+			}
+			else if ($embeddedInAPage == true)
+			{
+				$embeddedInPagesList = self::buildList($file->getEmbbededInPagesNames());
+				if ($removeAttachmentPermanentlyEvenIfEmbedded == true)
+				{
+					$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently3', $attachmentName, $embeddedInPagesList);
+					$js = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $message . '");';
+				}
+				else
+				{
+					$message = \wfMsg('UnableToFulfillRemoveAttachmentPermanentlyRequest3', $attachmentName, $embeddedInPagesList);
+					$js = 'javascript:pageAttachment_unableToFulfillRemoveAttachmentPermanentlyRequest("' . $message . '");';
+				}
 			}
 			else
 			{
-				$message = \wfMsg('UnableToFulfillRemoveAttachmentPermanentlyRequest', $attachmentName, $fileList);
-				$js = 'javascript:pageAttachment_unableToFulfillRemoveAttachmentPermanentlyRequest("' . $message . '");';
+				// The flow should not come here!!!
 			}
 		}
 		else
 		{
-			$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently1', $attachmentName);
+			$message = \wfMsg('PleaseConfirmRemoveAttachmentPermanently', $attachmentName);
 			$js = 'javascript:pageAttachment_removePageAttachmentPermanently("' . $attachmentName   . '", "' .  $rvt . '", "' . $message . '");';
 		}
 		return self::buildImageCommandLink($titleMsgArgs, $js, $imageURL);
@@ -134,7 +173,8 @@ class HTML
 			{
 				for ($i = 0; $i < $itemCount; $i++)
 				{
-					$list .= '  ' . ($i + 1) . ') ' . $itemList[$i] . '\n';
+					$list .= ($i > 0) ? '\n' : '';
+					$list .= '  ' . ($i + 1) . ') ' . $itemList[$i]; // . '\n';
 				}
 			}
 		}

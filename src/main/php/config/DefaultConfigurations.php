@@ -128,29 +128,6 @@ $wgPageAttachment_statusMessageFormat['default'] = '&nbsp;&#187; STATUS_MESSAGE 
 $wgPageAttachment_enableAuditLog = false;
 
 # ---------------------------------------------------------------------------
-# Attachment Removal
-# ---------------------------------------------------------------------------
-#
-# Attachment files are not permanently deleted when attachments are removed
-# from a page for the following reasons:
-#    1. By default, MediaWiki only allow user's with admin rights to delete file 
-#    2. The file maybe embedded in a Wiki page
-#
-# To permanently delete a file, do the following:
-#    1. Allow user to delete file through MediaWiki permission settings
-#       See: http://www.mediawiki.org/wiki/Manual:User_rights
-#    2. Set $wgPageAttachment_removeAttachments['permanently'] = true to
-#       allow file deletion.  Please, note that if the file is embedded
-#       in a page through file or media link, then file removal request
-#       will not honored.
-#    3. Set $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] to true
-#       to allow removal of a file even it is embedded in a page through
-#       file or media link.
-#
-$wgPageAttachment_removeAttachments['permanently']      = false;
-$wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = false;
-
-# ---------------------------------------------------------------------------
 # Permissions
 # ---------------------------------------------------------------------------
 #
@@ -215,6 +192,33 @@ $wgPageAttachment_permissions['viewHistory'    ]['group']['*'    ] = false;
 # Use the following format to add user specific permissions.
 #
 # $wgPageAttachment_permissions['remove'      ]['user']['admin' ] = true;
+
+# ---------------------------------------------------------------------------
+# Attachment Removal - Permanently
+# ---------------------------------------------------------------------------
+#
+# Attachment files are not permanently deleted from MediaWiki's file repository
+# when attachments are removed from a page for the following reasons:
+#    1. By default, MediaWiki only allow user's with admin rights to delete a file
+#    2. The file maybe attached to other pages
+#    3. The file maybe embedded in a Wiki page
+#
+# To allow permanent file deletion of a file, do the following:
+#    1. Allow user to delete file through MediaWiki permission settings
+#       See: http://www.mediawiki.org/wiki/Manual:User_rights
+#    2. Set $wgPageAttachment_removeAttachments['permanently'] = true to
+#       allow file deletion.  Please, note that if the file is attached to
+#       other pages or, embedded in a page through file or media link, then
+#       file removal request will not honored.
+#    3. Set $wgPageAttachment_removeAttachments['ignoreIfAttached'] to true
+#       to allow removal of a file even it is attached to another page.
+#    4. Set $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] to true
+#       to allow removal of a file even it is embedded in a page through a
+#       file or media link.
+#
+$wgPageAttachment_removeAttachments['permanently']      = false;
+$wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = false;
+$wgPageAttachment_removeAttachments['ignoreIfAttached'] = false;
 
 # ---------------------------------------------------------------------------
 # Server Cache - Page Attachment List & Other Data 

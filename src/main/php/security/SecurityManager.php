@@ -52,6 +52,7 @@ define('PA_USER',               'user');
 # Permanent file removal
 define('PA_PERMANENTLY',         'permanently');
 define('PA_IGNORE_IF_EMBEDDED',  'ignoreIfEmbedded');
+define('PA_IGNORE_IF_ATTACHED',  'ignoreIfAttached');
 
 class SecurityManager
 {
@@ -280,9 +281,9 @@ class SecurityManager
 	{
 		global $wgPageAttachment_removeAttachments;
 
-		if (isset($wgPageAttachment_removeAttachments['permanently']))
+		if (isset($wgPageAttachment_removeAttachments[PA_PERMANENTLY]))
 		{
-			return  true;
+			return  ($wgPageAttachment_removeAttachments[PA_PERMANENTLY]) ? true : false;
 		}
 		else
 		{
@@ -294,9 +295,23 @@ class SecurityManager
 	{
 		global $wgPageAttachment_removeAttachments;
 
-		if (isset($wgPageAttachment_removeAttachments['ignoreIfEmbedded']))
+		if (isset($wgPageAttachment_removeAttachments[PA_IGNORE_IF_EMBEDDED]))
 		{
-			return  ($wgPageAttachment_removeAttachments['ignoreIfEmbedded'] == true) ? true : false;
+			return  ($wgPageAttachment_removeAttachments[PA_IGNORE_IF_EMBEDDED] == true) ? true : false;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	function isRemoveAttachmentPermanentlyEvenIfAttached()
+	{
+		global $wgPageAttachment_removeAttachments;
+	
+		if (isset($wgPageAttachment_removeAttachments[PA_IGNORE_IF_ATTACHED]))
+		{
+			return  ($wgPageAttachment_removeAttachments[PA_IGNORE_IF_ATTACHED] == true) ? true : false;
 		}
 		else
 		{
@@ -317,13 +332,11 @@ class SecurityManager
 		{
 			if ($this->isAllowed(PA_REMOVE))
 			{
-				global $wgPageAttachment_removeAttachments;
-
-				if (isset($wgPageAttachment_removeAttachments['permanently']))
+				if ($this->isRemoveAttachmentPermanentlyEnabled())
 				{
 					if ($this->isUserAllowedToDeleteFile())
 					{
-						return  ($wgPageAttachment_removeAttachments['permanently']) ? true : false;
+						return  true;
 					}
 					else
 					{

@@ -48,7 +48,7 @@ class AttachmentManager
 		$this->session = $session;
 		$this->auditLogManager = $auditLogManager;
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
-		$this->fileManager = new \PageAttachment\File\FileManager($security);
+		$this->fileManager = new \PageAttachment\File\FileManager($security, $this->cacheManager);
 	}
 
 	function getAttachmentIds($attachedToPageId)

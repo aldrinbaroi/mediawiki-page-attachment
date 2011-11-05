@@ -198,7 +198,7 @@ class WebBrowser
 	{
 		global $wgUser;
 
-		$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory();
+		$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
 		$sk = $wgUser->getSkin();
 		$aIds = $this->attachmentManager->getAttachmentIds($pageId);
 		$aCount = 0;
@@ -241,10 +241,11 @@ class WebBrowser
 				{
 					if ($this->security->isRemoveAttachmentPermanentlyEnabled())
 					{
-						$file = $this->fileManager->getFile($fileName);
+						$file = $this->fileManager->getFile($att->getTitle());
+						$removeAttachmentPermanentlyEvenIfAttached = $this->security->isRemoveAttachmentPermanentlyEvenIfAttached();
 						$removeAttachmentPermanentlyEvenIfEmbedded = $this->security->isRemoveAttachmentPermanentlyEvenIfEmbedded();
 						$attachmentRows[$aCount][4] .=
-						$command->getRemoveAttachmentPermanentlyCommandLink($file, $removeAttachmentPermanentlyEvenIfEmbedded);
+						$command->getRemoveAttachmentPermanentlyCommandLink($att, $removeAttachmentPermanentlyEvenIfAttached, $file, $removeAttachmentPermanentlyEvenIfEmbedded);
 					}
 					else
 					{

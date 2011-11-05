@@ -14,13 +14,13 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the 
+ * with this program; if not, write to the
  *     Free Software Foundation, Inc.,
  *     51 Franklin Street, Fifth Floor
  *     Boston, MA 02110-1301, USA.
  *     http://www.gnu.org/copyleft/gpl.html
  *
- */ 
+ */
 
 namespace PageAttachment\Attachment;
 
@@ -32,46 +32,60 @@ if (!defined('MEDIAWIKI'))
 
 class AttachmentData
 {
-    var $id;
-    var $title;
-    var $size;
-    var $dateUploaded;
-    var $uploadedBy;
+	var $id;
+	var $title;
+	var $size;
+	var $dateUploaded;
+	var $uploadedBy;
+	var $attachedToMoreThanOnePage;
+	var $attachedToPages;
 
-    function __construct($id, $title, $size, $dateUploaded, $uploadedBy)
-    {
-    	$this->id = $id;
-    	$this->title = $title;
-    	$this->size = $size;
-    	$this->dateUploaded = $dateUploaded;
-    	$this->uploadedBy = $uploadedBy;
-    }
+	function __construct($id, $title, $size, $dateUploaded, $uploadedBy, $attachedToPages)
+	{
+		$this->id = $id;
+		$this->title = $title;
+		$this->size = $size;
+		$this->dateUploaded = $dateUploaded;
+		$this->uploadedBy = $uploadedBy;
+		$this->attachedToMoreThanOnePage = ($attachedToPages == NULL) ? false : (count($attachedToPages) > 1) ? true : false;
+		$this->attachedToPages = $attachedToPages;
+	}
 
-    function getId()
-    {
-        return $this->id;
-    }
+	function getId()
+	{
+		return $this->id;
+	}
 
-    function getTitle()
-    {
-        return $this->title;
-    }
+	function getTitle()
+	{
+		return $this->title;
+	}
 
-    function getSize()
-    {
-        return $this->size;
-    }
+	function getSize()
+	{
+		return $this->size;
+	}
 
-    function getDateUploaded()
-    {
-        return $this->dateUploaded;
-    }
+	function getDateUploaded()
+	{
+		return $this->dateUploaded;
+	}
 
-    function getUploadedBy()
-    {
-        return $this->uploadedBy;
-    }
+	function getUploadedBy()
+	{
+		return $this->uploadedBy;
+	}
+
+	function isAttachedToMoreThanOnePage()
+	{
+		return $this->attachedToMoreThanOnePage;
+	}
+
+	function getAttachedToPages()
+	{
+		return $this->attachedToPages;
+	}
 
 }
 
-## :: END :: 
+## :: END ::

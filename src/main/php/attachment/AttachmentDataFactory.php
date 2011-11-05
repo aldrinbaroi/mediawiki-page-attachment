@@ -30,20 +30,28 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
+// TODO Update to include attached to page names if permanent file deletion is enabled
+
 class AttachmentDataFactory
 {
 	private $cache;
 	private $runtimeConfig;
+	private $securityManager;
+	private $articleNameCache;
+	private $cacheManager;
 
-	function __construct()
+	function __construct($securityManager)
 	{
+		$this->securityManager = $securityManager;
 		$this->cache = new \PageAttachment\Cache\AttachmentDataCache();
 		$this->runtimeConfig = new \PageAttachment\Config\RuntimeConfig();
+		$this->articleNameCache = new \PageAttachment\Cache\ArticleNameCache();
+		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
 	}
 
 	function newAttachmentData($id)
 	{
-		$obj = $this->cache->retrieve($id);
+		$obj = $this->cacheManager->retrieveAtachmentData($id);
 		if ($obj instanceof \PageAttachment\Attachment\AttachmentData)
 		{
 			$pageAttachmentData = $obj;
@@ -51,7 +59,7 @@ class AttachmentDataFactory
 		else
 		{
 			$title = \Title::newFromID($id);
-			$article = new \Article($title, 0);
+			$article = new \Article($title, NS_FILE);
 			$size  = \wfFindFile($title)->getSize();
 			$dateUploaded = $article->getTimestamp();
 			$uploadedBy = null;
@@ -63,10 +71,52 @@ class AttachmentDataFactory
 			{
 				$uploadedBy = \User::whoIs($article->getUser());
 			}
-			$pageAttachmentData = new AttachmentData($id, $title, $size, $dateUploaded, $uploadedBy); //($id);
-			$this->cache->store($id, $pageAttachmentData);
+			$attachedToPages = null;
+			if ($this->securityManager->isRemoveAttachmentPermanentlyEnabled())
+			{
+				$attachedToPages = $this->getAttachedToPages($id);
+			}
+			$pageAttachmentData = new AttachmentData($id, $title, $size, $dateUploaded, $uploadedBy, $attachedToPages);
+			$this->cacheManager->storeAttachmentData($pageAttachmentData);
 		}
 		return $pageAttachmentData;
+	}
+
+	private function getAttachedToPages($attachmentPageId)
+	{
+		$dbr = \wfGetDB( DB_SLAVE );
+		$rs = $dbr->select('page_attachment_data', 'attached_to_page_id', 'attachment_page_id = ' . $attachmentPageId);
+		if ($rs == false)
+		{
+			return null;
+		}
+		else
+		{
+			$attachedToPages = array();
+			$i = 0;
+			foreach($rs as $row)
+			{
+				$attachedToPageId = $row->attached_to_page_id;
+				$pageName = $this->cacheManager->retrieveArticleName($attachedToPageId);
+				if (isset($pageName))
+				{
+					$attachedToPages[$i++] = $pageName;
+				}
+				else
+				{
+					$rs2 = $dbr->select('page','page_title', 'page_id = ' . $attachedToPageId);
+					if ($found = $rs2->fetchRow($rs2))
+					foreach($rs2 as $row2)
+					{
+						$title = \Title::newFromText($row2->page_title);
+						$pageName = $title->getText();
+						$attachedToPages[$i++] = $pageName;
+						$this->cacheManager->storeArticleName($attachedToPageId, $pageName);
+					}
+				}
+			}
+			return $attachedToPages;
+		}
 	}
 
 }

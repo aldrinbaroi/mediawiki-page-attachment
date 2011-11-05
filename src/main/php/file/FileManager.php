@@ -29,28 +29,39 @@ if (!defined('MEDIAWIKI'))
 	echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
 	exit( 1 );
 }
-
+// TODO update to use cache manager
 class FileManager
 {
 	private $securityManager;
+	private $cacheManager;
 
 
 	function __construct($securityManager)
 	{
 		$this->securityManager = $securityManager;
+		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
 	}
-
 
 	function getFile($fileName)
 	{
+		if ($fileName instanceof \Title)
+		{
+			$title = $fileName;
+		}
+		else
+		{
+			$title = \Title::newFromText($fileName, NS_FILE);
+		}
+		$userFileName = $title->getText();
+		$mwFileName = $title->getPartialURL();
 		$file = null;
 		$dbr = \wfGetDB( DB_SLAVE );
-		$res = $dbr->select(array( 'imagelinks', 'page' ), array( 'page_namespace', 'page_title' ),
-		array( 'il_to' => $fileName, 'il_from = page_id' ));
+		$res = $dbr->select(array( 'imagelinks', 'page' ), array( 'page_namespace', 'page_title', 'page_id' ),
+		array( 'il_to' => $mwFileName, 'il_from = page_id' ));
 		$embeddedInPagesCount = $dbr->numRows( $res );
 		if ( $embeddedInPagesCount == 0 )
 		{
-			$file = new File($fileName);
+			$file = new File($userFileName);
 		}
 		else
 		{
@@ -63,10 +74,20 @@ class FileManager
 					$embeddedInPagesNames[] = '...';
 					break;
 				}
-				$title = \Title::makeTitle( $pageData->page_namespace, $pageData->page_title );
-				$embeddedInPagesNames[] =  $title->getText();
+				$pageName = $this->cacheManager->retrieveArticleName($pageData->page_id);
+				if (isset($pageName))
+				{
+					$embeddedInPagesNames[] = $pageName;
+				}
+				else
+				{
+					$title = \Title::makeTitle( $pageData->page_namespace, $pageData->page_title );
+					$pageName =  $title->getText();
+					$embeddedInPagesNames[] = $pageName;
+					$this->cacheManager->storeArticleName($pageData->page_id, $pageName);
+				}
 			}
-			$file = new File($fileName, $embeddedInPagesNames);
+			$file = new File($userFileName, $embeddedInPagesNames);
 		}
 		return $file;
 	}
@@ -86,7 +107,7 @@ class FileManager
 		}
 		catch(Exception $e)
 		{
-			$deleteSuccess = false;	
+			$deleteSuccess = false;
 		}
 		return $deleteSuccess;
 	}

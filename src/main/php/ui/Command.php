@@ -84,10 +84,10 @@ class Command
 		return HTML::buildRemoveAttachmentCommandLink('RemoveAttachment', $fileName, $this->resource->getRemoveAttachmentImageURL(), $this->rvt);
 	}
 
-	function getRemoveAttachmentPermanentlyCommandLink($file, $removeAttachmentPermanentlyEvenIfEmbedded)
+	function getRemoveAttachmentPermanentlyCommandLink($attachmentData, $removeAttachmentPermanentlyEvenIfAttached, $file, $removeAttachmentPermanentlyEvenIfEmbedded)
 	{
-		return HTML::buildRemoveAttachmentPermanentlyCommandLink('RemoveAttachmentPermanently', $file, $this->resource->getRemoveAttachmentImageURL(),
-		$this->rvt, $removeAttachmentPermanentlyEvenIfEmbedded);
+		return HTML::buildRemoveAttachmentPermanentlyCommandLink('RemoveAttachmentPermanently', $this->resource->getRemoveAttachmentImageURL(),
+		$this->rvt, $attachmentData, $removeAttachmentPermanentlyEvenIfAttached, $file, $removeAttachmentPermanentlyEvenIfEmbedded);
 	}
 
 	function getAttachFileCommandLink($fileName)

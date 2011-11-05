@@ -41,6 +41,7 @@ if (!defined('MEDIAWIKI'))
 $wgPageAttachment_enableAuditLog = true;
 
 $wgPageAttachment_removeAttachments['permanently']      = true;
+$wgPageAttachment_removeAttachments['ignoreIfAttached'] = true;
 $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
 
 
