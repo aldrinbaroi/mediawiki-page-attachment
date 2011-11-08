@@ -35,16 +35,18 @@ class AttachmentData
 	var $id;
 	var $title;
 	var $size;
+	var $description;
 	var $dateUploaded;
 	var $uploadedBy;
 	var $attachedToMoreThanOnePage;
 	var $attachedToPages;
 
-	function __construct($id, $title, $size, $dateUploaded, $uploadedBy, $attachedToPages)
+	function __construct($id, $title, $size, $description = '', $dateUploaded, $uploadedBy, $attachedToPages)
 	{
 		$this->id = $id;
 		$this->title = $title;
 		$this->size = $size;
+		$this->description = description;
 		$this->dateUploaded = $dateUploaded;
 		$this->uploadedBy = $uploadedBy;
 		$this->attachedToMoreThanOnePage = ($attachedToPages == NULL) ? false : (count($attachedToPages) > 1) ? true : false;
@@ -64,6 +66,11 @@ class AttachmentData
 	function getSize()
 	{
 		return $this->size;
+	}
+	
+	function getDescription()
+	{
+		return $this->description;
 	}
 
 	function getDateUploaded()
