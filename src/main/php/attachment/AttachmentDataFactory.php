@@ -60,7 +60,9 @@ class AttachmentDataFactory
 		{
 			$title = \Title::newFromID($id);
 			$article = new \Article($title, NS_FILE);
-			$size  = \wfFindFile($title)->getSize();
+			$file = \wfFindFile($title);
+			$size  = $file->getSize();
+			$description = $this->replaceHtmlTags( $file->getDescriptionText() );
 			$dateUploaded = $article->getTimestamp();
 			$uploadedBy = null;
 			if ($this->runtimeConfig->isShowUserRealName())
@@ -76,7 +78,7 @@ class AttachmentDataFactory
 			{
 				$attachedToPages = $this->getAttachedToPages($id);
 			}
-			$pageAttachmentData = new AttachmentData($id, $title, $size, $dateUploaded, $uploadedBy, $attachedToPages);
+			$pageAttachmentData = new AttachmentData($id, $title, $size, $description, $dateUploaded, $uploadedBy, $attachedToPages);
 			$this->cacheManager->storeAttachmentData($pageAttachmentData);
 		}
 		return $pageAttachmentData;
@@ -117,6 +119,20 @@ class AttachmentDataFactory
 			}
 			return $attachedToPages;
 		}
+	}
+
+	private function replaceHtmlTags($htmlText)
+	{
+		if (is_string($htmlText))
+		{
+			$text = preg_replace('/\t|\n|\r/', '',  preg_replace('/<\/*p\/*>/', '', $htmlText));
+		}
+		else
+		{
+			$text =  '';
+		}
+
+		return $text;
 	}
 
 }

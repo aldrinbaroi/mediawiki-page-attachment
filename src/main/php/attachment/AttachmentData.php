@@ -41,12 +41,12 @@ class AttachmentData
 	var $attachedToMoreThanOnePage;
 	var $attachedToPages;
 
-	function __construct($id, $title, $size, $description = '', $dateUploaded, $uploadedBy, $attachedToPages)
+	function __construct($id, $title, $size, $description, $dateUploaded, $uploadedBy, $attachedToPages)
 	{
 		$this->id = $id;
 		$this->title = $title;
 		$this->size = $size;
-		$this->description = description;
+		$this->description = $description;
 		$this->dateUploaded = $dateUploaded;
 		$this->uploadedBy = $uploadedBy;
 		$this->attachedToMoreThanOnePage = ($attachedToPages == NULL) ? false : (count($attachedToPages) > 1) ? true : false;
