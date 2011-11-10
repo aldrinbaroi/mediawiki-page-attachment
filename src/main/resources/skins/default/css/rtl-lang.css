@@ -30,20 +30,20 @@
     text-align: right;
 }
 
-#PageAttachment .titleRow_col_1 
+#PageAttachment .titleRow_col_Buttons  
 {
     text-align: left;
     padding-left: 0.5em;
 }
 
-#PageAttachment .titleRow_col_2 
+#PageAttachment .titleRow_col_DisplayTimeZone  
 {
     text-align: right;
     font-weight: normal;
     font-size: x-small;
 }
 
-#PageAttachment .titleRow_col_3 
+#PageAttachment .titleRow_col_Title 
 {
     text-align: right; 
     padding-right: 0.5em;
@@ -58,26 +58,31 @@
     text-align: right;
 }
 
-#PageAttachment .headerRow_col_1
+#PageAttachment .headerRow_col_Buttons 
 { 
 }
 
-#PageAttachment .headerRow_col_2
-{ 
-    text-align: right;
-}
-
-#PageAttachment .headerRow_col_3
+#PageAttachment .headerRow_col_UploadedBy 
 { 
     text-align: right;
 }
 
-#PageAttachment .headerRow_col_4
+#PageAttachment .headerRow_col_DateUploaded 
+{ 
+    text-align: right;
+}
+
+#PageAttachment .headerRow_col_Size
 { 
     text-align: center;
 }
 
-#PageAttachment .headerRow_col_5
+#PageAttachment .headerRow_col_Description  
+{ 
+    text-align: right;
+}
+
+#PageAttachment .headerRow_col_Name
 { 
     text-align: right;
     padding-right: 0.5em;
@@ -92,28 +97,34 @@
     text-align: right;
 }
 
-#PageAttachment .attachmentRow_col_1
+#PageAttachment .attachmentRow_col_Buttons 
 { 
     text-align: left;
     padding-left: 0.5em;
 }
 
-#PageAttachment .attachmentRow_col_2
+#PageAttachment .attachmentRow_col_UploadedBy 
 { 
     text-align: right;
 }
 
-#PageAttachment .attachmentRow_col_3
+#PageAttachment .attachmentRow_col_DateUploaded 
 { 
     text-align: right;
 }
 
-#PageAttachment .attachmentRow_col_4
+#PageAttachment .attachmentRow_col_Size 
 { 
     text-align: left;
+    padding-left: 1.0em;
 }
 
-#PageAttachment .attachmentRow_col_5
+#PageAttachment .attachmentRow_col_Description  
+{ 
+    text-align: right;
+}
+
+#PageAttachment .attachmentRow_col_Name
 { 
     text-align: right;
     padding-right: 0.5em;

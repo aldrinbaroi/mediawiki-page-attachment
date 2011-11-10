@@ -34,6 +34,7 @@ $messages['en'] = array(
     'attachments'                               => 'Attachments',
     'attachment'                                => 'Attachment',
     'name'                                      => 'Name',
+    'description'                               => 'Description',
     'size'                                      => 'Size',
     'dateUploaded'                              => 'Date Uploaded',
     'uploadedBy'                                => 'Uploaded By',

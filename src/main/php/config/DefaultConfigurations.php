@@ -90,16 +90,54 @@ $wgPageAttachment_imgViewAuditLog['default']       = 'tango-edit-find-16x16.png'
 $wgPageAttachment_imgViewHistory['default']        = 'tango-system-file-manager-16x16.png';
 
 # ---------------------------------------------------------------------------
-# Column Widths : Attachment list display section
+# Attachment list display section
 # ---------------------------------------------------------------------------
-# You can either specify skin specific column widths or, override the default
-# or, both. For skin spcific settings, specify skin name, instead of 'default'.
 #
-$wgPageAttachment_colWidth['default'][] = 53;  # <-- Name Column
-$wgPageAttachment_colWidth['default'][] = 10;  # <-- Size Column
-$wgPageAttachment_colWidth['default'][] = 15;  # <-- Date Uploaded Column
-$wgPageAttachment_colWidth['default'][] = 15;  # <-- Uploaded By Column
-$wgPageAttachment_colWidth['default'][] = 7;   # <-- Buttons Column
+# :: Columns to Display ::
+#
+$wgPageAttachment_colToDisplay[] = 'Name';
+$wgPageAttachment_colToDisplay[] = 'Description';
+$wgPageAttachment_colToDisplay[] = 'Size';
+$wgPageAttachment_colToDisplay[] = 'DateUploaded';
+$wgPageAttachment_colToDisplay[] = 'UploadedBy';
+$wgPageAttachment_colToDisplay[] = 'Buttons';
+
+#
+# :: Columns to Widths ::
+#
+# You can either specify skin & language specific column widths or, override 
+# the default or, both. For skin spcific settings, specify skin name, instead
+# of 'default'.  Similarly, for language specific settings, specify language
+# code instead of 'default'.
+#
+#   $wgPageAttachment_colWidth['Skin Name']['Language Code']['Column Name']
+#
+# -- Header & Attachment List Rows --
+//$wgPageAttachment_colWidth['default']['default']['Name'        ] = 65; // 53
+$wgPageAttachment_colWidth['default']['default']['Name'        ] = 34;
+$wgPageAttachment_colWidth['default']['default']['Description' ] = 24;
+$wgPageAttachment_colWidth['default']['default']['Size'        ] = 10;  // 10
+$wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 14; // 15
+$wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 14; // 15
+$wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 6;  // 7
+
+ 
+//$wgPageAttachment_colWidth['default']['default']['Name'        ] = 34;
+//$wgPageAttachment_colWidth['default']['default']['Description' ] = 28;
+//$wgPageAttachment_colWidth['default']['default']['Size'        ] = 10;  
+//$wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 12; 
+//$wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 10; 
+//$wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 6;  
+
+#
+# :: Title Row Spans ::
+#
+#
+#
+$wgPageAttachment_titleRowColSpan['default']['default']['Title'          ] = 3;
+$wgPageAttachment_titleRowColSpan['default']['default']['DisplayTimeZone'] = 2;
+$wgPageAttachment_titleRowColSpan['default']['default']['Buttons'        ] = 1;
+
 
 # ---------------------------------------------------------------------------
 # Status Message Format
@@ -153,7 +191,7 @@ $wgPageAttachment_permissions['download'       ]['loginRequired'] = true;
 $wgPageAttachment_permissions['viewAuditlog'   ]['loginRequired'] = true;
 $wgPageAttachment_permissions['viewHistory'    ]['loginRequired'] = true;
 #
-# - When login is not required
+# :: When login is not required ::
 #
 $wgPageAttachment_permissions['view'           ]['allowed'] = true;
 $wgPageAttachment_permissions['uploadAndAttach']['allowed'] = true;
@@ -163,7 +201,7 @@ $wgPageAttachment_permissions['download'       ]['allowed'] = true;
 $wgPageAttachment_permissions['viewAuditLog'   ]['allowed'] = true;
 $wgPageAttachment_permissions['viewHistory'    ]['allowed'] = true;
 #
-# - When login is required - Group Permission
+# :: When login is required - Group Permission ::
 #
 $wgPageAttachment_permissions['view'           ]['group']['sysop'] = true;
 $wgPageAttachment_permissions['uploadAndAttach']['group']['sysop'] = true;
@@ -187,7 +225,7 @@ $wgPageAttachment_permissions['download'       ]['group']['*'    ] = false;
 $wgPageAttachment_permissions['viewAuditLog'   ]['group']['*'    ] = false;
 $wgPageAttachment_permissions['viewHistory'    ]['group']['*'    ] = false;
 #
-# - When login is required - User Specific Permission
+# :: When login is required - User Specific Permission ::
 #
 # Use the following format to add user specific permissions.
 #

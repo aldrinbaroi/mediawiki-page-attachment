@@ -35,7 +35,7 @@ class UIComposer
 	private $security;
 	private $session;
 	private $runtimeConfig;
-	
+
 	function __construct($security, $session, $runtimeConfig)
 	{
 		$this->security = $security;
@@ -46,9 +46,13 @@ class UIComposer
 	function composeAttachmentListTable($titleRowColumns, $headerRowColumns, $attachmentRows)
 	{
 		global $wgLang;
-		
+		global $wgPageAttachment_colToDisplay;
+		global $wgPageAttachment_colWidth;
+
+		$skinName = $this->runtimeConfig->getSkinName();
+		$userLangCode = $this->runtimeConfig->getUserLanguageCode();
 		$rtlLang = $wgLang->isRTL() ? true : false;
-		$colWidths = $this->getColWidths();
+		$colWidths = $this->getColWidths($skinName, $userLangCode);
 		$cols = $rtlLang ? array_reverse($colWidths) : $colWidths;
 		$colgroupCols = '';
 		foreach ($cols as $col)
@@ -56,27 +60,33 @@ class UIComposer
 			$colgroupCols .= \HTML::element('col', array('width' => ($col . '%')));
 		}
 		$colgroup = \HTML::rawElement('colgroup', null, $colgroupCols);
-		## Title Row
+		//
+		// Title Row
+		//
 		$cols = $rtlLang ? array_reverse($titleRowColumns) : $titleRowColumns;
-		$colCount = 0;
+		$titleRowColKeys = array_keys($cols);
 		$titleRowCols = '';
-		foreach ($cols as $col)
+		foreach($titleRowColKeys as $colKey)
 		{
-			$attrs = array('class' => ('titleRow_col_' . ++$colCount), 'colspan' => $col['span']);
-			$titleRowCols .= \HTML::rawElement('th', $attrs, $col['value']);
+			$attrs = array('class' => ('titleRow_col_' . $colKey), 'colspan' => $this->getTitleRowColSpan($skinName, $userLangCode, $colKey));
+			$titleRowCols .= \HTML::rawElement('th', $attrs, $cols[$colKey]);
 		}
 		$titleRow = \HTML::rawElement('tr', array('class' => 'TitleRow'), $titleRowCols);
-		## Header Row
+		//
+		// Header Row
+		//
 		$cols = $rtlLang ? array_reverse($headerRowColumns) : $headerRowColumns;
-		$colCount = 0;
+		$headerRowColKeys = array_keys($cols);
 		$headerRowCols = '';
-		foreach ($cols as $col)
+		foreach ($headerRowColKeys as $colKey) 
 		{
-			$headerRowCols .= \HTML::element('th', array('class' => ('headerRow_col_' . ++$colCount)), $col);
+			$headerRowCols .= \HTML::element('th', array('class' => ('headerRow_col_' . $colKey)), $cols[$colKey]);
 		}
 		$headerRow = \HTML::rawElement('tr', array('class' => 'HeaderRow'), $headerRowCols);
 		$thead = \HTML::rawElement('thead', null, ($titleRow . $headerRow));
-		## Attachment Rows
+		//
+		// Attachment Rows
+		//
 		$atRows = '';
 		if ($this->security->isViewAttachmentsAllowed())
 		{
@@ -84,12 +94,12 @@ class UIComposer
 			{
 				foreach($attachmentRows as $row)
 				{
-					$colCount = 0;
 					$rowCols = $rtlLang ? array_reverse($row) : $row;
+					$rowColKeys = array_keys($rowCols);
 					$atRowsCols = '';
-					foreach($rowCols as $col)
+					foreach($rowColKeys as $colKey)
 					{
-						$atRowsCols .= \HTML::rawElement('td', array('class' => ('attachmentRow_col_' . ++$colCount)), $col);
+						$atRowsCols .= \HTML::rawElement('td', array('class' => ('attachmentRow_col_' . $colKey)), $rowCols[$colKey]);
 					}
 					$atRows .= \HTML::rawElement('tr', array('class' => 'AttachmentRow'), $atRowsCols);
 				}
@@ -130,10 +140,30 @@ class UIComposer
 		return $data;
 	}
 
+	private function getTitleRowColSpan($skinName, $userLangCode, $colName)
+	{
+		global $wgPageAttachment_titleRowColSpan;
+
+		$colSpan = 0;
+		if (isset($wgPageAttachment_titleRowColSpan[$skinName][$userLangCode][$colName]))
+		{
+			$colSpan =  $wgPageAttachment_titleRowColSpan[$skinName][$userLangCode][$colName];
+		}
+		else if (isset($wgPageAttachment_titleRowColSpan['default'][$userLangCode][$colName]))
+		{
+			$colSpan =  $wgPageAttachment_titleRowColSpan['default'][$userLangCode][$colName];
+		}
+		else
+		{
+			$colSpan =  $wgPageAttachment_titleRowColSpan['default']['default'][$colName];
+		}
+		return $colSpan;
+	}
+
 	private function formatStatusMessage($msg)
 	{
 		global $wgPageAttachment_statusMessageFormat;
-	
+
 		if (isset($msg))
 		{
 			$formattedMsg =  str_replace('STATUS_MESSAGE', $msg, $wgPageAttachment_statusMessageFormat);
@@ -148,20 +178,29 @@ class UIComposer
 		}
 		return $formattedMsg;
 	}
-	
-	private function getColWidths()
+
+	private function getColWidths($skinName, $userLangCode)
 	{
+		global $wgPageAttachment_colToDisplay;
 		global $wgPageAttachment_colWidth;
 
-		$skinName = $this->runtimeConfig->getSkinName();
-		if (isset($wgPageAttachment_colWidth[$skinName]))
+		$colWidths = array();
+		foreach ($wgPageAttachment_colToDisplay as $colToDisplay)
 		{
-			return $wgPageAttachment_colWidth[$skinName];
+			if (isset($wgPageAttachment_colWidth[$skinName][$userLangCode][$colToDisplay]))
+			{
+				$colWidths[] =  $wgPageAttachment_colWidth[$skinName][$userLangCode][$colToDisplay];
+			}
+			else if (isset($wgPageAttachment_colWidth['default'][$userLangCode][$colToDisplay]))
+			{
+				$colWidths[] =  $wgPageAttachment_colWidth[$skinName][$userLangCode][$colToDisplay];
+			}
+			else
+			{
+				$colWidths[] =  $wgPageAttachment_colWidth['default']['default'][$colToDisplay];
+			}
 		}
-		else
-		{
-			return $wgPageAttachment_colWidth['default'];
-		}
+		return $colWidths;
 	}
 
 }

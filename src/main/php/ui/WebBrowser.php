@@ -151,44 +151,52 @@ class WebBrowser
 		$tzName = $this->dateHelper->getUserTimeZoneInUserLang();
 		$rtlLang = $this->runtimeConfig->isRTL();
 		$titleRowColumns = array();
-		// Column 1 - Attachment Heading
-		$titleRowColumns[0]['span']  = 2;
-		$titleRowColumns[0]['value'] = ':: ' . \wfMsg('Attachments') . ' ::';
-		// Column 2 - Display Timezone
-		$titleRowColumns[1]['span']  = 2;
+		$titleRowColumns['Title'] = ':: ' . \wfMsg('Attachments') . ' ::';
 		if ($rtlLang == true)
 		{
-			$titleRowColumns[1]['value'] = $tzName .  ' :' .  \wfMsg('DisplayTimeZone');
+			$titleRowColumns['DisplayTimeZone'] = $tzName .  ' :' .  \wfMsg('DisplayTimeZone');
 		}
 		else
 		{
-			$titleRowColumns[1]['value'] = \wfMsg('DisplayTimeZone') . ': ' . $tzName;
+			$titleRowColumns['DisplayTimeZone'] = \wfMsg('DisplayTimeZone') . ': ' . $tzName;
 		}
-		// Column 3 - Command Links
-		$titleRowColumns[2]['span']  = 1;
-		$titleRowColumns[2]['value'] = '';
+		$titleRowColumns['Buttons'] = '';
 		if ($this->security->isAuditLogViewAllowed())
 		{
-			$titleRowColumns[2]['value'] .= $command->getViewAuditLogAllCommandLink();
+			$titleRowColumns['Buttons'] .= $command->getViewAuditLogAllCommandLink();
 		}
 		if ($this->security->isBrowseSearchAttachAllowed())
 		{
-			$titleRowColumns[2]['value'] .= $command->getBrowseSearchAttachCommandLink();
+			$titleRowColumns['Buttons'] .= $command->getBrowseSearchAttachCommandLink();
 		}
 		if ($this->security->isAttachmentUploadAndAttachAllowed())
 		{
-			$titleRowColumns[2]['value'] .= $command->getUploadAndAttachCommandLink();
+			$titleRowColumns['Buttons'] .= $command->getUploadAndAttachCommandLink();
 		}
-		if ($titleRowColumns[2]['value'] == '')
+		if ($titleRowColumns['Buttons'] == '')
 		{
-			$titleRowColumns[2]['value'] = HTML::buildImageLink(null, $this->resource->getSpacerImageURL());
+			$titleRowColumns['Buttons'] = HTML::buildImageLink(null, $this->resource->getSpacerImageURL());
 		}
 		return $titleRowColumns;
 	}
 
 	private function getHeaderRowColumns()
 	{
-		return  array(\wfMsg('Name'), \wfMsg('Size'), \wfMsg('DateUploaded'), \wfMsg('UploadedBy'), '');
+		global $wgPageAttachment_colToDisplay;
+
+		$headerRowColumns = array();
+		for($i = 0; $i < count($wgPageAttachment_colToDisplay); $i++)
+		{
+			if ($wgPageAttachment_colToDisplay[$i] == 'Buttons')
+			{
+				$headerRowColumns[$wgPageAttachment_colToDisplay[$i]] = '';
+			}
+			else
+			{
+				$headerRowColumns[$wgPageAttachment_colToDisplay[$i]] = \wfMsg($wgPageAttachment_colToDisplay[$i]);
+			}
+		}
+		return $headerRowColumns;
 	}
 
 	/*
@@ -197,6 +205,7 @@ class WebBrowser
 	private function getAttachmentRows($pageId, $command)
 	{
 		global $wgUser;
+		global $wgPageAttachment_colToDisplay;
 
 		$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
 		$sk = $wgUser->getSkin();
@@ -207,59 +216,91 @@ class WebBrowser
 		{
 			foreach($aIds as $aId)
 			{
-				$att = $pageAttachmentDataFactory->newAttachmentData($aId);
-				$aPageTitle = $att->getTitle()->getPartialURL();
-				$fileName = $att->getTitle()->getText();
-				if ($this->security->isAttachmentDownloadAllowed() == true)
+				$attachmentData = $pageAttachmentDataFactory->newAttachmentData($aId);
+				$fileName = $attachmentData->getTitle()->getText();
+				for($i = 0; $i < count($wgPageAttachment_colToDisplay); $i++)
 				{
-					$attachmentRows[$aCount][0] = $command->getDownloadCommandLink($fileName);
-				}
-				else
-				{
-					if ($this->security->isAttachmentDownloadRequireLogin() && !$this->security->isLoggedIn())
+					switch ($wgPageAttachment_colToDisplay[$i])
 					{
-						$attachmentRows[$aCount][0] = HTML::buildLabel('PleaseLoginToActivateDownloadLink', $fileName);
+						case 'Name':
+							$attachmentRows[$aCount]['Name'] = $this->getNameColumn($command, $fileName);
+							break;
+						case 'Size':
+							$attachmentRows[$aCount]['Size'] = $sk->formatSize($attachmentData->getSize());
+							break;
+						case 'Description':
+							$attachmentRows[$aCount]['Description'] = $attachmentData->getDescription();
+							break;
+						case 'DateUploaded':
+							$attachmentRows[$aCount]['DateUploaded'] = $this->dateHelper->formatDate($attachmentData->getDateUploaded());
+							break;
+						case 'UploadedBy':
+							$attachmentRows[$aCount]['UploadedBy'] = $attachmentData->getUploadedBy();
+							break;
+						case 'Buttons':
+							$attachmentRows[$aCount]['Buttons'] = $this->getButtonsColumn($command, $fileName, $attachmentData);
+							break;
 					}
-					else
-					{
-						$attachmentRows[$aCount][0] = HTML::buildLabel('AttachmentDownloadIsNotPermitted', $fileName);
-					}
-				}
-				$attachmentRows[$aCount][1] = $sk->formatSize($att->getSize());
-				$attachmentRows[$aCount][2] = $this->dateHelper->formatDate($att->getDateUploaded());
-				$attachmentRows[$aCount][3] = $att->getUploadedBy();
-				$attachmentRows[$aCount][4] = '';
-				if ($this->security->isAuditLogViewAllowed())
-				{
-					$attachmentRows[$aCount][4] .= $command->getViewAuditLogCommandLink($fileName);
-				}
-				if ($this->security->isHistoryViewAllowed())
-				{
-					$attachmentRows[$aCount][4] .= $command->getViewHistoryCommandLink($fileName);
-				}
-				if ($this->security->isAttachmentRemovalAllowed())
-				{
-					if ($this->security->isRemoveAttachmentPermanentlyEnabled())
-					{
-						$file = $this->fileManager->getFile($att->getTitle());
-						$removeAttachmentPermanentlyEvenIfAttached = $this->security->isRemoveAttachmentPermanentlyEvenIfAttached();
-						$removeAttachmentPermanentlyEvenIfEmbedded = $this->security->isRemoveAttachmentPermanentlyEvenIfEmbedded();
-						$attachmentRows[$aCount][4] .=
-						$command->getRemoveAttachmentPermanentlyCommandLink($att, $removeAttachmentPermanentlyEvenIfAttached, $file, $removeAttachmentPermanentlyEvenIfEmbedded);
-					}
-					else
-					{
-						$attachmentRows[$aCount][4] .= $command->getRemoveAttachmentCommandLink($fileName);
-					}
-				}
-				if ($attachmentRows[$aCount][4] == '')
-				{
-					$attachmentRows[$aCount][4] = HTML::buildImageLink(null, $this->resource->getSpacerImageURL());
 				}
 				$aCount++;
 			}
 		}
 		return $attachmentRows;
+	}
+
+	private function getNameColumn($command, $fileName)
+	{
+		$nameColum = '';
+		if ($this->security->isAttachmentDownloadAllowed() == true)
+		{
+			$nameColum = $command->getDownloadCommandLink($fileName);
+		}
+		else
+		{
+			if ($this->security->isAttachmentDownloadRequireLogin() && !$this->security->isLoggedIn())
+			{
+				$nameColum = HTML::buildLabel('PleaseLoginToActivateDownloadLink', $fileName);
+			}
+			else
+			{
+				$nameColum = HTML::buildLabel('AttachmentDownloadIsNotPermitted', $fileName);
+			}
+		}
+		return $nameColum;
+	}
+
+
+	private function getButtonsColumn($command, $fileName, $attachmentData)
+	{
+		$buttonsColumn = '';
+		if ($this->security->isAuditLogViewAllowed())
+		{
+			$buttonsColumn .= $command->getViewAuditLogCommandLink($fileName);
+		}
+		if ($this->security->isHistoryViewAllowed())
+		{
+			$buttonsColumn .= $command->getViewHistoryCommandLink($fileName);
+		}
+		if ($this->security->isAttachmentRemovalAllowed())
+		{
+			if ($this->security->isRemoveAttachmentPermanentlyEnabled())
+			{
+				$file = $this->fileManager->getFile($attachmentData->getTitle());
+				$removeAttachmentPermanentlyEvenIfAttached = $this->security->isRemoveAttachmentPermanentlyEvenIfAttached();
+				$removeAttachmentPermanentlyEvenIfEmbedded = $this->security->isRemoveAttachmentPermanentlyEvenIfEmbedded();
+				$buttonsColumn .=
+				$command->getRemoveAttachmentPermanentlyCommandLink($attachmentData, $removeAttachmentPermanentlyEvenIfAttached, $file, $removeAttachmentPermanentlyEvenIfEmbedded);
+			}
+			else
+			{
+				$buttonsColumn .= $command->getRemoveAttachmentCommandLink($fileName);
+			}
+		}
+		if ($buttonsColumn == '')
+		{
+			$buttonsColumn = HTML::buildImageLink(null, $this->resource->getSpacerImageURL());
+		}
+		return $buttonsColumn;
 	}
 
 }
