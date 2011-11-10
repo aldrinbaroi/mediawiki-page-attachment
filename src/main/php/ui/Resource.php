@@ -272,6 +272,21 @@ class Resource
 			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgRemoveAttachment['default'] ;
 		}
 	}
+	
+	function getViewMoreImageURL()
+	{
+		$skinName = $this->runtimeConfig->getSkinName();
+		global $wgPageAttachment_imgViewMore;
+	
+		if (isset($wgPageAttachment_imgViewMore[$skinName]))
+		{
+			return $this->getUrlPrefixForImage($skinName) . $wgPageAttachment_imgViewMore[$skinName] ;
+		}
+		else
+		{
+			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgViewMore['default'] ;
+		}
+	}
 
 }
 

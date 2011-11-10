@@ -131,7 +131,7 @@ class WebBrowser
 		$titleRowColumns = $this->getTitleRowColumns($command);
 		$headerRowColumns = $this->getHeaderRowColumns();
 		$attachmentRows = $this->getAttachmentRows($pageId, $command);
-		$uiComposer = new UIComposer($this->security, $this->session, $this->runtimeConfig);
+		$uiComposer = new UIComposer($this->security, $this->session, $this->runtimeConfig, $this->resource);
 		$data = $uiComposer->composeAttachmentListTable($titleRowColumns, $headerRowColumns, $attachmentRows);
 		$this->session->setForceReload(false);
 		return $data;

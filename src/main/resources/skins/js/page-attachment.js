@@ -41,6 +41,129 @@ function pageAttachment_openURL(url)
 }
 /**
  * 
+ * @param x
+ * @param y
+ * @returns
+ */
+function pageAttachment_Position(x, y)
+{
+	this.x = x;
+	this.y = y;
+	
+	this.getX = function()
+	{
+		return this.x;
+	}
+	
+	this.getY = function()
+	{
+		return this.y;
+	}
+}
+/**
+ * 
+ * @param element
+ * @returns
+ */
+function pageAttachment_getPosition(element)
+{
+	var e = element;
+    var left = e.offsetLeft;
+    while ((e = e.offsetParent) != null) 
+    {
+        left += e.offsetLeft;
+    }
+    var e = element;
+    var top = e.offsetTop;
+    while ((e = e.offsetParent) != null) 
+    {
+        top += e.offsetTop;
+    }
+    this.x = left;
+    this.y = top + element.offsetHeight;
+    this.w = element.offsetWidth;
+    this.h = element.offsetHeight;
+    return new pageAttachment_Position(x, y);
+}
+/**
+ * 
+ * @param fontFamily
+ * @param fontSize
+ * @returns
+ */
+function pageAttachment_FontInfo(fontFamily, fontSize)
+{
+	this.fontFamily = fontFamily;
+	this.fontSize = fontSize;
+	
+	this.getFontFamily = function()
+	{
+		return this.fontFamily;
+	}
+	
+	this.getFontSize = function()
+	{
+		return this.fontSize;
+	}
+}
+/**
+ * 
+ * @returns {pageAttachment_FontInfo}
+ */
+function pageAttachment_getBodyContentFontInfo()
+{
+	var fontFamily = '';
+	var fontSize = '';
+	var bodyContent = document.getElementById("bodyContent");
+	if (typeof document.defaultView != 'undefined' && typeof document.defaultView['getComputedStyle'] != 'undefined') 
+	{
+		var computedStyle = document.defaultView.getComputedStyle(bodyContent, null);
+		fontFamily = computedStyle.getPropertyValue("font-family");
+		fontSize = computedStyle.getPropertyValue("font-size");
+	} 
+	else 
+	{
+		computedStyle = bodyContent.currentStyle;
+		fontFamily = computedStyle["fontFamily"];
+		fontSize = computedStyle["fontSize"];
+	}
+	return new pageAttachment_FontInfo(fontFamily, fontSize);
+}
+/**
+ * 
+ * @param element
+ * @param popupWidth
+ * @param popupHeight
+ * @param text
+ */
+function pageAttachment_showPopup(element, popupWidth, popupHeight, text)
+{
+	var pos = pageAttachment_getPosition(element);
+	var popup = document.createElement("div");
+	var id = document.createAttribute("id");
+    var style = document.createAttribute("style");
+	var txt   = document.createTextNode(new String(text));
+	popup.setAttributeNode(id);
+	popup.setAttributeNode(style);
+	popup.appendChild(txt);
+	popup.id = "PageAttachment_Popup";
+	var fi = pageAttachment_getBodyContentFontInfo();
+	popup.style.cssText = "top:" + pos.getY() + "px;left:" + pos.getX() + "px;width:" + popupWidth + ";height:" + popupHeight + 
+							";font-family:" + fi.getFontFamily() + ";font-size:" + fi.getFontSize();
+	document.body.appendChild(popup);
+}
+/**
+ * 
+ * @param element
+ */
+function pageAttachment_removePopup(element)
+{
+	var popup = document.getElementById("PageAttachment_Popup");
+	var parentNode = popup.parentNode;
+	parentNode.removeChild(popup);
+}
+/**
+ * 
  */
 function pageAttachment_loadPageAttachments()
 {
@@ -159,7 +282,6 @@ function pageAttachment_registerOnLoad()
 		}	
 	}
 }
-
 
 /**
  * 

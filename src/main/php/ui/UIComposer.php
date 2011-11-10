@@ -35,12 +35,14 @@ class UIComposer
 	private $security;
 	private $session;
 	private $runtimeConfig;
+	private $resource;
 
-	function __construct($security, $session, $runtimeConfig)
+	function __construct($security, $session, $runtimeConfig, $resouce)
 	{
 		$this->security = $security;
 		$this->session = $session;
 		$this->runtimeConfig = $runtimeConfig;
+		$this->resource = $resouce;
 	}
 
 	function composeAttachmentListTable($titleRowColumns, $headerRowColumns, $attachmentRows)
@@ -48,6 +50,9 @@ class UIComposer
 		global $wgLang;
 		global $wgPageAttachment_colToDisplay;
 		global $wgPageAttachment_colWidth;
+		global $wgPageAttachment_descriptionMaxLength;
+		global $wgPageAttachment_descriptionPopupWidth;
+		global $wgPageAttachment_descriptionPopupHeight;
 
 		$skinName = $this->runtimeConfig->getSkinName();
 		$userLangCode = $this->runtimeConfig->getUserLanguageCode();
@@ -78,7 +83,7 @@ class UIComposer
 		$cols = $rtlLang ? array_reverse($headerRowColumns) : $headerRowColumns;
 		$headerRowColKeys = array_keys($cols);
 		$headerRowCols = '';
-		foreach ($headerRowColKeys as $colKey) 
+		foreach ($headerRowColKeys as $colKey)
 		{
 			$headerRowCols .= \HTML::element('th', array('class' => ('headerRow_col_' . $colKey)), $cols[$colKey]);
 		}
@@ -87,6 +92,8 @@ class UIComposer
 		//
 		// Attachment Rows
 		//
+		$viewMoreImgURL = $this->resource->getViewMoreImageURL();
+		$viewMoreImgIcon = \HTML::rawElement('img', array('src' => $viewMoreImgURL));
 		$atRows = '';
 		if ($this->security->isViewAttachmentsAllowed())
 		{
@@ -99,7 +106,30 @@ class UIComposer
 					$atRowsCols = '';
 					foreach($rowColKeys as $colKey)
 					{
-						$atRowsCols .= \HTML::rawElement('td', array('class' => ('attachmentRow_col_' . $colKey)), $rowCols[$colKey]);
+						if ($colKey == 'Description')
+						{
+							if ($rowCols[$colKey] == '')
+							{
+								$atRowsCols .= \HTML::rawElement('td', array('class' => ('attachmentRow_col_' . $colKey)), '');
+							}
+							else if (strlen($rowCols[$colKey]) > $wgPageAttachment_descriptionMaxLength)
+							{
+								$atRowsCols .= \HTML::rawElement('td',  array('class' => ('attachmentRow_col_' . $colKey),
+								'onmouseover' => 'pageAttachment_showPopup(this, "' . $wgPageAttachment_descriptionPopupWidth . '", "' . 
+								$wgPageAttachment_descriptionPopupHeight . '", "' . $rowCols[$colKey] . '");', 
+								'onmouseout' => 'pageAttachment_removePopup();'), 
+								(substr($rowCols[$colKey], 0, ($wgPageAttachment_descriptionMaxLength - 4)) . ' ' .
+								$viewMoreImgIcon));
+							}
+							else
+							{
+								$atRowsCols .= \HTML::rawElement('td', array('class' => ('attachmentRow_col_' . $colKey)), $rowCols[$colKey]);
+							}
+						}
+						else
+						{
+							$atRowsCols .= \HTML::rawElement('td', array('class' => ('attachmentRow_col_' . $colKey)), $rowCols[$colKey]);
+						}
 					}
 					$atRows .= \HTML::rawElement('tr', array('class' => 'AttachmentRow'), $atRowsCols);
 				}

@@ -88,12 +88,28 @@ $wgPageAttachment_imgAttachFile['default']         = 'tango-mail-attachment-16x1
 $wgPageAttachment_imgRemoveAttachment['default']   = 'tango-edit-cut-16x16.png';
 $wgPageAttachment_imgViewAuditLog['default']       = 'tango-edit-find-16x16.png';
 $wgPageAttachment_imgViewHistory['default']        = 'tango-system-file-manager-16x16.png';
+$wgPageAttachment_imgViewMore['default']           = 'tango-go-jump-16x16.png';
 
 # ---------------------------------------------------------------------------
 # Attachment list display section
 # ---------------------------------------------------------------------------
 #
 # :: Columns to Display ::
+#
+# Currently the following columns are available for display & by default all
+# are displayed. You can cusotmize the display columns do the follwing:
+#   1. To remove a column
+#        1.1 Unset $wgPageAttachment_colToDisplay[] 
+#               Examle: unset($wgPageAttachment_colToDisplay);
+#        1.2 Set the columns to be displayed
+#        1.3 Set the column widths $wgPageAttachment_colWidth[] so that the 
+#            sum of the column withds add up to 100
+#        1.4 Ensure that title row's column span total match total number of
+#            columns going to be displayed
+#   2. To change the order of the columns
+#        The columns are displayed in the sequence added to $wgPageAttachment_colToDisplay.
+#        So, to change the display order, specify the column names in the sequence
+#        you would like them to be displayed.
 #
 $wgPageAttachment_colToDisplay[] = 'Name';
 $wgPageAttachment_colToDisplay[] = 'Description';
@@ -103,7 +119,7 @@ $wgPageAttachment_colToDisplay[] = 'UploadedBy';
 $wgPageAttachment_colToDisplay[] = 'Buttons';
 
 #
-# :: Columns to Widths ::
+# :: Colum Widths ::
 #
 # You can either specify skin & language specific column widths or, override 
 # the default or, both. For skin spcific settings, specify skin name, instead
@@ -113,31 +129,54 @@ $wgPageAttachment_colToDisplay[] = 'Buttons';
 #   $wgPageAttachment_colWidth['Skin Name']['Language Code']['Column Name']
 #
 # -- Header & Attachment List Rows --
-//$wgPageAttachment_colWidth['default']['default']['Name'        ] = 65; // 53
+#
 $wgPageAttachment_colWidth['default']['default']['Name'        ] = 34;
-$wgPageAttachment_colWidth['default']['default']['Description' ] = 24;
-$wgPageAttachment_colWidth['default']['default']['Size'        ] = 10;  // 10
-$wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 14; // 15
-$wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 14; // 15
-$wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 6;  // 7
-
+$wgPageAttachment_colWidth['default']['default']['Description' ] = 23;
+$wgPageAttachment_colWidth['default']['default']['Size'        ] = 10; 
+$wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 14;
+$wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 14;
+$wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 7;  
  
-//$wgPageAttachment_colWidth['default']['default']['Name'        ] = 34;
-//$wgPageAttachment_colWidth['default']['default']['Description' ] = 28;
+//
+// For your refrence, here are the column widths before "description"
+// column was added.
+//
+//$wgPageAttachment_colWidth['default']['default']['Name'        ] = 53;
 //$wgPageAttachment_colWidth['default']['default']['Size'        ] = 10;  
-//$wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 12; 
-//$wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 10; 
-//$wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 6;  
+//$wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 15; 
+//$wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 15; 
+//$wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 7;  
+//
 
 #
-# :: Title Row Spans ::
+# :: Title Row Column Spans ::
 #
-#
+# The title row has three columns.  So, to match total number of columns being
+# displayed, "span" must be used.  If you change the number of column being
+# displayed, change the column span values so that the total match the total
+# number of columns to be displayed.
 #
 $wgPageAttachment_titleRowColSpan['default']['default']['Title'          ] = 3;
 $wgPageAttachment_titleRowColSpan['default']['default']['DisplayTimeZone'] = 2;
 $wgPageAttachment_titleRowColSpan['default']['default']['Buttons'        ] = 1;
 
+#
+# :: Description Field ::
+#
+# To keep the display clean, the following is setting is used to detemine
+# the number of characters to display.  If the description is longer than
+# the maximum length specified, the description is trimed and a popup is used 
+# to display the whole description.
+# 
+$wgPageAttachment_descriptionMaxLength = 35;
+
+#
+# :: Description Popup ::
+#
+# Use the following to change the width & height of the description popup.
+#
+$wgPageAttachment_descriptionPopupWidth  = '50em';
+$wgPageAttachment_descriptionPopupHeight = '7em';
 
 # ---------------------------------------------------------------------------
 # Status Message Format
