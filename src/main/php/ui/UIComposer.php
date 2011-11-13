@@ -114,12 +114,25 @@ class UIComposer
 							}
 							else if (strlen($rowCols[$colKey]) > $wgPageAttachment_descriptionMaxLength)
 							{
+								$descriptionAndIcon = '';
+								if ($rtlLang == true)
+								{
+									// FIXME Need to figure out how to detect file description content language to properly trim it
+									// $desc = strrev(substr(strrev($rowCols[$colKey]), 0, ($wgPageAttachment_descriptionMaxLength - 4)));
+									// 
+									// for now do the same as LTR language
+									$desc = substr($rowCols[$colKey], 0, ($wgPageAttachment_descriptionMaxLength - 4));
+									$descriptionAndIcon = $desc . ' ' .  $viewMoreImgIcon;
+								}
+								else
+								{
+									$desc = substr($rowCols[$colKey], 0, ($wgPageAttachment_descriptionMaxLength - 4));
+									$descriptionAndIcon = $desc . ' ' . $viewMoreImgIcon;
+								}
 								$atRowsCols .= \HTML::rawElement('td',  array('class' => ('attachmentRow_col_' . $colKey),
 								'onmouseover' => 'pageAttachment_showPopup(this, "' . $wgPageAttachment_descriptionPopupWidth . '", "' . 
-								$wgPageAttachment_descriptionPopupHeight . '", "' . $rowCols[$colKey] . '");', 
-								'onmouseout' => 'pageAttachment_removePopup();'), 
-								(substr($rowCols[$colKey], 0, ($wgPageAttachment_descriptionMaxLength - 4)) . ' ' .
-								$viewMoreImgIcon));
+								$wgPageAttachment_descriptionPopupHeight . '", "' . $rowCols[$colKey] . '");',
+								'onmouseout' => 'pageAttachment_removePopup();'), $descriptionAndIcon);
 							}
 							else
 							{
