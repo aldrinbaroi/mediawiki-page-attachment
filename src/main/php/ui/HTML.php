@@ -94,7 +94,6 @@ class HTML
 		return self::buildImageCommandLink($titleMsgArgs, $jsRemoveAttachment, $imageURL);
 	}
 
-	// TODO Need to complete the implementation
 	static function buildRemoveAttachmentPermanentlyCommandLink($titleMsgArgs, $imageURL, $rvt, $attachmentData, $removeAttachmentPermanentlyEvenIfAttached, $file, $removeAttachmentPermanentlyEvenIfEmbedded)
 	{
 		$attachmentName = $file->getName();
