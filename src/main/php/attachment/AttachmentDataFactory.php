@@ -30,8 +30,6 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-// TODO Update to include attached to page names if permanent file deletion is enabled
-
 class AttachmentDataFactory
 {
 	private $cache;
