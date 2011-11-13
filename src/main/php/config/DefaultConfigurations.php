@@ -88,7 +88,7 @@ $wgPageAttachment_imgAttachFile['default']         = 'tango-mail-attachment-16x1
 $wgPageAttachment_imgRemoveAttachment['default']   = 'tango-edit-cut-16x16.png';
 $wgPageAttachment_imgViewAuditLog['default']       = 'tango-edit-find-16x16.png';
 $wgPageAttachment_imgViewHistory['default']        = 'tango-system-file-manager-16x16.png';
-$wgPageAttachment_imgViewMore['default']           = 'tango-go-jump-16x16.png';
+$wgPageAttachment_imgViewMore['default']           = 'tango-go-jump-12x12.png';
 
 # ---------------------------------------------------------------------------
 # Attachment list display section
