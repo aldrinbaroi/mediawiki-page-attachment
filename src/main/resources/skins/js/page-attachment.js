@@ -148,8 +148,8 @@ function pageAttachment_showPopup(element, popupWidth, popupHeight, text)
 	popup.appendChild(txt);
 	popup.id = "PageAttachment_Popup";
 	var fi = pageAttachment_getBodyContentFontInfo();
-	popup.style.cssText = "top:" + pos.getY() + "px;left:" + pos.getX() + "px;width:" + popupWidth + ";height:" + popupHeight + 
-							";font-family:" + fi.getFontFamily() + ";font-size:" + fi.getFontSize();
+	popup.style.cssText = "top:" + pos.getY() + "px;left:" + pos.getX() + "px;width:" + popupWidth + 
+	                      ";font-family:" + fi.getFontFamily() + ";font-size:" + fi.getFontSize();
 	document.body.appendChild(popup);
 }
 /**
