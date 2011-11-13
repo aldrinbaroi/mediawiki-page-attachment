@@ -107,24 +107,6 @@ $wgAutoloadClasses['PageAttachment\\File\\File']                                
 $wgAutoloadClasses['PageAttachment\\File\\FileManager']                           = $dir . 'file/FileManager.php';
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
 
-## Hooks
-$requestHandler = new PageAttachment\RequestHandler();
-#
-$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'setupDatabase');
-$wgHooks['BeforeInitialize'][]                    = array($requestHandler, 'onBeforeInitialize');
-$wgHooks['EditPage::importFormData'][]            = array($requestHandler, 'onEditPageImportFormData');
-$wgHooks['ArticleSaveComplete'][]                 = array($requestHandler, 'onArticleSaveComplete');
-$wgHooks['BeforePageDisplay'][]                   = array($requestHandler, 'onBeforePageDisplay');
-$wgHooks['SkinAfterContent'][]                    = array($requestHandler, 'onSkinAfterContent');
-$wgHooks['SkinAfterBottomScripts'][]              = array($requestHandler, 'onSkinAfterBottomScripts');
-$wgHooks['UploadComplete'][]                      = array($requestHandler, 'onUploadComplete');
-$wgHooks['SpecialUploadComplete'][]               = array($requestHandler, 'onSpecialUploadComplete');
-$wgHooks['UserLoginComplete'][]                   = array($requestHandler, 'onUserLoginComplete');
-$wgHooks['UserLogoutComplete'][]                  = array($requestHandler, 'onUserLogoutComplete');
-$wgHooks['ArticleDelete'][]                       = array($requestHandler, 'onArticleDelete');
-$wgHooks['FileDeleteComplete'][]                  = array($requestHandler, 'onFileDeleteComplete');
-$wgHooks['FileUndeleteComplete'][]                = array($requestHandler, 'onFileUndeleteComplete');
-
 ## Ajax Hooks
 $wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\getPageAttachments';
 $wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachment';
@@ -134,5 +116,33 @@ $wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\rem
 $wgSpecialPages['PageAttachmentListFiles']        = '\\PageAttachment\\BrowseSearch\\ListFiles';
 $wgSpecialPages['PageAttachmentUpload']           = '\\PageAttachment\\Upload\\Upload';
 $wgSpecialPages['PageAttachmentAuditLogViewer']   = '\\PageAttachment\\AuditLog\\AuditLogViewer';
+
+## Extension Function Hook
+$wgExtensionFunctions[] = 'efSetupPageAttachmentExtension';
+
+## Function to register the hooks
+function efSetupPageAttachmentExtension()
+{
+	global $wgHooks;
+	
+	$requestHandler = new \PageAttachment\RequestHandler();
+	
+	// Hooks
+	$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'setupDatabase');
+	$wgHooks['BeforeInitialize'][]                    = array($requestHandler, 'onBeforeInitialize');
+	$wgHooks['EditPage::importFormData'][]            = array($requestHandler, 'onEditPageImportFormData');
+	$wgHooks['ArticleSaveComplete'][]                 = array($requestHandler, 'onArticleSaveComplete');
+	$wgHooks['BeforePageDisplay'][]                   = array($requestHandler, 'onBeforePageDisplay');
+	$wgHooks['SkinAfterContent'][]                    = array($requestHandler, 'onSkinAfterContent');
+	$wgHooks['SkinAfterBottomScripts'][]              = array($requestHandler, 'onSkinAfterBottomScripts');
+	$wgHooks['UploadComplete'][]                      = array($requestHandler, 'onUploadComplete');
+	$wgHooks['SpecialUploadComplete'][]               = array($requestHandler, 'onSpecialUploadComplete');
+	$wgHooks['UserLoginComplete'][]                   = array($requestHandler, 'onUserLoginComplete');
+	$wgHooks['UserLogoutComplete'][]                  = array($requestHandler, 'onUserLogoutComplete');
+	$wgHooks['ArticleDelete'][]                       = array($requestHandler, 'onArticleDelete');
+	$wgHooks['FileDeleteComplete'][]                  = array($requestHandler, 'onFileDeleteComplete');
+	$wgHooks['FileUndeleteComplete'][]                = array($requestHandler, 'onFileUndeleteComplete');
+	
+}
 
 ## ::END::
