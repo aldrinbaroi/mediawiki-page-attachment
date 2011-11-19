@@ -68,9 +68,9 @@ class Command
 		return HTML::buildImageCommandLinkJS('ViewAuditLog', $this->getViewAuditLogCommandURL($fileName), $this->resource->getViewAuditLogImageURL());
 	}
 
-	function getDownloadCommandLink($fileName)
+	function getDownloadCommandLink($fileName, $fileNameLabel)
 	{
-		return HTML::buildCommandLink(array('DownloadFile', $fileName), $this->getDownloadCommandURL($fileName), $fileName);
+		return HTML::buildCommandLink(array('DownloadFile', $fileName), $this->getDownloadCommandURL($fileName), $fileNameLabel);
 	}
 
 

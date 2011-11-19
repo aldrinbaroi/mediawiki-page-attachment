@@ -250,23 +250,44 @@ class WebBrowser
 
 	private function getNameColumn($command, $fileName)
 	{
+		global $wgPageAttachment_attachmentNameMaxLength;
+
 		$nameColum = '';
+		$fileNameLabel = $fileName;
+		if (strlen($fileName) > $wgPageAttachment_attachmentNameMaxLength)
+		{
+			$rtlLang = $this->runtimeConfig->isRTL();
+			if ($rtlLang == true)
+			{
+				// FIXME Need to figure out how to detect file name content language to properly trim it
+				$fileNameLabel = substr($fileName, 0, ($wgPageAttachment_attachmentNameMaxLength - 4)) . ' ...';
+			}
+			else
+			{
+				$fileNameLabel = substr($fileName, 0, ($wgPageAttachment_attachmentNameMaxLength - 4)) . ' ...';
+			}
+		}
 		if ($this->security->isAttachmentDownloadAllowed() == true)
 		{
-			$nameColum = $command->getDownloadCommandLink($fileName);
+			$nameColum = $command->getDownloadCommandLink($fileName, $fileNameLabel);
 		}
 		else
 		{
 			if ($this->security->isAttachmentDownloadRequireLogin() && !$this->security->isLoggedIn())
 			{
-				$nameColum = HTML::buildLabel('PleaseLoginToActivateDownloadLink', $fileName);
+				$nameColum = HTML::buildLabel('PleaseLoginToActivateDownloadLink', $fileNameLabel);
 			}
 			else
 			{
-				$nameColum = HTML::buildLabel('AttachmentDownloadIsNotPermitted', $fileName);
+				$nameColum = HTML::buildLabel('AttachmentDownloadIsNotPermitted', $fileNameLabel);
 			}
 		}
 		return $nameColum;
+	}
+
+	private function getDescriptionColumn($description)
+	{
+
 	}
 
 

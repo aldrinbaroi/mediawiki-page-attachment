@@ -161,11 +161,21 @@ $wgPageAttachment_titleRowColSpan['default']['default']['DisplayTimeZone'] = 2;
 $wgPageAttachment_titleRowColSpan['default']['default']['Buttons'        ] = 1;
 
 #
-# :: Description Field ::
+# :: Attachment Name Column
 #
-# To keep the display clean, the following is setting is used to detemine
-# the number of characters to display.  If the description is longer than
-# the maximum length specified, the description is trimed and a popup is used 
+# To keep the display clean, the following is setting is used to detemine the
+# number of characters to display.  If the attachment name is longer than the
+# maximum length specified, the name is trimed and elipses are used indicate that
+# the ....
+#
+$wgPageAttachment_attachmentNameMaxLength = 55;
+
+#
+# :: Description Column ::
+#
+# To keep the display clean, the following setting is used to detemine the
+# number of characters to display.  If the description is longer than the
+# maximum length specified, the description is trimed and a popup is used 
 # to display the whole description.
 # 
 $wgPageAttachment_descriptionMaxLength = 35;
