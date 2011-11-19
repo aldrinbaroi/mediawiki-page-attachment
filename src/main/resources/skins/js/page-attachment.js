@@ -150,7 +150,7 @@ function pageAttachment_showPopup(element, popupWidth, popupHeight, text, rtlLan
 	var fi = pageAttachment_getBodyContentFontInfo();
 	popup.style.cssText = "top:" + pos.getY() + "px;left:" + pos.getX() + "px;width:" + popupWidth + 
 	                      ";font-family:" + fi.getFontFamily() + ";font-size:" + fi.getFontSize();
-	if (rtLang == true)
+	if (rtlLang == true)
 	{
 		popup.style.cssText += ";text-align:right;";
 	}
