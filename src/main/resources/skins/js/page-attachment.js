@@ -136,7 +136,7 @@ function pageAttachment_getBodyContentFontInfo()
  * @param popupHeight
  * @param text
  */
-function pageAttachment_showPopup(element, popupWidth, popupHeight, text)
+function pageAttachment_showPopup(element, popupWidth, popupHeight, text, rtlLang)
 {
 	var pos = pageAttachment_getPosition(element);
 	var popup = document.createElement("div");
@@ -150,6 +150,14 @@ function pageAttachment_showPopup(element, popupWidth, popupHeight, text)
 	var fi = pageAttachment_getBodyContentFontInfo();
 	popup.style.cssText = "top:" + pos.getY() + "px;left:" + pos.getX() + "px;width:" + popupWidth + 
 	                      ";font-family:" + fi.getFontFamily() + ";font-size:" + fi.getFontSize();
+	if (rtLang == true)
+	{
+		popup.style.cssText += ";text-align:right;";
+	}
+	else
+	{
+		popup.style.cssText += ";text-align:left;";
+	}
 	document.body.appendChild(popup);
 }
 /**

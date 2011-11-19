@@ -131,7 +131,8 @@ class UIComposer
 								}
 								$atRowsCols .= \HTML::rawElement('td',  array('class' => ('attachmentRow_col_' . $colKey),
 								'onmouseover' => 'pageAttachment_showPopup(this, "' . $wgPageAttachment_descriptionPopupWidth . '", "' . 
-								$wgPageAttachment_descriptionPopupHeight . '", "' . $rowCols[$colKey] . '");',
+								$wgPageAttachment_descriptionPopupHeight . '", "' . $rowCols[$colKey] . '", ' . 
+								(($rtlLang == true) ? "true" : "false" ).');',
 								'onmouseout' => 'pageAttachment_removePopup();'), $descriptionAndIcon);
 							}
 							else
