@@ -122,6 +122,11 @@ class RequestHandler
 
 	function onArticleSaveComplete(&$article, &$user, $text, $summary, $minoredit, $watchthis, $sectionanchor, &$flags, $revision, &$status, $baseRevId, &$redirect)
 	{
+		$title = $article->getTitle();
+		if ($title->getNamespace() == NS_FILE)
+		{
+			$this->attachmentManager->cleardAttachmentData($article->getID());
+		}
 		$this->session->setForceReload(true);
 		return true;
 	}

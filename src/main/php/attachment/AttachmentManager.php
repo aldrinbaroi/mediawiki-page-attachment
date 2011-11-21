@@ -449,6 +449,34 @@ class AttachmentManager
 		}
 	}
 
+	function cleardAttachmentData($pageId)
+	{
+		if ($this->isAttachedToPages($pageId))
+		{
+			$this->cacheManager->removeAttachmentData($pageId);
+		}
+	}
+
+	private function isAttachedToPages($pageId)
+	{
+		$dbr = \wfGetDB( DB_SLAVE );
+		$rs = $dbr->select('page_attachment_data', 'attached_to_page_id', 'attachment_page_id = ' . $pageId);
+		if ($rs == false)
+		{
+			return false;
+		}
+		else
+		{
+			$i = 0;
+			foreach($rs as $row)
+			{
+				$i++;
+				if ($i > 0) break;
+			}
+			return ($i > 0) ? true : false;
+		}
+	}
+
 }
 
 ## ::END::
