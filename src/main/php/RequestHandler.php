@@ -27,7 +27,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html   GPL License 3.0 or later
  * @version    SVN: $Id$
  * @since      File available since Release 1.0
- * 
+ *
  */
 
 namespace PageAttachment;
@@ -52,6 +52,7 @@ class RequestHandler
 	private $resource;
 	private $auditLogManager;
 	private $downloadManager;
+	private $uploadHelper;
 
 	function __construct()
 	{
@@ -63,6 +64,7 @@ class RequestHandler
 		$this->resource = new \PageAttachment\UI\Resource($this->security, $this->session);
 		$this->webBrowser = new \PageAttachment\UI\WebBrowser($this->security, $this->requestHelper, $this->session, $this->attachmentManager, $this->resource);
 		$this->downloadManager = new \PageAttachment\Download\DownloadManager($this->security, $this->session, $this->attachmentManager);
+		$this->uploadHelper = new \PageAttachment\Upload\UploadHelper();
 	}
 
 	function setupDatabase()
@@ -76,7 +78,7 @@ class RequestHandler
 	function onBeforeInitialize(&$title, &$article, &$output, &$user, $request, $mediaWiki)
 	{
 		global $wgRequest;
-		
+
 		$this->session->startSessionIfNotStarted();
 		$action = $wgRequest->getVal('action');
 		$currentViewPage = new \PageAttachment\Session\Page($title);
@@ -149,6 +151,24 @@ class RequestHandler
 		return true;
 	}
 
+	function onUploadFormInitial($uploadFormObj)
+	{
+		if ($this->uploadHelper->isSetAttachmentCategoryOnUploadEnabled())
+		{
+			$this->uploadHelper->addCategoryChooserToUploadForm($uploadFormObj);
+		}
+		return true;
+	}
+
+	function onUploadFormBeforeProcessing($uploadFormObj)
+	{
+		if ($this->uploadHelper->isSetAttachmentCategoryOnUploadEnabled())
+		{
+			$this->uploadHelper->setAttachmentCategory($uploadFormObj);
+		}
+		return true;
+	}
+
 	function onUploadComplete(&$image)
 	{
 		$this->attachmentManager->attachUploadedFile($image);
@@ -173,18 +193,18 @@ class RequestHandler
 		$this->attachmentManager->removeAttachment($attachmentName, $rvt);
 		return $this->webBrowser->renderAttachmentList($pageTitle);
 	}
-	
+
 	/**
-	* Fulfils Ajax request to remove a page attachment permanently
-	*
-	*/
+	 * Fulfils Ajax request to remove a page attachment permanently
+	 *
+	 */
 	function removeAttachmentPermanently($pageTitle, $attachmentName, $rvt)
 	{
 		$this->attachmentManager->removeAttachmentPermanently($attachmentName, $rvt);
 		return $this->webBrowser->renderAttachmentList($pageTitle);
 	}
-	
-	
+
+
 	/**
 	 * Fulfils Ajax request get attachment list for a page
 	 *

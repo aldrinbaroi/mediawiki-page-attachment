@@ -361,4 +361,19 @@ $wgPageAttachment_sqlite3CacheDirectory = '';
 #
 $wgPageAttachment_ajaxCacheDuration = 0;
 
+# ---------------------------------------------------------------------------
+# Attachment Category
+# ---------------------------------------------------------------------------
+#
+
+$wgPageAttachment_attachmentCategory['setOnUpload'] = true;
+$wgPageAttachment_attachmentCategory['mustSet'] = false;
+$wgPageAttachment_attachmentCategory['defaultCategory'] = 'MyCategory 2'; 
+#$wgPageAttachment_attachmentCategory['allowedCategories'] = 'PredefinedCategoriesOnly';
+#$wgPageAttachment_attachmentCategory['allowedCategories'] = 'MediaWikiCategoriesOnly';
+$wgPageAttachment_attachmentCategory['allowedCategories'] = 'BothPredefinedAndMediaWikiCategories';
+$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 1';
+$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 2';
+$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory03';
+
 ## ::END ::

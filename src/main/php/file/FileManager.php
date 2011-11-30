@@ -29,7 +29,7 @@ if (!defined('MEDIAWIKI'))
 	echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
 	exit( 1 );
 }
-// TODO update to use cache manager
+
 class FileManager
 {
 	private $securityManager;

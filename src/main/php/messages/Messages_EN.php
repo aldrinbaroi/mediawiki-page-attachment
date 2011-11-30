@@ -1,31 +1,31 @@
 <?php
 /**
-*
-* Copyright (C) 2011 Aldrin Edison Baroi
-*
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License along
-* with this program; if not, write to the
-*     Free Software Foundation, Inc.,
-*     51 Franklin Street, Fifth Floor
-*     Boston, MA 02110-1301, USA.
-*     http://www.gnu.org/copyleft/gpl.html
-*
-*/
+ *
+ * Copyright (C) 2011 Aldrin Edison Baroi
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the
+ *     Free Software Foundation, Inc.,
+ *     51 Franklin Street, Fifth Floor
+ *     Boston, MA 02110-1301, USA.
+ *     http://www.gnu.org/copyleft/gpl.html
+ *
+ */
 
 if (!defined('MEDIAWIKI'))
 {
-    echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
-    exit( 1 );
+	echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
+	exit( 1 );
 }
 
 $messages = array();
@@ -94,18 +94,18 @@ $messages['en'] = array(
     'unableToDetermineAttachToPage'             => 'Error: Unable to Determine Attach to Page',
     'pleaseLoginToActivateDownloadLink'         => 'Please Login to Activate Download Link',
     'downloadFile'                              => 'Download File: $1',
-    // Special Pages
+// Special Pages
     'pageattachmentlistfiles'                   => 'Browse/Search & Attach File',
     'pageattachmentupload'                      => 'Upload & Attach File',
     'pageattachmentauditlogviewer'              => 'Page Attachment Audit Log Viewer',
-    // Audit Log Viewer 
+// Audit Log Viewer
     'auditLog'                                  => 'Audit Log',
     'attached_to_page_id'                       => 'Attached to Page Name',
     'attachment_file_name'                      => 'Attachment Name',
     'user_id'                                   => 'User ID/Name',
     'activity_time'                             => 'Activity Time',
     'activity_type'                             => 'Activity',
-    // Activity Types
+// Activity Types
     'uploadedAndAttachedFile'                   => 'Uploaded & Attached File',
     'uploadedAndReattachedFile'                 => 'Uploaded & Reattached File',
     'attachedExistingFile'                      => 'Attached Existing File',
@@ -115,12 +115,14 @@ $messages['en'] = array(
     'removeFilePermanentlyFailed'               => 'Remove File Permanently Failed',
     'removedDeletedFile'                        => 'Removed Deleted File',
     'reattachedUndeletedFile'                   => 'Reattached Undeleted File',
-    //
+//
     'utc'                                       => 'UTC',
     'unableToDetermineDownloadFromPage'         => 'Unable to Determine Download from Page',
     'unableToDetermineDownloadFileName'         => 'Unable to Determine Download File Name',
     'requestedDownloadFileDoesNotExist'         => 'Requested Download File Does Not Exist',
-    'unknownDownloadError'                      => 'Unknown Download Error'
+    'unknownDownloadError'                      => 'Unknown Download Error',
+// Attachment Category
+    'selectCategory'                            => 'Select Category'
 );
 
 

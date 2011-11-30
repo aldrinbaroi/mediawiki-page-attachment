@@ -93,6 +93,7 @@ $wgAutoloadClasses['PageAttachment\\Attachment\\AttachmentDataFactory']         
 $wgAutoloadClasses['PageAttachment\\Attachment\\AttachmentManager']               = $dir . 'attachment/AttachmentManager.php';
 $wgAutoloadClasses['PageAttachment\\BrowseSearch\\ImageListPager']                = $dir . 'browse-search/ImageListPager.php';
 $wgAutoloadClasses['PageAttachment\\BrowseSearch\\ListFiles']                     = $dir . 'browse-search/ListFiles.php';
+$wgAutoloadClasses['PageAttachment\\Upload\\UploadHelper']                        = $dir . 'upload/UploadHelper.php';
 $wgAutoloadClasses['PageAttachment\\Upload\\Upload']                              = $dir . 'upload/Upload.php';
 $wgAutoloadClasses['PageAttachment\\Download\\FileStreamer']                      = $dir . 'download/FileStreamer.php';
 $wgAutoloadClasses['PageAttachment\\Download\\DownloadManager']                   = $dir . 'download/DownloadManager.php';
@@ -105,6 +106,7 @@ $wgAutoloadClasses['PageAttachment\\User\\User']                                
 $wgAutoloadClasses['PageAttachment\\User\\UserManager']                           = $dir . 'user/UserManager.php';
 $wgAutoloadClasses['PageAttachment\\File\\File']                                  = $dir . 'file/File.php';
 $wgAutoloadClasses['PageAttachment\\File\\FileManager']                           = $dir . 'file/FileManager.php';
+$wgAutoloadClasses['PageAttachment\\Category\\CategoryManager']                   = $dir . 'category/CategoryManager.php';
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
 
 ## Ajax Hooks
@@ -135,6 +137,8 @@ function efSetupPageAttachmentExtension()
 	$wgHooks['BeforePageDisplay'][]                   = array($requestHandler, 'onBeforePageDisplay');
 	$wgHooks['SkinAfterContent'][]                    = array($requestHandler, 'onSkinAfterContent');
 	$wgHooks['SkinAfterBottomScripts'][]              = array($requestHandler, 'onSkinAfterBottomScripts');
+	$wgHooks['UploadForm:initial'][]                  = array($requestHandler, 'onUploadFormInitial');
+	$wgHooks['UploadForm:BeforeProcessing'][]         = array($requestHandler, 'onUploadFormBeforeProcessing');
 	$wgHooks['UploadComplete'][]                      = array($requestHandler, 'onUploadComplete');
 	$wgHooks['SpecialUploadComplete'][]               = array($requestHandler, 'onSpecialUploadComplete');
 	$wgHooks['UserLoginComplete'][]                   = array($requestHandler, 'onUserLoginComplete');
