@@ -37,6 +37,7 @@ class CacheManager
 	private $userCache;
 	private $articleNameCache;
 	private $fileCache;
+	private $categoryListCache;
 
 	function __construct()
 	{
@@ -45,6 +46,7 @@ class CacheManager
 		$this->userCache = new UserCache();
 		$this->articleNameCache = new ArticleNameCache();
 		$this->fileCache = new FileCache();
+		$this->categoryListCache = new CategoryListCache();
 	}
 
 	function storeAttachmentData($attachmentData)
@@ -114,12 +116,27 @@ class CacheManager
 
 	function retrieveFile($fieName)
 	{
-		$this->fileCache->retrieve($fileName);
+		return $this->fileCache->retrieve($fileName);
 	}
 
 	function removeFile($fileName)
 	{
 		$this->fileCache->remove($fileName);
+	}
+
+	function storeCategoryList($categoryList)
+	{
+		$this->categoryListCache->store($categoryList);
+	}
+
+	function retrieveCategoryList()
+	{
+		return $this->categoryListCache->retrieve();
+	}
+
+	function removeCategoryList()
+	{
+		$this->categoryListCache->remove();
 	}
 
 }

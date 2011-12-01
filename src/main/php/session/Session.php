@@ -42,7 +42,7 @@ define('PA_UPLOAD_AND_ATTACH_INITIATED',    'PA_UPLOAD_AND_ATTACH_INITIATED');
 define('PA_VIEW_PAGE_SPECIAL',              'PA_VIEW_PAGE_SPECIAL');
 define('PA_LOGIN_LOGOUT_TIME',              'PA_LOGIN_LOGOUT_TIME');
 define('PA_DELETED_FILE_INFO',              'PA_DELETED_FILE_INFO');
-
+define('PA_REINITIALIZE_CATEGORY_LIST',     'PA_REINITIALIZE_CATEGORY_LIST');
 
 class Session
 {
@@ -52,7 +52,7 @@ class Session
 	{
 		$this->security = $security;
 	}
-	
+
 	function startSessionIfNotStarted()
 	{
 		\wfSuppressWarnings();
@@ -261,6 +261,26 @@ class Session
 		else
 		{
 			return null;
+		}
+	}
+
+	function setReinitializeCategoryList()
+	{
+		$_SESSION[PA_REINITIALIZE_CATEGORY_LIST] = true;
+	}
+
+	function isReinitializeCategoryList()
+	{
+		if (isset($_SESSION[PA_REINITIALIZE_CATEGORY_LIST]) &&
+		is_bool($_SESSION[PA_REINITIALIZE_CATEGORY_LIST]) &&
+		$_SESSION[PA_REINITIALIZE_CATEGORY_LIST] == true)
+		{
+			unset ($_SESSION[PA_REINITIALIZE_CATEGORY_LIST]);
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 

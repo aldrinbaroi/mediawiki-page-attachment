@@ -36,9 +36,9 @@ class UploadHelper
 {
 	private $categoryManager;
 
-	function __construct()
+	function __construct($categoryManager)
 	{
-		$this->categoryManager = new \PageAttachment\Category\CategoryManager();
+		$this->categoryManager = $categoryManager;
 	}
 
 	function isSetAttachmentCategoryOnUploadEnabled()
@@ -55,6 +55,7 @@ class UploadHelper
 		}
 	}
 
+	// TODO Remove hardcoded HTML tags using MediaWiki's \HTML class
 	function addCategoryChooserToUploadForm($uploadFormObj)
 	{
 		$categoryChooserHTML = '<tr>'.
@@ -69,7 +70,6 @@ class UploadHelper
 		}
 		foreach($this->categoryManager->getCategoryList() as $category)
 		{
-			//'    </option><option value="MyCategory">My Category</option>';
 			if ($this->categoryManager->isDefaultCategorySet() && $this->categoryManager->isDefaultCategory($category))
 			{
 				$categoryChooserHTML .= '<option value="'. $category .'" selected="selected">' . $category . '</option>';

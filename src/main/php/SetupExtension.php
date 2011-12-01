@@ -69,6 +69,7 @@ $wgAutoloadClasses['PageAttachment\\Cache\\Provider\\DatabaseCache']            
 $wgAutoloadClasses['PageAttachment\\Cache\\AttachmentDataCache']                  = $dir . 'cache/AttachmentDataCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\AttachmentListCache']                  = $dir . 'cache/AttachmentListCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\ArticleNameCache']                     = $dir . 'cache/ArticleNameCache.php';
+$wgAutoloadClasses['PageAttachment\\Cache\\CategoryListCache']                    = $dir . 'cache/CategoryListCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\UserCache']                            = $dir . 'cache/UserCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\FileCache']                            = $dir . 'cache/FileCache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\CacheFactory']                         = $dir . 'cache/CacheFactory.php';
@@ -146,6 +147,8 @@ function efSetupPageAttachmentExtension()
 	$wgHooks['ArticleDelete'][]                       = array($requestHandler, 'onArticleDelete');
 	$wgHooks['FileDeleteComplete'][]                  = array($requestHandler, 'onFileDeleteComplete');
 	$wgHooks['FileUndeleteComplete'][]                = array($requestHandler, 'onFileUndeleteComplete');
+	$wgHooks['LinksUpdate'][]                         = array($requestHandler, 'onLinksUpdate');
+	$wgHooks['LinksUpdateComplete'][]                 = array($requestHandler, 'onLinksUpdateComplete');
 	
 }
 

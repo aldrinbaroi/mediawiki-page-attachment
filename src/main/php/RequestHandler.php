@@ -53,6 +53,7 @@ class RequestHandler
 	private $auditLogManager;
 	private $downloadManager;
 	private $uploadHelper;
+	private $categoryManager;
 
 	function __construct()
 	{
@@ -64,7 +65,8 @@ class RequestHandler
 		$this->resource = new \PageAttachment\UI\Resource($this->security, $this->session);
 		$this->webBrowser = new \PageAttachment\UI\WebBrowser($this->security, $this->requestHelper, $this->session, $this->attachmentManager, $this->resource);
 		$this->downloadManager = new \PageAttachment\Download\DownloadManager($this->security, $this->session, $this->attachmentManager);
-		$this->uploadHelper = new \PageAttachment\Upload\UploadHelper();
+		$this->categoryManager = new \PageAttachment\Category\CategoryManager($this->session);
+		$this->uploadHelper = new \PageAttachment\Upload\UploadHelper($this->categoryManager);
 	}
 
 	function setupDatabase()
@@ -276,6 +278,23 @@ class RequestHandler
 		return true;
 	}
 
+	function onLinksUpdate(&$linksUpdate)
+	{
+		if ($this->uploadHelper->isSetAttachmentCategoryOnUploadEnabled())
+		{
+			$this->categoryManager->setReinitializeCategoryList($linksUpdate);
+		}
+		return true;
+	}
+
+	function onLinksUpdateComplete(&$linksUpdate)
+	{
+		if ($this->uploadHelper->isSetAttachmentCategoryOnUploadEnabled())
+		{
+			$this->categoryManager->reinitializeCategoryList();
+		}
+		return true;
+	}
 }
 
 ## :: END ::

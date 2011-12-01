@@ -30,27 +30,18 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-// TODO use cache
-// TODO update category cache when new category is added
-// TODO update category cache when a category is deleted
-
 class CategoryManager
 {
-	//private $securityManager;
+	private $session;
 	private $cacheManager;
 	private $defaultCategory;
 
-	function __construct() //$securityManager)
-	{
-		//$this->securityManager = $securityManager;
-		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
-		$this->initialize();
-	}
-
-	private function initialize()
+	function __construct($session)
 	{
 		global $wgPageAttachment_attachmentCategory;
 
+		$this->session = $session;
+		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
 		if (isset($wgPageAttachment_attachmentCategory['defaultCategory'])
 		&& strlen($wgPageAttachment_attachmentCategory['defaultCategory']) > 0)
 		{
@@ -94,7 +85,7 @@ class CategoryManager
 	function isMustSetCategory()
 	{
 		global $wgPageAttachment_attachmentCategory;
-		
+
 		if (isset($wgPageAttachment_attachmentCategory['mustSet']) && $wgPageAttachment_attachmentCategory['mustSet'] == true)
 		{
 			return true;
@@ -107,9 +98,19 @@ class CategoryManager
 
 	function getCategoryList()
 	{
+		$categoryList = $this->cacheManager->retrieveCategoryList();
+		if (!isset($categoryList))
+		{
+			$categoryList = $this->initializeCategoryList();
+		}
+		return $categoryList;
+	}
+
+	function initializeCategoryList()
+	{
 		global $wgPageAttachment_attachmentCategory;
 
-		$categories = array();
+		$categoryList = array();
 		if (isset($wgPageAttachment_attachmentCategory))
 		{
 			if (isset($wgPageAttachment_attachmentCategory['allowedCategories']))
@@ -118,27 +119,54 @@ class CategoryManager
 				switch ($allowedCategories)
 				{
 					case 'PredefinedCategoriesOnly':
-						$categories = $this->getPredefinedCategories();
+						$categoryList = $this->getPredefinedCategories();
 						break;
 					case 'MediaWikiCategoriesOnly':
-						$categories = $this->getMediaWikiCategories();
+						$categoryList = $this->getMediaWikiCategories();
 						break;
 					case 'BothPredefinedAndMediaWikiCategories':
-						$categories = $this->getBothPredefinedAndMediaWikiCategories();
+						$categoryList = $this->getBothPredefinedAndMediaWikiCategories();
 						break;
 					default:
 						// Not set, defaulting to 'MediaWikiCategoriesOnly'
-						$categories = $this->getMediaWikiCategories();
+						$categoryList = $this->getMediaWikiCategories();
 					break;
 				}
 			}
 			else
 			{
 				// Not set, defaulting to 'MediaWikiCategoriesOnly'
-				$categories = $this->getMediaWikiCategories();
+				$categoryList = $this->getMediaWikiCategories();
 			}
+			$modifiedCategoryList = $this->modifyCategoryNamesForPresentation($categoryList);
+			if (count($this->cacheManager->retrieveCategoryList()))
+			{
+				$this->cacheManager->removeCategoryList();
+			}
+			$this->cacheManager->storeCategoryList($modifiedCategoryList);
+			$categoryList = $modifiedCategoryList;
 		}
-		return $categories;
+		return $categoryList;
+	}
+
+	function setReinitializeCategoryList(&$linksUpdate)
+	{
+		$existing = $linksUpdate->getExistingCategories();
+		$categoryDeletes = $linksUpdate->getCategoryDeletions( $existing );
+		$categoryInserts = array_diff_assoc( $linksUpdate->mCategories, $existing );
+		if (count($categoryInserts) > 0 || count($categoryDeletes) > 0)
+		{
+			$this->session->setReinitializeCategoryList();
+		}
+	}
+
+	function reinitializeCategoryList()
+	{
+		if ($this->session->isReinitializeCategoryList())
+		{
+			$this->cacheManager->removeCategoryList();
+			$this->initializeCategoryList();
+		}
 	}
 
 	private function getPredefinedCategories()
@@ -160,7 +188,7 @@ class CategoryManager
 	{
 		$mediaWikiCategories = array();
 		$dbr = \wfGetDB( DB_SLAVE );
-		$rs = $dbr->select('category', 'cat_title'); //, 'attachment_page_id = ' . $attachmentPageId);
+		$rs = $dbr->select('category', 'cat_title');
 		if ($rs == false)
 		{
 			//
@@ -196,6 +224,21 @@ class CategoryManager
 		{
 			return array();
 		}
+	}
+
+	private function modifyCategoryNamesForPresentation($categoryList)
+	{
+		$i = 0;
+		$modifiedCategoryList = array();
+		if (count($categoryList) > 0)
+		{
+			foreach($categoryList as $category)
+			{
+				$title = \Title::makeTitleSafe( NS_CATEGORY, $category );
+				$modifiedCategoryList[$i++] = $title->getText();
+			}
+		}
+		return $modifiedCategoryList;
 	}
 }
 
