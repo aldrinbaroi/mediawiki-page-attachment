@@ -61,7 +61,7 @@ class SetupDatabase
 		# Cache Table
 		$tableName['cache'] = 'page_attachment_cache';
 		$tableSqlFile['cache'] = $sqlFileDir . $wgDBtype . '/cache.table.sql';
-		$indexSqlFile['cache'] = $sqlFileDir . 'cache.table.sql';
+		$indexSqlFile['cache'] = $sqlFileDir . 'cache.index.sql';
 
 		# Audit Log Table
 		$tableName['auditLog'] = 'page_attachment_audit_log';
