@@ -24,7 +24,6 @@
 
 namespace PageAttachment\Upload;
 
-use PageAttachment\Category\Category;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -55,35 +54,31 @@ class UploadHelper
 		}
 	}
 
-	// TODO Remove hardcoded HTML tags using MediaWiki's \HTML class
 	function addCategoryChooserToUploadForm($uploadFormObj)
 	{
-		$categoryChooserHTML = '<tr>'.
-		'<td class="mw-label">' . 
-		'  <label for="attachmentCategory">'. \wfMsg('selectCategory') . ':</label>' . 
-		'</td>' . 
-		'<td class="mw-input">' . 
-		'  <select id="attachmentCategory" name="attachmentCategory">'; 
+		$label = \HTML::rawElement('label', array('for' => 'attachmentCategory'), \wfMsg('selectCategory'));
+		$labelCol = \HTML::rawElement('td', array('class' => 'mw-label'), $label);
+		$categoryOptions = '';
 		if (!$this->categoryManager->isMustSetCategory())
 		{
-			$categoryChooserHTML .= '<option value=""></option>';
+			$categoryOptions .= \HTML::rawElement('option', array('value' => ''), '');
 		}
 		foreach($this->categoryManager->getCategoryList() as $category)
 		{
 			if ($this->categoryManager->isDefaultCategorySet() && $this->categoryManager->isDefaultCategory($category))
 			{
-				$categoryChooserHTML .= '<option value="'. $category .'" selected="selected">' . $category . '</option>';
+				$categoryOptions .= \HTML::rawElement('option', array('value' => $category, 'selected' => 'selected'), $category);
 			}
 			else
 			{
-				$categoryChooserHTML .= '<option value="'. $category .'">' . $category . '</option>';
+				$categoryOptions .= \HTML::rawElement('option', array('value' => $category), $category);
 			}
 		}
-		$categoryChooserHTML .= '  </select>' .
-		'</td>' . 
-		'</tr>';
+		$categorySelect = \HTML::rawElement('select', array('id' => 'attachmentCategory', 'name' => 'attachmentCategory'), $categoryOptions);
+		$categorySelectCol = \HTML::rawElement('td', array('class' => 'mw-input'), $categorySelect);
+		$categoryChooserRow = \HTML::rawElement('tr', array(), $labelCol . $categorySelectCol);
 		$uploadFormTextAfterSummary = $uploadFormObj->uploadFormTextAfterSummary;
-		$uploadFormObj->uploadFormTextAfterSummary = $categoryChooserHTML . $uploadFormTextAfterSummary;
+		$uploadFormObj->uploadFormTextAfterSummary = $categoryChooserRow . $uploadFormTextAfterSummary;
 	}
 
 	function setAttachmentCategory($uploadFormObj)
