@@ -364,16 +364,65 @@ $wgPageAttachment_ajaxCacheDuration = 0;
 # ---------------------------------------------------------------------------
 # Attachment Category
 # ---------------------------------------------------------------------------
+# 
+# Category of the attachment file can be set during upload.
 #
-
-$wgPageAttachment_attachmentCategory['setOnUpload'] = true;
-$wgPageAttachment_attachmentCategory['mustSet'] = false;
-$wgPageAttachment_attachmentCategory['defaultCategory'] = 'MyCategory 2'; 
-#$wgPageAttachment_attachmentCategory['allowedCategories'] = 'PredefinedCategoriesOnly';
-#$wgPageAttachment_attachmentCategory['allowedCategories'] = 'MediaWikiCategoriesOnly';
-$wgPageAttachment_attachmentCategory['allowedCategories'] = 'BothPredefinedAndMediaWikiCategories';
-$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 1';
-$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 2';
-$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory03';
+# By default setting attachment category during upload is not enabled.
+#
+# To enable, set 
+#
+#    $wgPageAttachment_attachmentCategory['setOnUpload'] = true;
+#
+# To allow a user not set a cateogry, set
+#
+#    $wgPageAttachment_attachmentCategory['mustSet'] = false;
+#
+# To force a user to set a category, set
+#
+#    $wgPageAttachment_attachmentCategory['mustSet'] = true;
+#
+# To set a category to be the default category, set
+#
+#    $wgPageAttachment_attachmentCategory['defaultCategory'] = 'You Default Category Name';
+#
+# You can restrict the category selection options to:
+# 
+#    1. Predefined categories
+#         -- Restrict user to only predefined categories
+#         -- Set the following to enable this:
+#
+#              $wgPageAttachment_attachmentCategory['allowedCategories'] = 'PredefinedCategoriesOnly';
+#
+#         -- In addition, use the following to define the predefined categories:
+#
+#              $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'Your Predefined Category 1';
+#              $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'Your Predefined Category 2';
+#              $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'Your Predefined Category 3';
+#
+#    2. Categories that exists in MediaWiki
+#         -- All the categories that exists in MediaWiki would be
+#            available to the user
+#         -- Not recommended if your Wiki has a large number of categories,
+#            since the category selection dropdown would contain all the 
+#            categories and it would be hard for user to select a particular category.
+#         -- set the following to enable this:
+#
+#              $wgPageAttachment_attachmentCategory['allowedCategories'] = 'MediaWikiCategoriesOnly';
+#
+#    3. Both to predefined categories & categories that exists in MediaWiki
+#         -- Combination of #1 & #2
+#         -- Not recommended for the same reason as #2
+#         -- set the following to enable this:
+#
+#              $wgPageAttachment_attachmentCategory['allowedCategories'] = 'BothPredefinedAndMediaWikiCategories';
+# 
+#    4. If do not specify which category selection restriction, the restriction
+#       would default to 'MediaWikiCategoriesOnly'
+#
+$wgPageAttachment_attachmentCategory['setOnUpload']              = false;
+# $wgPageAttachment_attachmentCategory['mustSet']                = false;
+# $wgPageAttachment_attachmentCategory['defaultCategory']        = ''; 
+# $wgPageAttachment_attachmentCategory['allowedCategories']      = '';
+# $wgPageAttachment_attachmentCategory['predefinedCategories'][] = '';
 
 ## ::END ::
