@@ -359,6 +359,8 @@ class AttachmentManager
 		}
 		else
 		{
+			$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
+			$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED_DELETED;
 			$attachedToPageIds = array();
 			foreach($rs as $row)
 			{
@@ -371,18 +373,13 @@ class AttachmentManager
 				$insertData = array('attachment_file_name' => $attachmentName, 'attached_to_page_id' => $attachedToPageId);
 				$dbw->insert('page_attachment_delete_data', $insertData);
 				$this->cacheManager->removeAttachmentList($attachedToPageId);
-			}
-			$dbw->delete('page_attachment_data', array('attachment_page_id' => $page->getId()));
-			$this->session->setForceReload(true);
-			if ($this->auditLogManager->isAuditLogEnabled())
-			{
-				$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED_DELETED;
-				foreach($attachedToPageIds as $attachedToPageId)
+				if ($auditLogEnabled == true)
 				{
 					$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
 				}
 			}
-
+			$dbw->delete('page_attachment_data', array('attachment_page_id' => $page->getId()));
+			$this->session->setForceReload(true);
 		}
 	}
 
@@ -392,7 +389,6 @@ class AttachmentManager
 	 */
 	function restoreDeletedAttachment($page, $user)
 	{
-
 		$attachmentId = $page->getId();
 		$attachmentName = $page->getPageTitle();
 		$dbr = \wfGetDB( DB_SLAVE );
@@ -404,6 +400,8 @@ class AttachmentManager
 		}
 		else
 		{
+			$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
+			$activityType = \PageAttachment\AuditLog\ActivityType::REATTACHED_UNDELETED;
 			$attachedToPageIds = array();
 			foreach($rs as $row)
 			{
@@ -415,15 +413,14 @@ class AttachmentManager
 				$insertData =  array('attached_to_page_id' => $attachedToPageId, 'attachment_page_id' => $attachmentId);
 				$dbw->insert('page_attachment_data', $insertData);
 				$this->cacheManager->removeAttachmentList($attachedToPageId);
+				if ($auditLogEnabled == true)
+				{
+					$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+				}
 			}
 			$deleteCriteria =  array('attachment_file_name' => $dbw->strencode($attachmentName));
 			$dbw->delete('page_attachment_delete_data', $deleteCriteria);
 			$this->session->setForceReload(true);
-			if ($this->auditLogManager->isAuditLogEnabled())
-			{
-				$activityType = PageAttachment\AuditLog\ActivityType::REATTACHED_UNDELETED;
-				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType);
-			}
 		}
 	}
 
