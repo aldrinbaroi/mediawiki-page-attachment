@@ -149,7 +149,7 @@ class WebBrowser
 	private function getTitleRowColumns($command)
 	{
 		$tzName = $this->dateHelper->getUserTimeZoneInUserLang();
-		$rtlLang = $this->runtimeConfig->isRTL();
+		$rtlLang = $this->runtimeConfig->isRightToLeftLanguage();
 		$titleRowColumns = array();
 		$titleRowColumns['Title'] = ':: ' . \wfMsg('Attachments') . ' ::';
 		if ($rtlLang == true)
@@ -256,7 +256,7 @@ class WebBrowser
 		$fileNameLabel = $fileName;
 		if (strlen($fileName) > $wgPageAttachment_attachmentNameMaxLength)
 		{
-			$rtlLang = $this->runtimeConfig->isRTL();
+			$rtlLang = $this->runtimeConfig->isRightToLeftLanguage();
 			if ($rtlLang == true)
 			{
 				// FIXME Need to figure out how to detect file name content language to properly trim it

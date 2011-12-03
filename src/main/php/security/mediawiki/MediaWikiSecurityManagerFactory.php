@@ -57,6 +57,7 @@ class MediaWikiSecurityManagerFactory
 						$uploadPermissionChecker = new Upload\UploadPermissionChecker_MediaWiki_v1162();
 						break;
 					case 17:
+					case 18:
 						$uploadPermissionChecker = new Upload\UploadPermissionChecker_MediaWiki_v1170();
 						break;
 					default:
@@ -73,7 +74,7 @@ class MediaWikiSecurityManagerFactory
 			}
 			else
 			{
-				throw new \Exception("MediaWiki version [" + $mwv->getVersion() + "] is not supported!");
+				throw new \MWException("MediaWiki version [" . $mwv->getVersion() . "] is not supported!");
 			}
 		}
 		return $this->mediaWikiSecurityManager;

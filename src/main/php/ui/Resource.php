@@ -70,7 +70,7 @@ class Resource
 		if ($this->isAddResources())
 		{
 			$urlCSSFiles[] = $this->getCssFileCommonURL();
-			if ($this->runtimeConfig->isRTL() == true)
+			if ($this->runtimeConfig->isRightToLeftLanguage() == true)
 			{
 				$urlCSSFiles[] = $this->getCssFileRTL_URL();
 			}

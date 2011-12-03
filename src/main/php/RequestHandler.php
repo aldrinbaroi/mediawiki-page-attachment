@@ -69,7 +69,7 @@ class RequestHandler
 		$this->uploadHelper = new \PageAttachment\Upload\UploadHelper($this->categoryManager);
 	}
 
-	function setupDatabase()
+	function onSetupDatabase()
 	{
 			
 		$databaseHelper = new \PageAttachment\Setup\SetupDatabase();
@@ -77,7 +77,10 @@ class RequestHandler
 		return true;
 	}
 
-	function onBeforeInitialize(&$title, &$article, &$output, &$user, $request, $mediaWiki)
+	// 
+	// NOTE: As of MediaWiki 1.18.0, $article is NULL
+	//
+	function onBeforeInitialize(&$title, $article, &$output, &$user, $request, $mediaWiki)
 	{
 		global $wgRequest;
 

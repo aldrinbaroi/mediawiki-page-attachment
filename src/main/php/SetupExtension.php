@@ -39,11 +39,8 @@ $wgExtensionCredits['parserhook'][] = array(
 
 $dir = dirname(__FILE__) . '/';
 
-## Needed to get hold of MediaWiki cache provider
-require_once($dir . '../../includes/ObjectCache.php');
-
 ## 
-require_once($dir . 'config/DefaultConfigurations.php');
+require_once($dir . 'configuration/DefaultConfigurations.php');
 $siteSpecificConfigurationsFile = $dir . 'config/SiteSpecificConfigurations.php';
 if (file_exists($siteSpecificConfigurationsFile))
 {
@@ -56,7 +53,7 @@ require_once($dir . 'ajax/Ajax.php');
 $wgAutoloadClasses['ImageListPager']                                              = $IP . '/includes/specials/SpecialListfiles.php';
 
 ## Autoload PageAttachment classes
-$wgAutoloadClasses['PageAttachment\\Config\\RuntimeConfig']                       = $dir . 'config/RuntimeConfig.php';
+$wgAutoloadClasses['PageAttachment\\Config\\RuntimeConfig']                       = $dir . 'configuration/RuntimeConfig.php';
 $wgAutoloadClasses['PageAttachment\\Setup\\SetupDatabase']                        = $dir . 'setup/SetupDatabase.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                   = $dir . 'utility/MediaWikiVersion.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\DateUtil']                           = $dir . 'utility/DateUtil.php';
@@ -121,17 +118,19 @@ $wgSpecialPages['PageAttachmentUpload']           = '\\PageAttachment\\Upload\\U
 $wgSpecialPages['PageAttachmentAuditLogViewer']   = '\\PageAttachment\\AuditLog\\AuditLogViewer';
 
 ## Extension Function Hook
-$wgExtensionFunctions[] = 'efSetupPageAttachmentExtension';
+$wgExtensionFunctions[] = 'pageAttachment_registerEventHandlers';
 
 ## Function to register the hooks
-function efSetupPageAttachmentExtension()
+function pageAttachment_registerEventHandlers()
 {
 	global $wgHooks;
+	global $wgAjaxExportList;
+	global $wgSpecialPages;	
 	
 	$requestHandler = new \PageAttachment\RequestHandler();
 	
 	// Hooks
-	$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'setupDatabase');
+	$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'onSetupDatabase');
 	$wgHooks['BeforeInitialize'][]                    = array($requestHandler, 'onBeforeInitialize');
 	$wgHooks['EditPage::importFormData'][]            = array($requestHandler, 'onEditPageImportFormData');
 	$wgHooks['ArticleSaveComplete'][]                 = array($requestHandler, 'onArticleSaveComplete');

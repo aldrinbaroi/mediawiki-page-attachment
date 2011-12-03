@@ -139,7 +139,7 @@ class DateUtil
 				$tzRegionMsgCode = 'timezoneregion-' . strtolower($tzRegion);
 				$tzRegionUserLang = \wfMsg($tzRegionMsgCode);
 				$tzCityUserLang = $tzCity;
-				if ($wgLang->isRTL())
+				if ($this->runtimeConfig->isRightToLeftLanguage())
 				{
 					$tzNameUserLang = $tzCityUserLang . '\\' . $tzRegionUserLang;
 				}

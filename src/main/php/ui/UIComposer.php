@@ -56,36 +56,33 @@ class UIComposer
 
 		$skinName = $this->runtimeConfig->getSkinName();
 		$userLangCode = $this->runtimeConfig->getUserLanguageCode();
-		$rtlLang = $wgLang->isRTL() ? true : false;
+		$rtlLang = $this->runtimeConfig->isRightToLeftLanguage(); 
 		$colWidths = $this->getColWidths($skinName, $userLangCode);
-		$cols = $rtlLang ? array_reverse($colWidths) : $colWidths;
 		$colgroupCols = '';
-		foreach ($cols as $col)
+		foreach ($colWidths as $colWidth)
 		{
-			$colgroupCols .= \HTML::element('col', array('width' => ($col . '%')));
+			$colgroupCols .= \HTML::element('col', array('width' => ($colWidth . '%')));
 		}
 		$colgroup = \HTML::rawElement('colgroup', null, $colgroupCols);
 		//
 		// Title Row
 		//
-		$cols = $rtlLang ? array_reverse($titleRowColumns) : $titleRowColumns;
-		$titleRowColKeys = array_keys($cols);
+		$titleRowColKeys = array_keys($titleRowColumns);
 		$titleRowCols = '';
 		foreach($titleRowColKeys as $colKey)
 		{
 			$attrs = array('class' => ('titleRow_col_' . $colKey), 'colspan' => $this->getTitleRowColSpan($skinName, $userLangCode, $colKey));
-			$titleRowCols .= \HTML::rawElement('th', $attrs, $cols[$colKey]);
+			$titleRowCols .= \HTML::rawElement('th', $attrs, $titleRowColumns[$colKey]);
 		}
 		$titleRow = \HTML::rawElement('tr', array('class' => 'TitleRow'), $titleRowCols);
 		//
 		// Header Row
 		//
-		$cols = $rtlLang ? array_reverse($headerRowColumns) : $headerRowColumns;
-		$headerRowColKeys = array_keys($cols);
+		$headerRowColKeys = array_keys($headerRowColumns);
 		$headerRowCols = '';
 		foreach ($headerRowColKeys as $colKey)
 		{
-			$headerRowCols .= \HTML::element('th', array('class' => ('headerRow_col_' . $colKey)), $cols[$colKey]);
+			$headerRowCols .= \HTML::element('th', array('class' => ('headerRow_col_' . $colKey)), $headerRowColumns[$colKey]);
 		}
 		$headerRow = \HTML::rawElement('tr', array('class' => 'HeaderRow'), $headerRowCols);
 		$thead = \HTML::rawElement('thead', null, ($titleRow . $headerRow));
@@ -101,7 +98,7 @@ class UIComposer
 			{
 				foreach($attachmentRows as $row)
 				{
-					$rowCols = $rtlLang ? array_reverse($row) : $row;
+					$rowCols = $row;
 					$rowColKeys = array_keys($rowCols);
 					$atRowsCols = '';
 					foreach($rowColKeys as $colKey)

@@ -74,7 +74,7 @@ class RuntimeConfig
 		return $this->skinName;
 	}
 
-	function isRTL()
+	function isRightToLeftLanguage()
 	{
 		if (!isset($this->rightToLeftLang))
 		{
