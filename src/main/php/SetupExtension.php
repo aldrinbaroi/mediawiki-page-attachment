@@ -41,7 +41,7 @@ $dir = dirname(__FILE__) . '/';
 
 ## 
 require_once($dir . 'configuration/DefaultConfigurations.php');
-$siteSpecificConfigurationsFile = $dir . 'config/SiteSpecificConfigurations.php';
+$siteSpecificConfigurationsFile = $dir . 'configuration/SiteSpecificConfigurations.php';
 if (file_exists($siteSpecificConfigurationsFile))
 {
 	require_once($siteSpecificConfigurationsFile);
