@@ -30,33 +30,32 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-# The following constants are used for session attributes
-define('PA_REQUEST_VALIDATION_TOKEN', 'REQUEST_VALIDATION_TOKEN');
-define('PA_DOWNLOAD_REQUEST_VALID',   'PA_DOWNLOAD_REQUEST_VALID');
-
-# The following constants are used for permissions
-define('PA_VIEW',               'view');
-define('PA_VIEW_AUDIT_LOG',     'viewAuditLog');
-define('PA_VIEW_HISTORY_LOG',   'viewHistory');
-define('PA_UPLOAD_AND_ATTACH',  'uploadAndAttach');
-define('PA_BROWSE_SEARCH',      'browseSearch');
-define('PA_REMOVE',             'remove');
-define('PA_REMOVE_PERMANENTLY', 'removePermanently');
-define('PA_DOWNLOAD',           'download');
-define('PA_LOGIN_REQUIRED',     'loginRequired');
-define('PA_ALLOWED',            'allowed');
-define('PA_GROUP',              'group');
-define('PA_GROUP_ALL',          '*');
-define('PA_USER',               'user');
-
-# Permanent file removal
-define('PA_PERMANENTLY',         'permanently');
-define('PA_IGNORE_IF_EMBEDDED',  'ignoreIfEmbedded');
-define('PA_IGNORE_IF_ATTACHED',  'ignoreIfAttached');
-
 class SecurityManager
 {
 	private $mediaWikiSecurityManager;
+	
+	const REQUEST_VALIDATION_TOKEN = 'REQUEST_VALIDATION_TOKEN';
+	const DOWNLOAD_REQUEST_VALID   = 'DOWNLOAD_REQUEST_VALID';
+	//
+	// The following constants are used for permissions
+	const VIEW               = 'view';
+	const VIEW_AUDIT_LOG     = 'viewAuditLog';
+	const VIEW_HISTORY_LOG   = 'viewHistory';
+	const UPLOAD_AND_ATTACH  = 'uploadAndAttach';
+	const BROWSE_SEARCH      = 'browseSearch';
+	const REMOVE             = 'remove';
+	const REMOVE_PERMANENTLY =  'removePermanently';
+	const DOWNLOAD           = 'download';
+	const LOGIN_REQUIRED     = 'loginRequired';
+	const ALLOWED            = 'allowed';
+	const GROUP              = 'group';
+	const GROUP_ALL          = '*';
+	const USER               = 'user';
+	
+	# Permanent file removal
+	const PERMANENTLY        = 'permanently';
+	const IGNORE_IF_EMBEDDED = 'ignoreIfEmbedded';
+	const IGNORE_IF_ATTACHED = 'ignoreIfAttached';
 
 	function __construct()
 	{
@@ -138,9 +137,9 @@ class SecurityManager
 	{
 		global $wgPageAttachment_permissions;
 
-		if (isset($wgPageAttachment_permissions[$action][PA_LOGIN_REQUIRED]))
+		if (isset($wgPageAttachment_permissions[$action][self::LOGIN_REQUIRED]))
 		{
-			$loginRequired = $wgPageAttachment_permissions[$action][PA_LOGIN_REQUIRED];
+			$loginRequired = $wgPageAttachment_permissions[$action][self::LOGIN_REQUIRED];
 		}
 		else
 		{
@@ -160,9 +159,9 @@ class SecurityManager
 			if ($this->isLoggedIn())
 			{
 				// Check if all groups are allowed to perform the specific action
-				if (isset($wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL]))
+				if (isset($wgPageAttachment_permissions[$action][self::GROUP][self::GROUP_ALL]))
 				{
-					$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][PA_GROUP_ALL];
+					$actionAllowed = $wgPageAttachment_permissions[$action][self::GROUP][self::GROUP_ALL];
 				}
 				// Check if user's one of the effective groups are allowed to perform
 				// the specific action
@@ -171,9 +170,9 @@ class SecurityManager
 					$effectiveGroups = $wgUser->getEffectiveGroups();
 					foreach($effectiveGroups as $group)
 					{
-						if (isset($wgPageAttachment_permissions[$action][PA_GROUP][$group]))
+						if (isset($wgPageAttachment_permissions[$action][self::GROUP][$group]))
 						{
-							$actionAllowed = $wgPageAttachment_permissions[$action][PA_GROUP][$group];
+							$actionAllowed = $wgPageAttachment_permissions[$action][self::GROUP][$group];
 							if ($actionAllowed == true)
 							{
 								break;
@@ -185,18 +184,18 @@ class SecurityManager
 				if (!$actionAllowed)
 				{
 					$userId = $wgUser->getName();
-					if (isset($wgPageAttachment_permissions[$action][PA_USER][$userId]))
+					if (isset($wgPageAttachment_permissions[$action][self::USER][$userId]))
 					{
-						$actionAllowed = $wgPageAttachment_permissions[$action][PA_USER][$userId];
+						$actionAllowed = $wgPageAttachment_permissions[$action][self::USER][$userId];
 					}
 				}
 			}
 		}
 		else
 		{
-			if (isset($wgPageAttachment_permissions[$action][PA_ALLOWED]))
+			if (isset($wgPageAttachment_permissions[$action][self::ALLOWED]))
 			{
-				$actionAllowed = $wgPageAttachment_permissions[$action][PA_ALLOWED];
+				$actionAllowed = $wgPageAttachment_permissions[$action][self::ALLOWED];
 			}
 		}
 		return ($actionAllowed == true ) ? true : false;
@@ -217,17 +216,17 @@ class SecurityManager
 
 	function isViewAttachmentsAllowed()
 	{
-		return $this->__isAllowed(PA_VIEW);
+		return $this->__isAllowed(self::VIEW);
 	}
 
 	function isViewAttachmentsRequireLogin()
 	{
-		return $this->isLoginRequired(PA_VIEW);
+		return $this->isLoginRequired(self::VIEW);
 	}
 
 	function isAttachmentAddUpdateRequireLogin()
 	{
-		return $this->isLoginRequired(PA_UPLOAD_AND_ATTACH);
+		return $this->isLoginRequired(self::UPLOAD_AND_ATTACH);
 	}
 
 	function isAttachmentUploadAndAttachAllowed()
@@ -240,7 +239,7 @@ class SecurityManager
 			&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
 			&& !$this->mediaWikiSecurityManager->isUserBlocked())
 			{
-				return $this->isAllowed(PA_UPLOAD_AND_ATTACH);
+				return $this->isAllowed(self::UPLOAD_AND_ATTACH);
 			}
 			else
 			{
@@ -255,7 +254,7 @@ class SecurityManager
 
 	function isBrowseSearchAttachRequireLogin()
 	{
-		return $this->isLoginRequired(PA_BROWSE_SEARCH);
+		return $this->isLoginRequired(self::BROWSE_SEARCH);
 	}
 
 	function isBrowseSearchAttachAllowed()
@@ -264,7 +263,7 @@ class SecurityManager
 		&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(PA_BROWSE_SEARCH);
+			return $this->isAllowed(self::BROWSE_SEARCH);
 		}
 		else
 		{
@@ -274,16 +273,16 @@ class SecurityManager
 
 	function isAttachmentRemovalRequireLogin()
 	{
-		return $this->isLoginRequired(PA_REMOVE);
+		return $this->isLoginRequired(self::REMOVE);
 	}
 
 	function isRemoveAttachmentPermanentlyEnabled()
 	{
 		global $wgPageAttachment_removeAttachments;
 
-		if (isset($wgPageAttachment_removeAttachments[PA_PERMANENTLY]))
+		if (isset($wgPageAttachment_removeAttachments[self::PERMANENTLY]))
 		{
-			return  ($wgPageAttachment_removeAttachments[PA_PERMANENTLY]) ? true : false;
+			return  ($wgPageAttachment_removeAttachments[self::PERMANENTLY]) ? true : false;
 		}
 		else
 		{
@@ -295,9 +294,9 @@ class SecurityManager
 	{
 		global $wgPageAttachment_removeAttachments;
 
-		if (isset($wgPageAttachment_removeAttachments[PA_IGNORE_IF_EMBEDDED]))
+		if (isset($wgPageAttachment_removeAttachments[self::IGNORE_IF_EMBEDDED]))
 		{
-			return  ($wgPageAttachment_removeAttachments[PA_IGNORE_IF_EMBEDDED] == true) ? true : false;
+			return  ($wgPageAttachment_removeAttachments[self::IGNORE_IF_EMBEDDED] == true) ? true : false;
 		}
 		else
 		{
@@ -309,9 +308,9 @@ class SecurityManager
 	{
 		global $wgPageAttachment_removeAttachments;
 	
-		if (isset($wgPageAttachment_removeAttachments[PA_IGNORE_IF_ATTACHED]))
+		if (isset($wgPageAttachment_removeAttachments[self::IGNORE_IF_ATTACHED]))
 		{
-			return  ($wgPageAttachment_removeAttachments[PA_IGNORE_IF_ATTACHED] == true) ? true : false;
+			return  ($wgPageAttachment_removeAttachments[self::IGNORE_IF_ATTACHED] == true) ? true : false;
 		}
 		else
 		{
@@ -330,7 +329,7 @@ class SecurityManager
 		&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			if ($this->isAllowed(PA_REMOVE))
+			if ($this->isAllowed(self::REMOVE))
 			{
 				if ($this->isRemoveAttachmentPermanentlyEnabled())
 				{
@@ -357,7 +356,7 @@ class SecurityManager
 
 	function isAttachmentDownloadRequireLogin()
 	{
-		return $this->isLoginRequired(PA_DOWNLOAD);
+		return $this->isLoginRequired(self::DOWNLOAD);
 	}
 
 	function isAttachmentDownloadAllowed()
@@ -365,7 +364,7 @@ class SecurityManager
 		if ($this->isViewAttachmentsAllowed()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(PA_DOWNLOAD);
+			return $this->isAllowed(self::DOWNLOAD);
 		}
 		else
 		{
@@ -375,7 +374,7 @@ class SecurityManager
 
 	function isAuditLogViewRequireLogin()
 	{
-		return $this->isLoginRequired(PA_VIEW_AUDIT_LOG);
+		return $this->isLoginRequired(self::VIEW_AUDIT_LOG);
 	}
 
 	function isAuditLogViewAllowed()
@@ -387,7 +386,7 @@ class SecurityManager
 		&& $this->isViewAttachmentsAllowed()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(PA_VIEW_AUDIT_LOG);
+			return $this->isAllowed(self::VIEW_AUDIT_LOG);
 		}
 		else
 		{
@@ -397,7 +396,7 @@ class SecurityManager
 
 	function isHistoryViewRequireLogin()
 	{
-		return $this->isLoginRequired(PA_VIEW_HISTORY_LOG);
+		return $this->isLoginRequired(self::VIEW_HISTORY_LOG);
 	}
 
 	function isHistoryViewAllowed()
@@ -405,7 +404,7 @@ class SecurityManager
 		if ($this->isViewAttachmentsAllowed()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(PA_VIEW_HISTORY_LOG);
+			return $this->isAllowed(self::VIEW_HISTORY_LOG);
 		}
 		else
 		{
@@ -416,13 +415,13 @@ class SecurityManager
 	function newRequestValidationToken()
 	{
 		$requestValidationToken = hash('sha256', dechex(mt_rand()));
-		$_SESSION[PA_REQUEST_VALIDATION_TOKEN] = $requestValidationToken;
+		$_SESSION[self::REQUEST_VALIDATION_TOKEN] = $requestValidationToken;
 		return $requestValidationToken;
 	}
 
 	function getCurrentRequestValidationToken()
 	{
-		$requestValidationToken = $_SESSION[PA_REQUEST_VALIDATION_TOKEN];
+		$requestValidationToken = $_SESSION[self::REQUEST_VALIDATION_TOKEN];
 		return $requestValidationToken;
 	}
 
@@ -430,9 +429,9 @@ class SecurityManager
 	{
 		global $wgRequest;
 
-		if (isset($_SESSION[PA_REQUEST_VALIDATION_TOKEN]))
+		if (isset($_SESSION[self::REQUEST_VALIDATION_TOKEN]))
 		{
-			return $wgRequest->getVal('rvt','') == $_SESSION[PA_REQUEST_VALIDATION_TOKEN];
+			return $wgRequest->getVal('rvt','') == $_SESSION[self::REQUEST_VALIDATION_TOKEN];
 		}
 		else
 		{
@@ -443,9 +442,9 @@ class SecurityManager
 	function isRequestValidationTokenValid2($rvt)
 	{
 
-		if (isset($_SESSION[PA_REQUEST_VALIDATION_TOKEN]))
+		if (isset($_SESSION[self::REQUEST_VALIDATION_TOKEN]))
 		{
-			return $rvt == $_SESSION[PA_REQUEST_VALIDATION_TOKEN];
+			return $rvt == $_SESSION[self::REQUEST_VALIDATION_TOKEN];
 		}
 		else
 		{
@@ -457,19 +456,19 @@ class SecurityManager
 	{
 		if (is_bool($trueFalse))
 		{
-			$_SESSION[PA_DOWNLOAD_REQUEST_VALID] = $trueFalse;
+			$_SESSION[self::DOWNLOAD_REQUEST_VALID] = $trueFalse;
 		}
 		else
 		{
-			$_SESSION[PA_DOWNLOAD_REQUEST_VALID] = false;
+			$_SESSION[self::DOWNLOAD_REQUEST_VALID] = false;
 		}
 	}
 
 	function isDownloadRequestValid()
 	{
-		if (isset($_SESSION[PA_DOWNLOAD_REQUEST_VALID]))
+		if (isset($_SESSION[self::DOWNLOAD_REQUEST_VALID]))
 		{
-			return $_SESSION[PA_DOWNLOAD_REQUEST_VALID] == true ? true : false;
+			return $_SESSION[self::DOWNLOAD_REQUEST_VALID] == true ? true : false;
 		}
 		else
 		{
