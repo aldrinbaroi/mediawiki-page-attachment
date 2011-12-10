@@ -30,9 +30,6 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-define('PA_UPLOADED', 'PA_UPLOADED');
-define('PA_EXISTING', 'PA_EXISTING');
-
 class AttachmentManager
 {
 	private $security;
@@ -40,6 +37,9 @@ class AttachmentManager
 	private $auditLogManager;
 	private $cacheManager;
 	private $fileManager;
+	
+	const UPLOADED  = 'UPLOADED';
+	const EXISTING  = 'EXISTING';
 
 
 	function __construct($security, $session, $auditLogManager)
@@ -122,7 +122,7 @@ class AttachmentManager
 				$attachToPageTitle = $attachToPage->getPageTitle();
 				$attachmentId   = $image->getTitle()->getArticleID();
 				$attachmentName = $image->getTitle()->getText();
-				$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, PA_UPLOADED);
+				$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, self::UPLOADED);
 			}
 			else
 			{
@@ -169,7 +169,7 @@ class AttachmentManager
 			$attachmentTitle = \Title::newFromText($attachmentFileName, NS_FILE);
 			$attachmentId = $attachmentTitle->getArticleID();
 			$attachmentName = $attachmentTitle->getText();
-			$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, PA_EXISTING);
+			$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, self::EXISTING);
 		}
 		$action = 'view';
 		$wgRequest->setVal('action', $action);
@@ -190,7 +190,7 @@ class AttachmentManager
 			$this->session->setStatusMessage('AttachmentUpdated', $attachmentName);
 			if ($this->auditLogManager->isAuditLogEnabled())
 			{
-				if ($uploadedOrExisting == PA_UPLOADED)
+				if ($uploadedOrExisting == self::UPLOADED)
 				{
 					$activityType = \PageAttachment\AuditLog\ActivityType::UPLOADED_AND_REATTACHED;
 				}
@@ -210,7 +210,7 @@ class AttachmentManager
 				$this->session->setStatusMessage('AttachmentAdded', $attachmentName);
 				if ($this->auditLogManager->isAuditLogEnabled())
 				{
-					if ($uploadedOrExisting == PA_UPLOADED)
+					if ($uploadedOrExisting == self::UPLOADED)
 					{
 						$activityType = \PageAttachment\AuditLog\ActivityType::UPLOADED_AND_ATTACHED;
 					}
