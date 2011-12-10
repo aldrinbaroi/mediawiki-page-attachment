@@ -30,11 +30,8 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-define('PA_FN__ADD_ATTACHMENT', 'AddAttachment');
-
 class ImageListPager extends \ImageListPager
 {
-
 	private $security;
 	private $session;
 	private $currentFileName;
@@ -44,6 +41,8 @@ class ImageListPager extends \ImageListPager
 	private $rvt;
 	private $resource;
 	private $command;
+	
+	const ADD_ATTACHMENT = 'AddAttachment';
 
 	function __construct()
 	{
@@ -61,7 +60,7 @@ class ImageListPager extends \ImageListPager
 	function getFieldNames()
 	{
 		$fieldNames = parent::getFieldNames();
-		$fieldNames[PA_FN__ADD_ATTACHMENT] = 'Add Attachment';
+		$fieldNames[self::ADD_ATTACHMENT] = 'Add Attachment';
 		return $fieldNames;
 	}
 
@@ -75,7 +74,7 @@ class ImageListPager extends \ImageListPager
 	{
 		switch($field)
 		{
-			case PA_FN__ADD_ATTACHMENT:
+			case self::ADD_ATTACHMENT:
 				$attachFileCommandLink = $this->command->getAttachFileCommandLink($this->currentFileName);
 				return $attachFileCommandLink; 
 				break;
@@ -88,7 +87,7 @@ class ImageListPager extends \ImageListPager
 	function getQueryInfo()
 	{
 		$queryInfo = parent::getQueryInfo();
-		$ndx = array_search(PA_FN__ADD_ATTACHMENT, $queryInfo['fields']);
+		$ndx = array_search(self::ADD_ATTACHMENT, $queryInfo['fields']);
 		if ($ndx != false)
 		{
 			unset($queryInfo['fields'][$ndx]);
