@@ -36,16 +36,24 @@ class CategoryManager
 	private $cacheManager;
 	private $defaultCategory;
 
+	const MUST_SET                                 = 'mustSet';
+	const DEFAULT_CATEGORY                         = 'defaultCategory';
+	const ALLOWED_CATEGORIES                       = 'allowedCategories';
+	const PREDEFINED_CATEGORIES_ONLY               = 'PredefinedCategoriesOnly';
+	const MEDIAWIKI_CATEGORIES_ONLY                = 'MediaWikiCategoriesOnly';
+	const BOTH_PREDEFINED_AND_MEDIAWIKI_CATEGORIES = 'BothPredefinedAndMediaWikiCategories';
+	const PREDEFINED_CATEGORIES                    = 'predefinedCategories';
+
 	function __construct($session)
 	{
 		global $wgPageAttachment_attachmentCategory;
 
 		$this->session = $session;
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
-		if (isset($wgPageAttachment_attachmentCategory['defaultCategory'])
-		&& strlen($wgPageAttachment_attachmentCategory['defaultCategory']) > 0)
+		if (isset($wgPageAttachment_attachmentCategory[self::DEFAULT_CATEGORY])
+		&& strlen($wgPageAttachment_attachmentCategory[self::DEFAULT_CATEGORY]) > 0)
 		{
-			$this->defaultCategory = $wgPageAttachment_attachmentCategory['defaultCategory'];
+			$this->defaultCategory = $wgPageAttachment_attachmentCategory[self::DEFAULT_CATEGORY];
 		}
 		else
 		{
@@ -86,7 +94,8 @@ class CategoryManager
 	{
 		global $wgPageAttachment_attachmentCategory;
 
-		if (isset($wgPageAttachment_attachmentCategory['mustSet']) && $wgPageAttachment_attachmentCategory['mustSet'] == true)
+		if (isset($wgPageAttachment_attachmentCategory[self::MUST_SET])
+		&& $wgPageAttachment_attachmentCategory[self::MUST_SET] == true)
 		{
 			return true;
 		}
@@ -113,18 +122,18 @@ class CategoryManager
 		$categoryList = array();
 		if (isset($wgPageAttachment_attachmentCategory))
 		{
-			if (isset($wgPageAttachment_attachmentCategory['allowedCategories']))
+			if (isset($wgPageAttachment_attachmentCategory[self::ALLOWED_CATEGORIES]))
 			{
-				$allowedCategories = $wgPageAttachment_attachmentCategory['allowedCategories'];
+				$allowedCategories = $wgPageAttachment_attachmentCategory[self::ALLOWED_CATEGORIES];
 				switch ($allowedCategories)
 				{
-					case 'PredefinedCategoriesOnly':
+					case self::PREDEFINED_CATEGORIES_ONLY:
 						$categoryList = $this->getPredefinedCategories();
 						break;
-					case 'MediaWikiCategoriesOnly':
+					case self::MEDIAWIKI_CATEGORIES_ONLY:
 						$categoryList = $this->getMediaWikiCategories();
 						break;
-					case 'BothPredefinedAndMediaWikiCategories':
+					case self::BOTH_PREDEFINED_AND_MEDIAWIKI_CATEGORIES:
 						$categoryList = $this->getBothPredefinedAndMediaWikiCategories();
 						break;
 					default:
@@ -174,9 +183,9 @@ class CategoryManager
 		global $wgPageAttachment_attachmentCategory;
 
 		$predefinedCategories = array();
-		if (isset($wgPageAttachment_attachmentCategory['predefinedCategories']))
+		if (isset($wgPageAttachment_attachmentCategory[self::PREDEFINED_CATEGORIES]))
 		{
-			foreach($wgPageAttachment_attachmentCategory['predefinedCategories'] as $predefinedCategory)
+			foreach($wgPageAttachment_attachmentCategory[self::PREDEFINED_CATEGORIES] as $predefinedCategory)
 			{
 				$predefinedCategories[] = $predefinedCategory;
 			}
