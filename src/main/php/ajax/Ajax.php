@@ -49,24 +49,24 @@ function setAjaxCacheDuration(&$ajaxResponse)
 
 function getPageAttachments($pageTitle)
 {
-	$requestDispatcher = new \PageAttachment\RequestHandler();
-	$ajaxResponse = new \AjaxResponse($requestDispatcher->getAttachments($pageTitle));
+	$requestHandler = new \PageAttachment\RequestHandler();
+	$ajaxResponse = new \AjaxResponse($requestHandler->getAttachments($pageTitle));
 	setAjaxCacheDuration($ajaxResponse);
 	return $ajaxResponse;
 }
 
 function removePageAttachment($pageTitle, $attachmentName, $rvt)
 {
-	$requestDispatcher = new \PageAttachment\RequestHandler();
-	$ajaxResponse = new \AjaxResponse($requestDispatcher->removeAttachment($pageTitle, $attachmentName, $rvt));
+	$requestHandler = new \PageAttachment\RequestHandler();
+	$ajaxResponse = new \AjaxResponse($requestHandler->removeAttachment($pageTitle, $attachmentName, $rvt));
 	setAjaxCacheDuration($ajaxResponse);
 	return $ajaxResponse;
 }
 
 function removePageAttachmentPermanently($pageTitle, $attachmentName, $rvt)
 {
-	$requestDispatcher = new \PageAttachment\RequestHandler();
-	$ajaxResponse = new \AjaxResponse($requestDispatcher->removeAttachmentPermanently($pageTitle, $attachmentName, $rvt));
+	$requestHandler = new \PageAttachment\RequestHandler();
+	$ajaxResponse = new \AjaxResponse($requestHandler->removeAttachmentPermanently($pageTitle, $attachmentName, $rvt));
 	setAjaxCacheDuration($ajaxResponse);
 	return $ajaxResponse;	
 }
