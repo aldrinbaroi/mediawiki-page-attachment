@@ -30,12 +30,12 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-define('PA_PREVIEW_MODE',      'PA_PREVIEW_MODE');
-define('PA_EDIT_MODE',         'PA_EDIT_MODE');
-define('PA_VIEW_CHANGES_MODE', 'PA_VIEW_CHANGES_MODE');
-
 class RequestHelper
 {
+	const PREVIEW_MODE = 'PREVIEW MODE';
+	const EDIT_MODE = 'EDIT MODE';
+	const VIEW_CHANGES_MODE = 'VIEW CHANGES MODE';
+
 	function __construct()
 	{
 
@@ -79,19 +79,19 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[PA_PREVIEW_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::PREVIEW_MODE] = ($trueFalse == true) ? true : false;
 		}
 		else
 		{
-			$_REQUEST[PA_PREVIEW_MODE] = false;
+			$_REQUEST[self::PREVIEW_MODE] = false;
 		}
 	}
 
 	function isPreviewMode()
 	{
-		if (isset($_REQUEST[PA_PREVIEW_MODE]))
+		if (isset($_REQUEST[self::PREVIEW_MODE]))
 		{
-			return $_REQUEST[PA_PREVIEW_MODE];
+			return $_REQUEST[self::PREVIEW_MODE];
 		}
 		else
 		{
@@ -103,19 +103,19 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[PA_EDIT_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::EDIT_MODE] = ($trueFalse == true) ? true : false;
 		}
 		else
 		{
-			$_REQUEST[PA_EDIT_MODE] = false;
+			$_REQUEST[self::EDIT_MODE] = false;
 		}
 	}
 
 	function isEditMode()
 	{
-		if (isset($_REQUEST[PA_EDIT_MODE]))
+		if (isset($_REQUEST[self::EDIT_MODE]))
 		{
-			return $_REQUEST[PA_EDIT_MODE];
+			return $_REQUEST[self::EDIT_MODE];
 		}
 		else
 		{
@@ -127,19 +127,19 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[PA_VIEW_CHANGES_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::VIEW_CHANGES_MODE] = ($trueFalse == true) ? true : false;
 		}
 		else
 		{
-			$_REQUEST[PA_VIEW_CHANGES_MODE] = false;
+			$_REQUEST[self::VIEW_CHANGES_MODE] = false;
 		}
 	}
 
 	function isViewChangesMode()
 	{
-		if (isset($_REQUEST[PA_VIEW_CHANGES_MODE]))
+		if (isset($_REQUEST[self::VIEW_CHANGES_MODE]))
 		{
-			return $_REQUEST[PA_VIEW_CHANGES_MODE];
+			return $_REQUEST[self::VIEW_CHANGES_MODE];
 		}
 		else
 		{
