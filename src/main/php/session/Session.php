@@ -30,24 +30,24 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-define('PA_MESSAGE',                        'PA_MESSAGE');
-define('PA_MESSAGE_DOWNLOAD_ERROR',         'PA_MESSAGE_DOWNLOAD_ERROR');
-define('PA_PAGE_INFO',                      'PA_PAGE_INFO');
-define('PA_ATTACH_TO_PAGE',                 'PA_ATTACH_TO_PAGE');
-define('PA_ATTACH_TO_PAGE_HASH',            'PA_ATTACH_TO_PAGE_HASH');
-define('PA_ATTACH_TO_PAGE_VALIDATION_SALT', 'PA_ATTACH_TO_PAGE_VALIDATION_SALT');
-define('PA_UPLOAD_ATTACH_TO_PAGE',          'PA_UPLOAD_ATTACH_TO_PAGE');
-define('PA_FORCE_RELOAD',                   'PA_FORCE_RELOAD');
-define('PA_UPLOAD_AND_ATTACH_INITIATED',    'PA_UPLOAD_AND_ATTACH_INITIATED');
-define('PA_VIEW_PAGE_SPECIAL',              'PA_VIEW_PAGE_SPECIAL');
-define('PA_LOGIN_LOGOUT_TIME',              'PA_LOGIN_LOGOUT_TIME');
-define('PA_DELETED_FILE_INFO',              'PA_DELETED_FILE_INFO');
-define('PA_REINITIALIZE_CATEGORY_LIST',     'PA_REINITIALIZE_CATEGORY_LIST');
-
 class Session
 {
 	private $security;
-
+	
+	const MESSAGE                        = 'MESSAGE';
+	const MESSAGE_DOWNLOAD_ERROR         = 'MESSAGE_DOWNLOAD_ERROR';
+	const PAGE_INFO                      = 'PAGE_INFO';
+	const ATTACH_TO_PAGE                 = 'ATTACH_TO_PAGE';
+	const ATTACH_TO_PAGE_HASH            = 'ATTACH_TO_PAGE_HASH';
+	const ATTACH_TO_PAGE_VALIDATION_SALT = 'ATTACH_TO_PAGE_VALIDATION_SALT';
+	const UPLOAD_ATTACH_TO_PAGE          = 'UPLOAD_ATTACH_TO_PAGE';
+	const FORCE_RELOAD                   = 'FORCE_RELOAD';
+	const UPLOAD_AND_ATTACH_INITIATED    = 'UPLOAD_AND_ATTACH_INITIATED';
+	const VIEW_PAGE_SPECIAL              = 'VIEW_PAGE_SPECIAL';
+	const LOGIN_LOGOUT_TIME              = 'LOGIN_LOGOUT_TIME';
+	const DELETED_FILE_INFO              = 'DELETED_FILE_INFO';
+	const REINITIALIZE_CATEGORY_LIST     = 'REINITIALIZE_CATEGORY_LIST';
+	
 	function __construct($security)
 	{
 		$this->security = $security;
@@ -67,19 +67,19 @@ class Session
 	{
 		if (isset($page) && ($page instanceof \PageAttachment\Session\Page))
 		{
-			$_SESSION[PA_PAGE_INFO] = serialize($page);
+			$_SESSION[self::PAGE_INFO] = serialize($page);
 		}
 		else
 		{
-			unset($_SESSION[PA_PAGE_INFO]);
+			unset($_SESSION[self::PAGE_INFO]);
 		}
 	}
 
 	function getCurrentPage()
 	{
-		if (isset($_SESSION[PA_PAGE_INFO]))
+		if (isset($_SESSION[self::PAGE_INFO]))
 		{
-			return unserialize($_SESSION[PA_PAGE_INFO]);
+			return unserialize($_SESSION[self::PAGE_INFO]);
 		}
 		else
 		{
@@ -91,19 +91,19 @@ class Session
 	{
 		if (is_bool($trueFalse))
 		{
-			$_SESSION[PA_VIEW_PAGE_SPECIAL] = $trueFalse;
+			$_SESSION[self::VIEW_PAGE_SPECIAL] = $trueFalse;
 		}
 		else
 		{
-			$_SESSION[PA_VIEW_PAGE_SPECIAL] = false;
+			$_SESSION[self::VIEW_PAGE_SPECIAL] = false;
 		}
 	}
 
 	function isViewPageSpecial()
 	{
-		if (isset($_SESSION[PA_VIEW_PAGE_SPECIAL]))
+		if (isset($_SESSION[self::VIEW_PAGE_SPECIAL]))
 		{
-			return $_SESSION[PA_VIEW_PAGE_SPECIAL] == true ? true : false;
+			return $_SESSION[self::VIEW_PAGE_SPECIAL] == true ? true : false;
 		}
 		else
 		{
@@ -115,20 +115,20 @@ class Session
 	{
 		if (isset($attachToPage) && ($attachToPage instanceof \PageAttachment\Session\Page))
 		{
-			$_SESSION[PA_ATTACH_TO_PAGE] = serialize($attachToPage);
+			$_SESSION[self::ATTACH_TO_PAGE] = serialize($attachToPage);
 		}
 		else
 		{
-			unset($_SESSION[PA_ATTACH_TO_PAGE]);
+			unset($_SESSION[self::ATTACH_TO_PAGE]);
 		}
 	}
 
 	function getAttachToPage()
 	{
-		if (isset($_SESSION[PA_ATTACH_TO_PAGE]))
+		if (isset($_SESSION[self::ATTACH_TO_PAGE]))
 		{
 
-			$attachToPage = unserialize( $_SESSION[PA_ATTACH_TO_PAGE]);
+			$attachToPage = unserialize( $_SESSION[self::ATTACH_TO_PAGE]);
 			if ($attachToPage instanceof \PageAttachment\Session\Page)
 			{
 				return $attachToPage;
@@ -148,19 +148,19 @@ class Session
 	{
 		if (is_bool($trueFalse))
 		{
-			$_SESSION[PA_FORCE_RELOAD] = $trueFalse;
+			$_SESSION[self::FORCE_RELOAD] = $trueFalse;
 		}
 		else
 		{
-			$_SESSION[PA_FORCE_RELOAD] = false;
+			$_SESSION[self::FORCE_RELOAD] = false;
 		}
 	}
 
 	function isForceReload()
 	{
-		if (isset($_SESSION[PA_FORCE_RELOAD]))
+		if (isset($_SESSION[self::FORCE_RELOAD]))
 		{
-			return $_SESSION[PA_FORCE_RELOAD] == true ? true : false;
+			return $_SESSION[self::FORCE_RELOAD] == true ? true : false;
 		}
 		else
 		{
@@ -173,20 +173,20 @@ class Session
 	{
 		if (is_bool($trueFalse))
 		{
-			$_SESSION[PA_UPLOAD_AND_ATTACH_INITIATED] = $trueFalse;
+			$_SESSION[self::UPLOAD_AND_ATTACH_INITIATED] = $trueFalse;
 		}
 		else
 		{
-			$_SESSION[PA_UPLOAD_AND_ATTACH_INITIATED] = false;
+			$_SESSION[self::UPLOAD_AND_ATTACH_INITIATED] = false;
 		}
 	}
 
 
 	function isUploadAndAttachFileInitiated()
 	{
-		if (isset($_SESSION[PA_UPLOAD_AND_ATTACH_INITIATED]))
+		if (isset($_SESSION[self::UPLOAD_AND_ATTACH_INITIATED]))
 		{
-			return $_SESSION[PA_UPLOAD_AND_ATTACH_INITIATED] == true ? true : false;
+			return $_SESSION[self::UPLOAD_AND_ATTACH_INITIATED] == true ? true : false;
 		}
 		else
 		{
@@ -206,16 +206,16 @@ class Session
 			{
 				$message = \wfMsg($messageKey);
 			}
-			$_SESSION[PA_MESSAGE] = $message;
+			$_SESSION[self::MESSAGE] = $message;
 		}
 	}
 
 	function getStatusMessage()
 	{
-		if (isset($_SESSION[PA_MESSAGE]))
+		if (isset($_SESSION[self::MESSAGE]))
 		{
-			$message = $_SESSION[PA_MESSAGE];
-			unset($_SESSION[PA_MESSAGE]);
+			$message = $_SESSION[self::MESSAGE];
+			unset($_SESSION[self::MESSAGE]);
 		}
 		else
 		{
@@ -226,19 +226,19 @@ class Session
 
 	function setLoginLogoutTime()
 	{
-		$_SESSION[PA_LOGIN_LOGOUT_TIME] = time();
+		$_SESSION[self::LOGIN_LOGOUT_TIME] = time();
 	}
 
 	function getLoginLogoutTime()
 	{
-		if (isset($_SESSION[PA_LOGIN_LOGOUT_TIME]))
+		if (isset($_SESSION[self::LOGIN_LOGOUT_TIME]))
 		{
-			return $_SESSION[PA_LOGIN_LOGOUT_TIME];
+			return $_SESSION[self::LOGIN_LOGOUT_TIME];
 		}
 		else
 		{
 			$this->setLoginLogoutTime();
-			return $_SESSION[PA_LOGIN_LOGOUT_TIME];
+			return $_SESSION[self::LOGIN_LOGOUT_TIME];
 		}
 	}
 
@@ -246,16 +246,16 @@ class Session
 	{
 		if (isset($page) && $page instanceof \PageAttachment\Session\Page)
 		{
-			$_SESSION[PA_DELETED_FILE_INFO] = serialize($page);
+			$_SESSION[self::DELETED_FILE_INFO] = serialize($page);
 		}
 	}
 
 	function retrieveDeletedFileInfo()
 	{
-		if (isset($_SESSION[PA_DELETED_FILE_INFO] ))
+		if (isset($_SESSION[self::DELETED_FILE_INFO] ))
 		{
-			$page = unserialize($_SESSION[PA_DELETED_FILE_INFO]);
-			unset ($_SESSION[PA_DELETED_FILE_INFO]);
+			$page = unserialize($_SESSION[self::DELETED_FILE_INFO]);
+			unset ($_SESSION[self::DELETED_FILE_INFO]);
 			return $page;
 		}
 		else
@@ -266,16 +266,16 @@ class Session
 
 	function setReinitializeCategoryList()
 	{
-		$_SESSION[PA_REINITIALIZE_CATEGORY_LIST] = true;
+		$_SESSION[self::REINITIALIZE_CATEGORY_LIST] = true;
 	}
 
 	function isReinitializeCategoryList()
 	{
-		if (isset($_SESSION[PA_REINITIALIZE_CATEGORY_LIST]) &&
-		is_bool($_SESSION[PA_REINITIALIZE_CATEGORY_LIST]) &&
-		$_SESSION[PA_REINITIALIZE_CATEGORY_LIST] == true)
+		if (isset($_SESSION[self::REINITIALIZE_CATEGORY_LIST]) &&
+		is_bool($_SESSION[self::REINITIALIZE_CATEGORY_LIST]) &&
+		$_SESSION[self::REINITIALIZE_CATEGORY_LIST] == true)
 		{
-			unset ($_SESSION[PA_REINITIALIZE_CATEGORY_LIST]);
+			unset ($_SESSION[self::REINITIALIZE_CATEGORY_LIST]);
 			return true;
 		}
 		else
