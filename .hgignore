@@ -6,3 +6,8 @@ syntax: regexp
 syntax: regexp
 ^src/test/html$
 
+
+syntax: regexp
+^dist-php52$
+syntax: regexp
+^build-php52$

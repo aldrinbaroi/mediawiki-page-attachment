@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="PageAttachment" basedir=".">
+	<!-- 
+	/**
+	 *
+ 	 * Copyright (C) 2011 Aldrin Edison Baroi
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the GNU General Public License as published by
+     * the Free Software Foundation; either version 3 of the License, or
+     * (at your option) any later version.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     * GNU General Public License for more details.
+     *
+     * You should have received a copy of the GNU General Public License along
+     * with this program; if not, write to the 
+     *     Free Software Foundation, Inc.,
+     *     51 Franklin Street, Fifth Floor
+     *     Boston, MA 02110-1301, USA.
+     *     http://www.gnu.org/copyleft/gpl.html
+	 *
+	 */
+	-->
+	<property file="build.properties" />
+	<target name="showProjectSettings">
+		<echo>extension.name        = ${extension.name}</echo>
+		<echo>mediawiki.install.dir = ${mediawiki.install.dir}</echo>
+		<echo>source.main.dir       = ${source.main.dir}</echo>
+		<echo>source.test.dir       = ${source.test.dir}</echo>
+		<echo>resources.main.dir    = ${resources.main.dir}</echo>
+		<echo>resources.test.dir    = ${resources.test.dir}</echo>
+		<echo>distribution.dir      = ${distribution.dir}</echo>
+		<echo>deploy.dir            = ${deploy.dir}</echo>
+	</target>
+	<target name="distribute">
+		<delete file="${php52.distribution.zipfile}" />
+		<zip destfile="${php52.distribution.zipfile}">
+			<zipfileset dir="${php52.resources.main.dir}" prefix="${extension.name}" />
+			<zipfileset dir="${php52.source.main.dir}" prefix="${extension.name}" />
+		</zip>
+	</target>
+	<target name="cleanDeployDir" depends="showProjectSettings">
+		<delete dir="${deploy.dir}" />
+	</target>
+	<target name="deploy" depends="cleanDeployDir">
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${php52.resources.main.dir}" />
+		</copy>
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${php52.source.main.dir}" />
+		</copy>
+	</target>
+	<target name="deployTest" depends="deploy">
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${php52.source.test.dir}">
+				<include name="**/*.php" />
+			</fileset>
+		</copy>
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${php52.resources.test.dir}" />
+		</copy>
+	</target>
+	<!--
+	-->
+	<target name="commentOutNamespaceDeclaration">
+		<replaceregexp file="${fileName}" match="namespace(.*)" replace="// namespace\1" />
+	</target>
+	<target name="addNamespacePrefixToClassName">
+		<replaceregexp file="${fileName}" match="class (.*)" replace="class ${namespace}_\1" byline="true" />
+	</target>
+	<target name="replaceNamespaceSeparator">
+		<replaceregexp file="${fileName}" match="\\" replace="_" flags="g" byline="true" />
+	</target>
+	<target name="removeExtraneousUnderscore">
+		<replaceregexp file="${fileName}" match="_PageAttachment" replace="PageAttachment" byline="true" />
+		<replaceregexp file="${fileName}" match="_wfDebug" replace="wfDebug" byline="true" />
+	</target>
+	<target name="transformFile">
+		<!-- Comment out namespace declaration -->
+		<replaceregexp file="${fileName}" match="namespace(.*)" replace="// namespace\1" />
+		<!-- Add namespace prefix to class name -->
+		<replaceregexp file="${fileName}" match="class (.*)" replace="class ${namespace}_\1" byline="true" />
+		<!-- Replace namespace separator -->
+		<replaceregexp file="${fileName}" match="\\" replace="_" flags="g" byline="true" />
+		<!-- Remove extraneous underscores -->
+		<replaceregexp file="${fileName}" match="_PageAttachment" replace="PageAttachment" byline="true" />
+		<replaceregexp file="${fileName}" match="_wfDebug" replace="wfDebug" byline="true" />
+	</target>
+	<target name="copyOnly">
+		<property name="work.dir" value="${php52.build.dir}/${directoryName}" />
+		<mkdir dir="${work.dir}" />
+		<copy todir="${work.dir}">
+			<fileset dir="${source.main.dir}/${directoryName}">
+				<include name="*.php" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="transformFiles">
+		<property name="work.dir" value="${php52.build.dir}/${directoryName}" />
+		<mkdir dir="${work.dir}" />
+		<copy todir="${work.dir}">
+			<fileset dir="${source.main.dir}/${directoryName}">
+				<include name="*.php" />
+			</fileset>
+		</copy>
+		<!-- Comment out namespace declaration -->
+		<replaceregexp match="namespace(.*)" replace="// namespace\1">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<!-- Add namespace prefix to class name -->
+		<replaceregexp match="class (.*)" replace="class ${namespace}_\1" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<!-- Add namespace prefix to interface name -->
+		<replaceregexp match="interface (.*)" replace="interface ${namespace}_\1" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<!-- Replace namespace separator -->
+		<replaceregexp match="\\" replace="_" flags="g" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<!-- Remove extraneous underscores -->
+		<replaceregexp match="_PageAttachment" replace="PageAttachment" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="_wf" replace="wf" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="_Title" replace="Title" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="_Xml" replace="Xml" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="(.*)_ImageListPager" replace="\1ImageListPager" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="(.*)_SpecialPage" replace="\1SpecialPage" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match=" _getcwd" replace=" getcwd" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match=" _MediaWiki" replace=" MediaWiki" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match=" _HTML" replace=" HTML" flags="g" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="(.*)_SpecialUpload" replace="\1SpecialUpload" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match=" _DateTime" replace=" DateTime" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match=" _Article" replace=" Article" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="= _User::" replace="= User::" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="_UploadBase::" replace="UploadBase::" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="/_t\|_n\|_r/" replace="/\\\\t|\\\\n|\\\\r/" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="/&lt;_/\*p_/\*>/" replace="/&lt;\\\\/\*p\\\\/\*>/" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match=" _FileDeleteForm" replace=" FileDeleteForm" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<!-- Put back needed backslash -->
+		<replaceregexp match="&quot;_n&quot;" replace="&quot;\\\\n&quot;" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="(.*)[.]_n" replace="\1.\\\\n" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+		<replaceregexp match="'_n'" replace="'\\\\n'" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+	</target>
+	<target name="replaceText">
+		<property name="fullFileName" value="${php52.build.dir}/${directoryName}/${fileName}.php" />
+		<replaceregexp file="${fullFileName}" match="${match}" replace="${replacement}" byline="true" />
+	</target>
+	<target name="expandClassName">
+		<property name="fullFileName" value="${php52.build.dir}/${directoryName}/${fileName}.php" />
+		<replaceregexp file="${fullFileName}" match="new ${className}" replace="new ${namespace}_${className}" byline="true" />
+	</target>
+	<target name="expandClassNameAllFiles">
+		<property name="work.dir" value="${php52.build.dir}/${directoryName}" />
+		<replaceregexp match="new ${className}" replace="new ${namespace}_${className}" byline="true">
+			<fileset dir="${work.dir}">
+				<include name="*.php" />
+			</fileset>
+		</replaceregexp>
+	</target>
+	<target name="transform">
+		<delete dir="${php52.build.dir}" />
+		<mkdir dir="${php52.build.dir}" />
+		<!-- Javascript -->
+		<copy file="${resources.main.dir}/skins/js/page-attachment.js" tofile="${php52.build.dir}/skins/js/page-attachment.js" />
+		<replaceregexp file="${php52.build.dir}/skins/js/page-attachment.js" match="\\\\" replace="_" flags="g" byline="true" />
+		<replaceregexp file="${php52.build.dir}/skins/js/page-attachment.js" match="_PageAttachment" replace="PageAttachment" flags="g" byline="true" />
+		<!-- SetupExtension.php -->
+		<copy file="${source.main.dir}/SetupExtension.php" tofile="${php52.build.dir}/SetupExtension.php" />
+		<replaceregexp file="${php52.build.dir}/SetupExtension.php" match="\\\\" replace="_" flags="g" byline="true" />
+		<replaceregexp file="${php52.build.dir}/SetupExtension.php" match="\\" replace="_" flags="g" byline="true" />
+		<replaceregexp file="${php52.build.dir}/SetupExtension.php" match="_PageAttachment" replace="PageAttachment" byline="true" />
+		<!-- RequestHandler.php -->
+		<copy file="${source.main.dir}/RequestHandler.php" tofile="${php52.build.dir}/RequestHandler.php" />
+		<antcall target="transformFile">
+			<param name="fileName" value="${php52.build.dir}/RequestHandler.php" />
+			<param name="namespace" value="PageAttachment" />
+		</antcall>
+		<!-- dir: ajax -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="ajax" />
+			<param name="namespace" value="PageAttachment_Ajax" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ajax" />
+			<param name="fileName" value="Ajax" />
+			<param name="match" value="new _AjaxResponse" />
+			<param name="replacement" value="new AjaxResponse" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ajax" />
+			<param name="fileName" value="Ajax" />
+			<param name="match" value="setAjaxCacheDuration" />
+			<param name="replacement" value="PageAttachment_Ajax_setAjaxCacheDuration" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ajax" />
+			<param name="fileName" value="Ajax" />
+			<param name="match" value="getPageAttachments" />
+			<param name="replacement" value="PageAttachment_Ajax_getPageAttachments" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ajax" />
+			<param name="fileName" value="Ajax" />
+			<param name="match" value="removePageAttachment" />
+			<param name="replacement" value="PageAttachment_Ajax_removePageAttachment" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ajax" />
+			<param name="fileName" value="Ajax" />
+			<param name="match" value="removePageAttachmentPermanently" />
+			<param name="replacement" value="PageAttachment_Ajax_removePageAttachmentPermanently" />
+		</antcall>
+		<!-- dir: attachment -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="attachment" />
+			<param name="namespace" value="PageAttachment_Attachment" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="attachment" />
+			<param name="fileName" value="AttachmentDataFactory" />
+			<param name="namespace" value="PageAttachment_Attachment" />
+			<param name="className" value="AttachmentData" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="attachment" />
+			<param name="fileName" value="AttachmentManager" />
+			<param name="match" value="= _''" />
+			<param name="replacement" value="= \\\\''" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="attachment" />
+			<param name="fileName" value="AttachmentManager" />
+			<param name="match" value=" '_''" />
+			<param name="replacement" value=" '\\\\''" />
+		</antcall>
+		<!-- dir: auditlog -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="auditlog" />
+			<param name="namespace" value="PageAttachment_AuditLog" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="auditlog" />
+			<param name="fileName" value="AuditLogManager" />
+			<param name="namespace" value="PageAttachment_AuditLog" />
+			<param name="className" value="AuditLogData" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="auditlog" />
+			<param name="fileName" value="AuditLogViewer" />
+			<param name="namespace" value="PageAttachment_AuditLog" />
+			<param name="className" value="AuditLogPager" />
+		</antcall>
+		<!-- dir: browse-search -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="browse-search" />
+			<param name="namespace" value="PageAttachment_BrowseSearch" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="browse-search" />
+			<param name="fileName" value="ListFiles" />
+			<param name="namespace" value="PageAttachment_BrowseSearch" />
+			<param name="className" value="ImageListPager" />
+		</antcall>
+		<!-- dir: cache -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="cache" />
+			<param name="namespace" value="PageAttachment_Cache" />
+		</antcall>
+		<antcall target="expandClassNameAllFiles">
+			<param name="directoryName" value="cache" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="Cache" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheFactory" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="Provider" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheManager" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="AttachmentDataCache" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheManager" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="AttachmentListCache" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheManager" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="UserCache" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheManager" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="ArticleNameCache" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheManager" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="FileCache" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheManager" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="CategoryListCache" />
+		</antcall>
+		<!-- dir: cache/provider -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="cache/provider" />
+			<param name="namespace" value="PageAttachment_Cache_Provider" />
+		</antcall>
+		<!-- dir: category -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="category" />
+			<param name="namespace" value="PageAttachment_Category" />
+		</antcall>
+		<!-- dir: configuration -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="configuration" />
+			<param name="namespace" value="PageAttachment_Config" />
+		</antcall>
+		<!-- dir: download -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="download" />
+			<param name="namespace" value="PageAttachment_Download" />
+		</antcall>
+		<!-- dir: example-configuration -->
+		<antcall target="copyOnly">
+			<param name="directoryName" value="example-configuration" />
+		</antcall>
+		<!-- dir: file -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="file" />
+			<param name="namespace" value="PageAttachment_File" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="file" />
+			<param name="fileName" value="FileManager" />
+			<param name="namespace" value="PageAttachment_File" />
+			<param name="className" value="File" />
+		</antcall>
+		<!-- dir: messages -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="messages" />
+			<param name="namespace" value="PageAttachment_Messages" />
+		</antcall>
+		<copy file="${source.main.dir}/messages/Messages_EN.php" tofile="${php52.build.dir}/messages/Messages_EN.php" overwrite="true" />
+		<!-- dir: request -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="request" />
+			<param name="namespace" value="PageAttachment_Request" />
+		</antcall>
+		<!-- dir: security -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="security" />
+			<param name="namespace" value="PageAttachment_Security" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="security" />
+			<param name="fileName" value="SecurityManager" />
+			<param name="namespace" value="PageAttachment_Security" />
+			<param name="className" value="MediaWiki_MediaWikiSecurityManagerFactory" />
+		</antcall>
+		<!-- dir: security/mediawiki -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="security/mediawiki" />
+			<param name="namespace" value="PageAttachment_Security_Mediawiki" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="security/mediawiki" />
+			<param name="fileName" value="MediaWikiSecurityManagerFactory" />
+			<param name="namespace" value="PageAttachment_Security_MediaWiki" />
+			<param name="className" value="Upload_UploadPermissionChecker_MediaWiki" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="security/mediawiki" />
+			<param name="fileName" value="MediaWikiSecurityManagerFactory" />
+			<param name="namespace" value="PageAttachment_Security_MediaWiki" />
+			<param name="className" value="MediaWikiSecurityManager" />
+		</antcall>
+		<!-- dir: security/mediawiki/upload -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="security/mediawiki/upload" />
+			<param name="namespace" value="PageAttachment_Security_Mediawiki_Upload" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="security/mediawiki/upload" />
+			<param name="fileName" value="UploadPermissionChecker_MediaWiki_v1162" />
+			<param name="match" value="AbstractUploadPermissionChecker" />
+			<param name="replacement" value="PageAttachment_Security_MediaWiki_Upload_AbstractUploadPermissionChecker" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="security/mediawiki/upload" />
+			<param name="fileName" value="UploadPermissionChecker_MediaWiki_v1162" />
+			<param name="match" value="IUploadPermissionChecker" />
+			<param name="replacement" value="PageAttachment_Security_MediaWiki_Upload_IUploadPermissionChecker" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="security/mediawiki/upload" />
+			<param name="fileName" value="UploadPermissionChecker_MediaWiki_v1170" />
+			<param name="match" value="AbstractUploadPermissionChecker" />
+			<param name="replacement" value="PageAttachment_Security_MediaWiki_Upload_AbstractUploadPermissionChecker" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="security/mediawiki/upload" />
+			<param name="fileName" value="UploadPermissionChecker_MediaWiki_v1170" />
+			<param name="match" value="IUploadPermissionChecker" />
+			<param name="replacement" value="PageAttachment_Security_MediaWiki_Upload_IUploadPermissionChecker" />
+		</antcall>
+		<!-- dir: session -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="session" />
+			<param name="namespace" value="PageAttachment_Session" />
+		</antcall>
+		<!-- dir: setup -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="setup" />
+			<param name="namespace" value="PageAttachment_Setup" />
+		</antcall>
+		<!-- dir: ui -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="ui" />
+			<param name="namespace" value="PageAttachment_UI" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ui" />
+			<param name="fileName" value="Command" />
+			<param name="match" value="HTML::" />
+			<param name="replacement" value="PageAttachment_UI_HTML::" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="ui" />
+			<param name="fileName" value="WebBrowser" />
+			<param name="namespace" value="PageAttachment_UI" />
+			<param name="className" value="Command" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="ui" />
+			<param name="fileName" value="WebBrowser" />
+			<param name="namespace" value="PageAttachment_UI" />
+			<param name="className" value="UIComposer" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ui" />
+			<param name="fileName" value="WebBrowser" />
+			<param name="match" value="HTML::buildLabel" />
+			<param name="replacement" value="PageAttachment_UI_HTML::buildLabel" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="ui" />
+			<param name="fileName" value="WebBrowser" />
+			<param name="match" value="HTML::buildImageLink" />
+			<param name="replacement" value="PageAttachment_UI_HTML::buildImageLink" />
+		</antcall>
+		<!-- dir: upload -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="upload" />
+			<param name="namespace" value="PageAttachment_Upload" />
+		</antcall>
+		<!-- dir: user -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="user" />
+			<param name="namespace" value="PageAttachment_User" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="user" />
+			<param name="fileName" value="UserManager" />
+			<param name="namespace" value="PageAttachment_User" />
+			<param name="className" value="User" />
+		</antcall>
+		<!-- dir: utility -->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="utility" />
+			<param name="namespace" value="PageAttachment_Utility" />
+		</antcall>
+	</target>
+</project>
