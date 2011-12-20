@@ -421,6 +421,18 @@
 			<param name="directoryName" value="configuration" />
 			<param name="namespace" value="PageAttachment_Config" />
 		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="configuration" />
+			<param name="fileName" value="DefaultConfigurations" />
+			<param name="match" value="^# Date Format" />
+			<param name="replacement" value="# Date Format -- NOT SUPPORTED IN PHP 5.2" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="configuration" />
+			<param name="fileName" value="DefaultConfigurations" />
+			<param name="match" value="^\$wgPageAttachment_dateFormat(.*)" />
+			<param name="replacement" value="// NOT SUPPORTED IN PHP 5.2 -- $wgPageAttachment_dateFormat\1" />
+		</antcall>
 		<!-- dir: download -->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="download" />
@@ -574,6 +586,12 @@
 		<antcall target="transformFiles">
 			<param name="directoryName" value="utility" />
 			<param name="namespace" value="PageAttachment_Utility" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="utility" />
+			<param name="fileName" value="PsuedoArticle" />
+			<param name="namespace" value="PageAttachment_Utility" />
+			<param name="className" value="PsuedoTitle" />
 		</antcall>
 	</target>
 </project>
