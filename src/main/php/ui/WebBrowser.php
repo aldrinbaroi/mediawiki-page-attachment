@@ -139,7 +139,7 @@ class WebBrowser
 
 	function registerOnLoadHook($skin, &$text)
 	{
-		$text =\HTML::inlineScript(' pageAttachment_registerOnLoad(); pageAttachment_registerOnPageShow(); ') . $text;
+		$text = \HTML::inlineScript(' pageAttachment_registerOnLoad(); pageAttachment_registerOnPageShow(); ') . $text;
 		return true;
 	}
 
