@@ -24,7 +24,7 @@
 
 namespace PageAttachment\Setup;
 
-class SetupDatabase
+class DatabaseSetup
 {
 	function __construct() { }
 
