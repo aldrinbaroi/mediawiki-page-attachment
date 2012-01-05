@@ -54,7 +54,7 @@ $wgAutoloadClasses['ImageListPager']                                            
 
 ## Autoload PageAttachment classes
 $wgAutoloadClasses['PageAttachment\\Config\\RuntimeConfig']                       = $dir . 'configuration/RuntimeConfig.php';
-$wgAutoloadClasses['PageAttachment\\Setup\\SetupDatabase']                        = $dir . 'setup/SetupDatabase.php';
+$wgAutoloadClasses['PageAttachment\\Setup\\DatabaseSetup']                        = $dir . 'setup/DatabaseSetup.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                   = $dir . 'utility/MediaWikiVersion.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\DateUtil']                           = $dir . 'utility/DateUtil.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoTitle']                        = $dir . 'utility/PsuedoTitle.php';
@@ -108,14 +108,14 @@ $wgAutoloadClasses['PageAttachment\\Category\\CategoryManager']                 
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
 
 ## Ajax Hooks
-$wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\getPageAttachments';
-$wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachment';
-$wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachmentPermanently';
+$wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\getPageAttachments';
+$wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\removePageAttachment';
+$wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\removePageAttachmentPermanently';
 
 ## Special Pages (Unlisted)
-$wgSpecialPages['PageAttachmentListFiles']        = '\\PageAttachment\\BrowseSearch\\ListFiles';
-$wgSpecialPages['PageAttachmentUpload']           = '\\PageAttachment\\Upload\\Upload';
-$wgSpecialPages['PageAttachmentAuditLogViewer']   = '\\PageAttachment\\AuditLog\\AuditLogViewer';
+$wgSpecialPages['PageAttachmentListFiles']        = 'PageAttachment\\BrowseSearch\\ListFiles';
+$wgSpecialPages['PageAttachmentUpload']           = 'PageAttachment\\Upload\\Upload';
+$wgSpecialPages['PageAttachmentAuditLogViewer']   = 'PageAttachment\\AuditLog\\AuditLogViewer';
 
 ## Extension Function Hook
 $wgExtensionFunctions[] = 'pageAttachment_registerEventHandlers';

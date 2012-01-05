@@ -37,6 +37,9 @@
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
 	<target name="distribute">
+		<condition property="distribution.zipfile" value="${distribution.zipfile.beta-release}" else="${distribution.zipfile.normal-release}">
+			<isset property="extension.version.beta" />
+		</condition>
 		<delete file="${distribution.zipfile}" />
 		<zip destfile="${distribution.zipfile}">
 			<zipfileset dir="${source.main.dir}" prefix="${extension.name}" />
