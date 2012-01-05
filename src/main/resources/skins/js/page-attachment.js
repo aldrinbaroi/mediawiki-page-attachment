@@ -180,14 +180,14 @@ function pageAttachment_loadPageAttachments()
 	if (pageAttachment_isForceReload())
 	{
 		randomToken = pageAttachment_randomToken();
-		sajax_do_call("\\PageAttachment\\Ajax\\getPageAttachments",
+		sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
 			[
 					pageTitle, randomToken
 			], div);
 	}
 	else
 	{
-		sajax_do_call("\\PageAttachment\\Ajax\\getPageAttachments",
+		sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
 			[
 				pageTitle
 			], div);
@@ -205,7 +205,7 @@ function pageAttachment_removePageAttachment(attachmentName, rvt,
 	{
 		var pageTitle = pageAttachment_getAttachToPageTitle();
 		var div = document.getElementById("PageAttachment");
-		sajax_do_call("\\PageAttachment\\Ajax\\removePageAttachment",
+		sajax_do_call("PageAttachment\\Ajax\\removePageAttachment",
 			[
 					pageTitle, attachmentName, rvt
 			], div);
@@ -222,7 +222,7 @@ function pageAttachment_removePageAttachmentPermanently(attachmentName, rvt, con
 	{
 		var pageTitle = pageAttachment_getAttachToPageTitle();
 		var div = document.getElementById("PageAttachment");
-		sajax_do_call("\\PageAttachment\\Ajax\\removePageAttachmentPermanently",
+		sajax_do_call("PageAttachment\\Ajax\\removePageAttachmentPermanently",
 			[
 					pageTitle, attachmentName, rvt
 			], div);
