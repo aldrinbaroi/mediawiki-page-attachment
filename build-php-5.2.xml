@@ -145,8 +145,6 @@
 				<include name="*.php" />
 			</fileset>
 		</replaceregexp>
-
-
 		<!-- Remove extraneous underscores -->
 		<replaceregexp match="_PageAttachment" replace="PageAttachment" byline="true">
 			<fileset dir="${work.dir}">
@@ -347,6 +345,12 @@
 			<param name="fileName" value="ListFiles" />
 			<param name="match" value=" _SpecialPage" />
 			<param name="replacement" value=" SpecialPage" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="browse-search" />
+			<param name="fileName" value="ListFiles" />
+			<param name="match" value=">_n" />
+			<param name="replacement" value=">\\\\n" />
 		</antcall>
 		<antcall target="replaceText">
 			<param name="directoryName" value="browse-search" />
