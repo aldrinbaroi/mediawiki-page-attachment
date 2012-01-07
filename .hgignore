@@ -11,3 +11,5 @@ syntax: regexp
 ^dist-php52$
 syntax: regexp
 ^build-php52$
+syntax: regexp
+^src/main/php/Version\.php$
