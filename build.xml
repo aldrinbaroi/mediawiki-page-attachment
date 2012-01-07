@@ -26,6 +26,7 @@
 	 */
 	-->
 	<property file="build.properties" />
+	<import file="build-common.xml" as="common"/>
 	<target name="showProjectSettings">
 		<echo>extension.name        = ${extension.name}</echo>
 		<echo>mediawiki.install.dir = ${mediawiki.install.dir}</echo>
@@ -36,7 +37,7 @@
 		<echo>distribution.dir      = ${distribution.dir}</echo>
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
-	<target name="distribute">
+	<target name="distribute" depends="common.createVersionFile">
 		<condition property="distribution.zipfile" value="${distribution.zipfile.beta-release}" else="${distribution.zipfile.normal-release}">
 			<isset property="extension.version.beta" />
 		</condition>
@@ -49,7 +50,7 @@
 	<target name="cleanDeployDir" depends="showProjectSettings">
 		<delete dir="${deploy.dir}" />
 	</target>
-	<target name="deploy" depends="cleanDeployDir">
+	<target name="deploy" depends="cleanDeployDir,common.createVersionFile">
 		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
 			<fileset dir="${source.main.dir}">
 				<include name="**/*.php" />
