@@ -28,16 +28,17 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
+$dir = dirname(__FILE__) . '/';
+require_once($dir . 'Version.php');
+
 $wgExtensionCredits['parserhook'][] = array(
      'path' => __FILE__,
      'name' => 'PageAttachment',
      'author' => 'Aldrin Edison Baroi',
      'url' => 'http://www.mediawiki.org/wiki/Extension:PageAttachment',
      'descriptionmsg' => 'PageAttachmentExtensionDescription',
-     'version' => '2.0.0',
+     'version' => $wgPageAttachment_version
 );
-
-$dir = dirname(__FILE__) . '/';
 
 ## 
 require_once($dir . 'configuration/DefaultConfigurations.php');
@@ -127,7 +128,7 @@ function pageAttachment_registerEventHandlers()
 	global $wgAjaxExportList;
 	global $wgSpecialPages;	
 	
-	$requestHandler = new \PageAttachment\RequestHandler();
+	$requestHandler = new PageAttachment\RequestHandler();
 	
 	// Hooks
 	$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'onSetupDatabase');
