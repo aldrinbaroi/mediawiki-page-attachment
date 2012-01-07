@@ -38,7 +38,7 @@ class Upload extends \SpecialUpload
 		parent::__construct();
 		$this->mName = 'PageAttachmentUpload';
 		$this->mRestriction = '';
-		$this->mListed = false;
+		$this->setListed(false);
 	}
 
 	public function execute( $par )
