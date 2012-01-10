@@ -50,7 +50,6 @@ if (file_exists($siteSpecificConfigurationsFile))
 {
 	require_once($siteSpecificConfigurationsFile);
 }
-##require_once($dir . 'messages/SetupMessages.php');
 require_once($dir . 'ajax/Ajax.php');
  
 ## Autoload needed MediaWiki class that is not loaded automatically
