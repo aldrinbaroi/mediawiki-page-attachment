@@ -28,7 +28,6 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-$messages = array();
 $messages['en'] = array(
 	'pageAttachmentExtensionDescription'        => 'This extension extends MediaWiki to allow adding files to a page as attachments.',
     'attachments'                               => 'Attachments',
