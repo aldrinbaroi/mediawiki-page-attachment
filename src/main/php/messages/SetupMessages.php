@@ -22,8 +22,6 @@
  *
  */
 
-namespace PageAttachment\Messages;
-
 if (!defined('MEDIAWIKI'))
 {
 	echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
@@ -31,8 +29,18 @@ if (!defined('MEDIAWIKI'))
 }
 
 $messagesDirectory = dirname(__FILE__) . '/';
-
-$wgExtensionMessagesFiles['PageAttachment_Messages_EN'] = $messagesDirectory . 'Messages_EN.php';
-
+$messages = array();
+$fileNamePattern = "/.*Messages_.*php$/";
+if ($directory = opendir($messagesDirectory))
+{
+	while (false !== ($fileName = readdir($directory)))
+	{
+		if (preg_match($fileNamePattern, $fileName))
+		{
+			include($fileName);
+		}
+	}
+	closedir($directory);
+}
 
 ## ::END::

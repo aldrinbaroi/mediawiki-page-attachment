@@ -40,6 +40,9 @@ $wgExtensionCredits['parserhook'][] = array(
      'version' => $wgPageAttachment_version
 );
 
+## Internationalization 
+$wgExtensionMessagesFiles['PageAttachment_Messages'] = $dir . 'messages/SetupMessages.php';
+
 ## 
 require_once($dir . 'configuration/DefaultConfigurations.php');
 $siteSpecificConfigurationsFile = $dir . 'configuration/SiteSpecificConfigurations.php';
@@ -47,7 +50,6 @@ if (file_exists($siteSpecificConfigurationsFile))
 {
 	require_once($siteSpecificConfigurationsFile);
 }
-require_once($dir . 'messages/SetupMessages.php');
 require_once($dir . 'ajax/Ajax.php');
  
 ## Autoload needed MediaWiki class that is not loaded automatically
@@ -125,8 +127,6 @@ $wgExtensionFunctions[] = 'pageAttachment_registerEventHandlers';
 function pageAttachment_registerEventHandlers()
 {
 	global $wgHooks;
-	global $wgAjaxExportList;
-	global $wgSpecialPages;	
 	
 	$requestHandler = new PageAttachment\RequestHandler();
 	
