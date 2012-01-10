@@ -28,16 +28,20 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
+$dir = dirname(__FILE__) . '/';
+require_once($dir . 'Version.php');
+
 $wgExtensionCredits['parserhook'][] = array(
      'path' => __FILE__,
      'name' => 'PageAttachment',
      'author' => 'Aldrin Edison Baroi',
      'url' => 'http://www.mediawiki.org/wiki/Extension:PageAttachment',
      'descriptionmsg' => 'PageAttachmentExtensionDescription',
-     'version' => '1.3.1',
+     'version' => $wgPageAttachment_version
 );
 
-$dir = dirname(__FILE__) . '/';
+## Internationalization 
+$wgExtensionMessagesFiles['PageAttachment_Messages'] = $dir . 'messages/SetupMessages.php'; 
 
 ## Needed to get hold of MediaWiki cache provider
 require_once($dir . '../../includes/ObjectCache.php');
@@ -49,7 +53,6 @@ if (file_exists($siteSpecificConfigurationsFile))
 {
 	require_once($siteSpecificConfigurationsFile);
 }
-require_once($dir . 'messages/SetupMessages.php');
 require_once($dir . 'ajax/Ajax.php');
  
 ## Autoload needed MediaWiki class that is not loaded automatically
@@ -57,7 +60,7 @@ $wgAutoloadClasses['ImageListPager']                                            
 
 ## Autoload PageAttachment classes
 $wgAutoloadClasses['PageAttachment\\Config\\RuntimeConfig']                       = $dir . 'config/RuntimeConfig.php';
-$wgAutoloadClasses['PageAttachment\\Setup\\SetupDatabase']                        = $dir . 'setup/SetupDatabase.php';
+$wgAutoloadClasses['PageAttachment\\Setup\\DatabaseSetup']                        = $dir . 'setup/DatabaseSetup.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                   = $dir . 'utility/MediaWikiVersion.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\DateUtil']                           = $dir . 'utility/DateUtil.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoTitle']                        = $dir . 'utility/PsuedoTitle.php';
@@ -111,27 +114,27 @@ $wgAutoloadClasses['PageAttachment\\Category\\CategoryManager']                 
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
 
 ## Ajax Hooks
-$wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\getPageAttachments';
-$wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachment';
-$wgAjaxExportList[]                               = '\\PageAttachment\\Ajax\\removePageAttachmentPermanently';
+$wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\getPageAttachments';
+$wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\removePageAttachment';
+$wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\removePageAttachmentPermanently';
 
 ## Special Pages (Unlisted)
-$wgSpecialPages['PageAttachmentListFiles']        = '\\PageAttachment\\BrowseSearch\\ListFiles';
-$wgSpecialPages['PageAttachmentUpload']           = '\\PageAttachment\\Upload\\Upload';
-$wgSpecialPages['PageAttachmentAuditLogViewer']   = '\\PageAttachment\\AuditLog\\AuditLogViewer';
+$wgSpecialPages['PageAttachmentListFiles']        = 'PageAttachment\\BrowseSearch\\ListFiles';
+$wgSpecialPages['PageAttachmentUpload']           = 'PageAttachment\\Upload\\Upload';
+$wgSpecialPages['PageAttachmentAuditLogViewer']   = 'PageAttachment\\AuditLog\\AuditLogViewer';
 
 ## Extension Function Hook
-$wgExtensionFunctions[] = 'efSetupPageAttachmentExtension';
+$wgExtensionFunctions[] = 'pageAttachment_registerEventHandlers';
 
 ## Function to register the hooks
-function efSetupPageAttachmentExtension()
+function pageAttachment_registerEventHandlers()
 {
 	global $wgHooks;
 	
-	$requestHandler = new \PageAttachment\RequestHandler();
+	$requestHandler = new PageAttachment\RequestHandler();
 	
 	// Hooks
-	$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'setupDatabase');
+	$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'onSetupDatabase');
 	$wgHooks['BeforeInitialize'][]                    = array($requestHandler, 'onBeforeInitialize');
 	$wgHooks['EditPage::importFormData'][]            = array($requestHandler, 'onEditPageImportFormData');
 	$wgHooks['ArticleSaveComplete'][]                 = array($requestHandler, 'onArticleSaveComplete');

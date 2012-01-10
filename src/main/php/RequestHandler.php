@@ -69,10 +69,10 @@ class RequestHandler
 		$this->uploadHelper = new \PageAttachment\Upload\UploadHelper($this->categoryManager);
 	}
 
-	function setupDatabase()
+	function onSetupDatabase()
 	{
 			
-		$databaseHelper = new \PageAttachment\Setup\SetupDatabase();
+		$databaseHelper = new \PageAttachment\Setup\DatabaseSetup();
 		$databaseHelper->setupDatabase();
 		return true;
 	}
