@@ -36,7 +36,7 @@
 		<echo>distribution.dir      = ${distribution.dir}</echo>
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
-	<target name="distribute" description="Generate Distribution ZIP file">
+	<target name="distribute" depends="transform" description="Generate Distribution ZIP file">
 		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.beta-release}" else="${php52.distribution.zipfile.normal-release}">
 			<isset property="php52.extension.version.beta" />
 		</condition>
@@ -49,7 +49,7 @@
 	<target name="cleanDeployDir" depends="showProjectSettings">
 		<delete dir="${deploy.dir}" />
 	</target>
-	<target name="deploy" depends="cleanDeployDir" description="Deploy to local MediaWiki installation">
+	<target name="deploy" depends="cleanDeployDir, transform" description="Deploy to local MediaWiki installation">
 		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
 			<fileset dir="${php52.resources.main.dir}" />
 		</copy>
@@ -503,12 +503,12 @@
 		</antcall>
 		<!-- 
 			Directory: messages 
+			
+			This directory does not require any namespace related transformation.
 		-->
-		<antcall target="transformFiles">
-			<param name="directoryName" value="messages" />
-			<param name="namespace" value="PageAttachment_Messages" />
-		</antcall>
-		<copy file="${source.main.dir}/messages/Messages_EN.php" tofile="${php52.build.dir}/messages/Messages_EN.php" overwrite="true" />
+		<copy todir="${php52.build.dir}/messages" overwrite="true">
+			<fileset dir="${source.main.dir}/messages" />
+		</copy>
 		<!-- 
 			Directory: request 
 		-->
