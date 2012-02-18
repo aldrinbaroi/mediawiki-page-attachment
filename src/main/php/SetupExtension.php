@@ -62,6 +62,7 @@ $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                 
 $wgAutoloadClasses['PageAttachment\\Utility\\DateUtil']                           = $dir . 'utility/DateUtil.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoTitle']                        = $dir . 'utility/PsuedoTitle.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoArticle']                      = $dir . 'utility/PsuedoArticle.php';
+$wgAutoloadClasses['PageAttachment\\Utility\\StringUtil']                         = $dir . 'utility/StringUtil.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\ICache']                               = $dir . 'cache/ICache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\Provider\\MWCacheObjWrapper']          = $dir . 'cache/provider/MWCacheObjWrapper.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\Provider\\SQLiteCache']                = $dir . 'cache/provider/Sqlite3Cache.php';
