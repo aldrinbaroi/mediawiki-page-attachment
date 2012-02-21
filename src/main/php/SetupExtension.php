@@ -56,7 +56,7 @@ require_once($dir . 'ajax/Ajax.php');
 $wgAutoloadClasses['ImageListPager']                                              = $IP . '/includes/specials/SpecialListfiles.php';
 
 ## Autoload PageAttachment classes
-$wgAutoloadClasses['PageAttachment\\Config\\RuntimeConfig']                       = $dir . 'configuration/RuntimeConfig.php';
+$wgAutoloadClasses['PageAttachment\\Config\\RuntimeConfiguration']                = $dir . 'configuration/RuntimeConfiguration.php';
 $wgAutoloadClasses['PageAttachment\\Setup\\DatabaseSetup']                        = $dir . 'setup/DatabaseSetup.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                   = $dir . 'utility/MediaWikiVersion.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\DateUtil']                           = $dir . 'utility/DateUtil.php';

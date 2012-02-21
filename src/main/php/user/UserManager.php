@@ -71,7 +71,7 @@ class UserManager
 						$realName = $name;
 					}
 				}
-				$rtc = new \PageAttachment\Config\RuntimeConfig();
+				$rtc = new \PageAttachment\Configuration\RuntimeConfiguration();
 				if (!$rtc->isShowUserRealName())
 				{
 					$realName = $name;
