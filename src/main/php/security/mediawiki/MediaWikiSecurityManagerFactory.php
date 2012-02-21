@@ -43,38 +43,40 @@ class MediaWikiSecurityManagerFactory
 	{
 		if (!isset($this->mediaWikiSecurityManager))
 		{
-			$uploadPermissionChecker = null;
-			$versionSupported = true;
-			$mwv = new \PageAttachment\Utility\MediaWikiVersion();
-			$majorVersion = $mwv->getMajorVersion();
-			$minorVersion = $mwv->getMinorVersion();
-			$patchNumber = $mwv->getPatchNumber();
-			if ($majorVersion == 1)
+			global $wgPageAttachment_mediaWikiUploadPermissionChecker;
+
+			if (isset($wgPageAttachment_mediaWikiUploadPermissionChecker))
 			{
-				switch($minorVersion)
+				$uploadPermissionChecker = null;
+				$uploadPermissionCheckerClass = null;
+				$mwv = new \PageAttachment\Utility\MediaWikiVersion();
+				$majorVersion = $mwv->getMajorVersion();
+				$minorVersion = $mwv->getMinorVersion();
+				if (isset($wgPageAttachment_mediaWikiUploadPermissionChecker[$majorVersion][$minorVersion]))
 				{
-					case 16:
-						$uploadPermissionChecker = new Upload\UploadPermissionChecker_MediaWiki_v1162();
-						break;
-					case 17:
-					case 18:
-						$uploadPermissionChecker = new Upload\UploadPermissionChecker_MediaWiki_v1170();
-						break;
-					default:
-						$versionSupported = false;
+					$uploadPermissionCheckerClass = $wgPageAttachment_mediaWikiUploadPermissionChecker[$majorVersion][$minorVersion];
 				}
-			}
-			else
-			{
-				$versionSupported = false;
-			}
-			if ($versionSupported == true)
-			{
+				else if (isset($wgPageAttachment_mediaWikiUploadPermissionChecker[0][0]))
+				{
+					$uploadPermissionCheckerClass = $wgPageAttachment_mediaWikiUploadPermissionChecker[0][0];
+				}
+				else
+				{
+					throw new \MWException("Upload permission checker is not set for MediaWiki version [" . $mwv->getVersion() . "]!");
+				}
+				try
+				{
+					$uploadPermissionChecker = new $uploadPermissionCheckerClass;
+				}
+				catch(Exception $e)
+				{
+					throw new \MWException("Failed to instantiate Uupload permission checker class [" . $uploadPermissionCheckerClass . "]!");
+				}
 				$this->mediaWikiSecurityManager = new MediaWikiSecurityManager($uploadPermissionChecker);
 			}
 			else
 			{
-				throw new \MWException("MediaWiki version [" . $mwv->getVersion() . "] is not supported!");
+				throw new \MWException("Upload permission checker is not set for MediaWiki version [" . $mwv->getVersion() . "]!");
 			}
 		}
 		return $this->mediaWikiSecurityManager;
