@@ -52,7 +52,7 @@ class WebBrowser
 		$this->dateHelper = new \PageAttachment\Utility\DateUtil();
 		$this->attachmentManager = $attachmentManager;
 		$this->resource = $resource;
-		$this->runtimeConfig = new \PageAttachment\Config\RuntimeConfig();
+		$this->runtimeConfig = new \PageAttachment\Configuration\RuntimeConfiguration();
 		$this->fileManager = new \PageAttachment\File\FileManager($this->security);
 	}
 

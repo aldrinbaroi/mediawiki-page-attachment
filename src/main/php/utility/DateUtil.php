@@ -40,7 +40,7 @@ class DateUtil
 
 	function __construct()
 	{
-		$this->runtimeConfig = new \PageAttachment\Config\RuntimeConfig();
+		$this->runtimeConfig = new \PageAttachment\Configuration\RuntimeConfiguration();
 		$this->mediaWikiTimezone = new \DateTimeZone('UTC');
 	}
 
