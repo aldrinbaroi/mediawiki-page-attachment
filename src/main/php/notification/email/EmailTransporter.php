@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\AuditLog;
+namespace PageAttachment\Notification\Email;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,52 +30,28 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class AuditLogData
+class EmailTransporter implements \PageAttachment\Notification\MessageTransporter
 {
-	private $attachedToPageId;
-	private $attachmentFileName;
-	private $userId;
-	private $activityTime;
-	private $activityType;
-	private $activityDetail;
-
-	function __construct($attachedToPageId, $attachmentFileName, $activityType,
-	$activityTime = null, $userId = null)
+	function __construct()
 	{
-		global $wgUser;
-
-		$this->attachedToPageId = $attachedToPageId;
-		$this->attachmentFileName = $attachmentFileName;
-		$this->userId = ($userId == null) ?  $wgUser->getId() : $userId;
-		$this->activityTime = ($activityTime == null) ? time() : $activityTime;
-		$this->activityType = $activityType;
+		
 	}
-
-	function getAttachedToPageId()
+	
+	function sendMessage($user, $subject, $message)
 	{
-		return $this->attachedToPageId;
+		\wfDebugLog("PageAttachment", "***************** EMAIL <START> ***************************************************");
+		\wfDebugLog("PageAttachment", "EA valid: " . ($user->isEmailAddressValid() ? 'TRUE' : 'FALSE'));
+		\wfDebugLog("PageAttachment", "To:       " . $user->getEmailAddress());
+		\wfDebugLog("PageAttachment", "Subject:  " . $subject);
+		\wfDebugLog("PageAttachment", "Message   " . $message);
+		\wfDebugLog("PageAttachment", "***************** EMAIL <END> ***************************************************");
+		
+		$to = new \MailAddress($user->getEmailAddress());
+		$from = new \MailAddress($user->getEmailAddress());
+		$replyTo = new \MailAddress($user->getEmailAddress());
+		
+		\UserMailer::send( $to, $from, $subject, $message, $replyTo );
 	}
-
-	function getAttachmentFileName()
-	{
-		return $this->attachmentFileName;
-	}
-
-	function getUserId()
-	{
-		return $this->userId;
-	}
-
-	function getActivityTime()
-	{
-		return $this->activityTime;
-	}
-
-	function getActivityType()
-	{
-		return $this->activityType;
-	}
-
 }
 
 ## :: END ::

@@ -32,8 +32,9 @@ if (!defined('MEDIAWIKI'))
 
 class RequestHelper
 {
-	const PREVIEW_MODE = 'PREVIEW MODE';
-	const EDIT_MODE = 'EDIT MODE';
+	const PREVIEW_MODE      = 'PREVIEW MODE';
+	const EDIT_MODE         = 'EDIT MODE';
+	const VIEW_HISTORY_MODE = 'VIEW HISTORY MODE';
 	const VIEW_CHANGES_MODE = 'VIEW CHANGES MODE';
 
 	function __construct()
@@ -41,9 +42,9 @@ class RequestHelper
 
 	}
 
-	function setPageMode($editpage, $request)
+	function setPageMode($request, $editpage = null)
 	{
-		if (is_bool($editpage->preview) && ($editpage->preview == true))
+		if (isset($editpage) && is_bool($editpage->preview) && ($editpage->preview == true))
 		{
 			$this->setPreviewMode(true);
 		}
@@ -52,7 +53,6 @@ class RequestHelper
 			$this->setPreviewMode(false);
 		}
 
-		//
 		global $wgRequest;
 
 		$action = $wgRequest->getVal('action');
@@ -65,7 +65,16 @@ class RequestHelper
 			$this->setEditMode(false);
 		}
 
-		if (is_bool($editpage->diff) && ($editpage->diff == true))
+		if ($action == 'history')
+		{
+			$this->setViewHistoryMode(true);
+		}
+		else
+		{
+			$this->setViewHistoryMode(false);
+		}
+		
+		if (isset($editpage) && is_bool($editpage->diff) && ($editpage->diff == true))
 		{
 			$this->setViewChangesMode(true);
 		}
@@ -79,7 +88,7 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[self::PREVIEW_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::PREVIEW_MODE] = $trueFalse;
 		}
 		else
 		{
@@ -103,7 +112,7 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[self::EDIT_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::EDIT_MODE] = $trueFalse;
 		}
 		else
 		{
@@ -127,7 +136,7 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[self::VIEW_CHANGES_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::VIEW_CHANGES_MODE] = $trueFalse;
 		}
 		else
 		{
@@ -140,6 +149,30 @@ class RequestHelper
 		if (isset($_REQUEST[self::VIEW_CHANGES_MODE]))
 		{
 			return $_REQUEST[self::VIEW_CHANGES_MODE];
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	private function setViewHistoryMode($trueFalse)
+	{
+		if (is_bool($trueFalse))
+		{
+			$_REQUEST[self::VIEW_HISTORY_MODE] = $trueFalse;
+		}
+		else
+		{
+			$_REQUEST[self::VIEW_HISTORY_MODE] = false;
+		}
+	}
+
+	function isViewHistoryMode()
+	{
+		if (isset($_REQUEST[self::VIEW_HISTORY_MODE]))
+		{
+			return $_REQUEST[self::VIEW_HISTORY_MODE];
 		}
 		else
 		{

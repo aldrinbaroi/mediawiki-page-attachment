@@ -43,7 +43,15 @@ $wgExtensionCredits['parserhook'][] = array(
 ## Internationalization 
 $wgExtensionMessagesFiles['PageAttachment_Messages'] = $dir . 'messages/SetupMessages.php';
 
-## 
+## Load System Configurations
+require_once($dir . 'configuration/DefaultSystemConfigurations.php');
+$siteSpecificSystemConfigurationsFile = $dir . 'configuration/SiteSpecificSystemConfigurations.php';
+if (file_exists($siteSpecificSystemConfigurationsFile))
+{
+	require_once($siteSpecificSystemConfigurationsFile);
+}
+
+## Load Configurations 
 require_once($dir . 'configuration/DefaultConfigurations.php');
 $siteSpecificConfigurationsFile = $dir . 'configuration/SiteSpecificConfigurations.php';
 if (file_exists($siteSpecificConfigurationsFile))
@@ -51,12 +59,15 @@ if (file_exists($siteSpecificConfigurationsFile))
 	require_once($siteSpecificConfigurationsFile);
 }
 require_once($dir . 'ajax/Ajax.php');
- 
+
+## Load Notification Templates
+require_once($dir . 'template/TemplateLoader.php');
+
 ## Autoload needed MediaWiki class that is not loaded automatically
 $wgAutoloadClasses['ImageListPager']                                              = $IP . '/includes/specials/SpecialListfiles.php';
 
 ## Autoload PageAttachment classes
-$wgAutoloadClasses['PageAttachment\\Config\\RuntimeConfig']                       = $dir . 'configuration/RuntimeConfig.php';
+$wgAutoloadClasses['PageAttachment\\Configuration\\RuntimeConfiguration']         = $dir . 'configuration/RuntimeConfiguration.php';
 $wgAutoloadClasses['PageAttachment\\Setup\\DatabaseSetup']                        = $dir . 'setup/DatabaseSetup.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                   = $dir . 'utility/MediaWikiVersion.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\DateUtil']                           = $dir . 'utility/DateUtil.php';
@@ -109,6 +120,15 @@ $wgAutoloadClasses['PageAttachment\\User\\UserManager']                         
 $wgAutoloadClasses['PageAttachment\\File\\File']                                  = $dir . 'file/File.php';
 $wgAutoloadClasses['PageAttachment\\File\\FileManager']                           = $dir . 'file/FileManager.php';
 $wgAutoloadClasses['PageAttachment\\Category\\CategoryManager']                   = $dir . 'category/CategoryManager.php';
+$wgAutoloadClasses['PageAttachment\\WatchedItem\\WatchedItem']                    = $dir . 'watcheditem/WatchedItem.php';
+$wgAutoloadClasses['PageAttachment\\WatchedItem\\WatchedItemFactory']             = $dir . 'watcheditem/WatchedItemFactory.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\MessageComposer']               = $dir . 'notification/MessageComposer.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\MessageTransporter']            = $dir . 'notification/MessageTransporter.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\NotificationManager']           = $dir . 'notification/NotificationManager.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\NotificationManagerFactory']    = $dir . 'notification/NotificationManagerFactory.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\NotificationJob']               = $dir . 'notification/NotificationJob.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailMessageComposer']   = $dir . 'notification/email/EmailMessageComposer.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailTransporter']       = $dir . 'notification/email/EmailTransporter.php';
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
 
 ## Ajax Hooks
@@ -128,9 +148,9 @@ $wgExtensionFunctions[] = 'pageAttachment_registerEventHandlers';
 function pageAttachment_registerEventHandlers()
 {
 	global $wgHooks;
-	
+
 	$requestHandler = new PageAttachment\RequestHandler();
-	
+
 	// Hooks
 	$wgHooks['LoadExtensionSchemaUpdates'][]          = array($requestHandler, 'onSetupDatabase');
 	$wgHooks['BeforeInitialize'][]                    = array($requestHandler, 'onBeforeInitialize');
@@ -150,7 +170,10 @@ function pageAttachment_registerEventHandlers()
 	$wgHooks['FileUndeleteComplete'][]                = array($requestHandler, 'onFileUndeleteComplete');
 	$wgHooks['LinksUpdate'][]                         = array($requestHandler, 'onLinksUpdate');
 	$wgHooks['LinksUpdateComplete'][]                 = array($requestHandler, 'onLinksUpdateComplete');
-	
+
 }
+
+## Register Notification Job Handler
+$wgJobClasses['pageAttachmentNotification'] = 'PageAttachment\\Notification\\NotificationJob';
 
 ## ::END::

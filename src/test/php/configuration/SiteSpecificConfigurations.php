@@ -47,7 +47,7 @@ $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
 #
 # Attachment Category
 #
-$wgPageAttachment_attachmentCategory['setOnUpload']            = true;
+$wgPageAttachment_attachmentCategory['setOnUpload']            = false;
 $wgPageAttachment_attachmentCategory['mustSet']                = false;
 $wgPageAttachment_attachmentCategory['defaultCategory']        = 'MyCategory 2';
 $wgPageAttachment_attachmentCategory['allowedCategories']      = 'PredefinedCategoriesOnly';
@@ -56,6 +56,14 @@ $wgPageAttachment_attachmentCategory['allowedCategories']      = 'PredefinedCate
 $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 1';
 $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 2';
 $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 3';
+
+#
+# Notificaiton 
+#
+$wgPageAttachment_enableNotification = true;
+$wgPageAttachment_useJobQueueForNotification = true;
+$wgPageAttachment_messageFormat = 'plaintext';
+
 
 
 

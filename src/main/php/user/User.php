@@ -37,14 +37,18 @@ class User
 	private $realName;
 	private $isValidUser;
 	private $userPageLink;
+	private $emailAddress;
+	private $emailAddressValid;
 
-	function __construct($id, $name, $realName, $isValidUser, $userPageLink)
+	function __construct($id, $name, $realName, $isValidUser, $userPageLink, $emailAddress, $emailAddressValid)
 	{
 		$this->id = $id;
 		$this->name = $name;
 		$this->realName = $realName;
 		$this->isValidUser = $isValidUser;
 		$this->userPageLink = $userPageLink;
+		$this->emailAddress = $emailAddress;
+		$this->emailAddressValid = (is_bool($emailAddressValid) && $emailAddressValid == true) ? true : false;
 	}
 
 	function getId()
@@ -70,6 +74,16 @@ class User
 	function getUserPageLink()
 	{
 		return $this->userPageLink;
+	}
+	
+	function getEmailAddress()
+	{
+		return $this->emailAddress;
+	}
+	
+	function isEmailAddressValid()
+	{
+		return $this->emailAddressValid;
 	}
 
 }

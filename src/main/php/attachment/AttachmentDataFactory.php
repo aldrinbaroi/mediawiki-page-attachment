@@ -42,7 +42,7 @@ class AttachmentDataFactory
 	{
 		$this->securityManager = $securityManager;
 		$this->cache = new \PageAttachment\Cache\AttachmentDataCache();
-		$this->runtimeConfig = new \PageAttachment\Config\RuntimeConfig();
+		$this->runtimeConfig = new \PageAttachment\Configuration\RuntimeConfiguration();
 		$this->articleNameCache = new \PageAttachment\Cache\ArticleNameCache();
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
 	}
