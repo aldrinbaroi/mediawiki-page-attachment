@@ -82,6 +82,7 @@ class RequestHandler
 		global $wgRequest;
 
 		$this->session->startSessionIfNotStarted();
+		$this->requestHelper->setPageMode($request);
 		$action = $wgRequest->getVal('action');
 		$currentViewPage = new \PageAttachment\Session\Page($title);
 		$viewPageId = $currentViewPage->getId();
@@ -120,7 +121,7 @@ class RequestHandler
 
 	function onEditPageImportFormData($editpage, $request)
 	{
-		$this->requestHelper->setPageMode($editpage, $request);
+		$this->requestHelper->setPageMode($request, $editpage);
 		return true;
 	}
 

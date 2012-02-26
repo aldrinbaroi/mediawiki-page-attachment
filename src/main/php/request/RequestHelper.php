@@ -33,6 +33,7 @@ if (!defined('MEDIAWIKI'))
 define('PA_PREVIEW_MODE',      'PA_PREVIEW_MODE');
 define('PA_EDIT_MODE',         'PA_EDIT_MODE');
 define('PA_VIEW_CHANGES_MODE', 'PA_VIEW_CHANGES_MODE');
+define('PA_VIEW_HISTORY_MODE', 'PA_VIEW_HISTORY_MODE');
 
 class RequestHelper
 {
@@ -41,9 +42,9 @@ class RequestHelper
 
 	}
 
-	function setPageMode($editpage, $request)
+	function setPageMode($request, $editpage = null)
 	{
-		if (is_bool($editpage->preview) && ($editpage->preview == true))
+		if (isset($editpage) && is_bool($editpage->preview) && ($editpage->preview == true))
 		{
 			$this->setPreviewMode(true);
 		}
@@ -65,7 +66,16 @@ class RequestHelper
 			$this->setEditMode(false);
 		}
 
-		if (is_bool($editpage->diff) && ($editpage->diff == true))
+		if ($action == 'history')
+		{
+			$this->setViewHistoryMode(true);
+		}
+		else
+		{
+			$this->setViewHistoryMode(false);
+		}
+		
+		if (isset($editpage) && is_bool($editpage->diff) && ($editpage->diff == true))
 		{
 			$this->setViewChangesMode(true);
 		}
@@ -146,7 +156,31 @@ class RequestHelper
 			return false;
 		}
 	}
-
+	
+	private function setViewHistoryMode($trueFalse)
+	{
+		if (is_bool($trueFalse))
+		{
+			$_REQUEST[PA_VIEW_HISTORY_MODE] = $trueFalse;
+		}
+		else
+		{
+			$_REQUEST[PA_VIEW_HISTORY_MODE] = false;
+		}
+	}
+	
+	function isViewHistoryMode()
+	{
+		if (isset($_REQUEST[PA_VIEW_HISTORY_MODE]))
+		{
+			return $_REQUEST[PA_VIEW_HISTORY_MODE];
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
 	function isSpecialPage(&$title)
 	{
 		if (isset($title) && $title instanceof \Title)
