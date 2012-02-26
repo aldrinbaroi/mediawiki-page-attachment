@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\AuditLog;
+namespace PageAttachment\Template;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,52 +30,20 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class AuditLogData
-{
-	private $attachedToPageId;
-	private $attachmentFileName;
-	private $userId;
-	private $activityTime;
-	private $activityType;
-	private $activityDetail;
+$wgPageAttachment_messageTemplates['plaintext'] = 
+'
+** HEADER **
 
-	function __construct($attachedToPageId, $attachmentFileName, $activityType,
-	$activityTime = null, $userId = null)
-	{
-		global $wgUser;
+>> SITENAME Wiki <<
 
-		$this->attachedToPageId = $attachedToPageId;
-		$this->attachmentFileName = $attachmentFileName;
-		$this->userId = ($userId == null) ?  $wgUser->getId() : $userId;
-		$this->activityTime = ($activityTime == null) ? time() : $activityTime;
-		$this->activityType = $activityType;
-	}
+ATTACHED_TO_PAGE_NAME_LABEL: ATTACHED_TO_PAGE_NAME
+ATTACHMENT_NAME_LABEL: ATTACHMENT_NAME
+ACTIVITY_TYPE_LABEL: ACTIVITY_TYPE
+ACTIVITY_TIME_LABEL: ACTIVITY_TIME
+MODIFIED_BY_USER_LABEL: MODIFIED_BY_USER
 
-	function getAttachedToPageId()
-	{
-		return $this->attachedToPageId;
-	}
-
-	function getAttachmentFileName()
-	{
-		return $this->attachmentFileName;
-	}
-
-	function getUserId()
-	{
-		return $this->userId;
-	}
-
-	function getActivityTime()
-	{
-		return $this->activityTime;
-	}
-
-	function getActivityType()
-	{
-		return $this->activityType;
-	}
-
-}
+';
 
 ## :: END ::
+ 
+

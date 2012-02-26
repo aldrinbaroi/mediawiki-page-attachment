@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\AuditLog;
+namespace PageAttachment\Notification;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,52 +30,10 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class AuditLogData
+interface MessageComposer
 {
-	private $attachedToPageId;
-	private $attachmentFileName;
-	private $userId;
-	private $activityTime;
-	private $activityType;
-	private $activityDetail;
-
-	function __construct($attachedToPageId, $attachmentFileName, $activityType,
-	$activityTime = null, $userId = null)
-	{
-		global $wgUser;
-
-		$this->attachedToPageId = $attachedToPageId;
-		$this->attachmentFileName = $attachmentFileName;
-		$this->userId = ($userId == null) ?  $wgUser->getId() : $userId;
-		$this->activityTime = ($activityTime == null) ? time() : $activityTime;
-		$this->activityType = $activityType;
-	}
-
-	function getAttachedToPageId()
-	{
-		return $this->attachedToPageId;
-	}
-
-	function getAttachmentFileName()
-	{
-		return $this->attachmentFileName;
-	}
-
-	function getUserId()
-	{
-		return $this->userId;
-	}
-
-	function getActivityTime()
-	{
-		return $this->activityTime;
-	}
-
-	function getActivityType()
-	{
-		return $this->activityType;
-	}
-
+	function composeSubject($wathchedItem);
+	function composeMessage($wathchedItem, $attachmentName);
 }
 
 ## :: END ::

@@ -41,7 +41,7 @@ class Resource
 	{
 		$this->security = $security;
 		$this->session = $session;
-		$this->runtimeConfig = new \PageAttachment\Config\RuntimeConfig();
+		$this->runtimeConfig = new \PageAttachment\Configuration\RuntimeConfiguration();
 	}
 
 	private function isAddResources()

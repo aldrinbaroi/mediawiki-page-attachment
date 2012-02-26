@@ -175,22 +175,25 @@ function pageAttachment_removePopup(element)
  */
 function pageAttachment_loadPageAttachments()
 {
-	var pageTitle = pageAttachment_getAttachToPageTitle();
-	var div = document.getElementById("PageAttachment");
-	if (pageAttachment_isForceReload())
+	if (pageAttachment_isLoadPageAttachments())
 	{
-		randomToken = pageAttachment_randomToken();
-		sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
-			[
-					pageTitle, randomToken
-			], div);
-	}
-	else
-	{
-		sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
-			[
-				pageTitle
-			], div);
+		var pageTitle = pageAttachment_getAttachToPageTitle();
+		var div = document.getElementById("PageAttachment");
+		if (pageAttachment_isForceReload())
+		{
+			randomToken = pageAttachment_randomToken();
+			sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
+				[
+						pageTitle, randomToken
+				], div);
+		}
+		else
+		{
+			sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
+				[
+					pageTitle
+				], div);
+		}
 	}
 }
 /**

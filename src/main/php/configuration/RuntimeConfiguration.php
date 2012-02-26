@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\Config;
+namespace PageAttachment\Configuration;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,7 +30,7 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class RuntimeConfig
+class RuntimeConfiguration
 {
 	private $showUserRealName;
 	private $skinName;

@@ -45,13 +45,13 @@ class UserManager
 	{
 		$user = $this->cacheManager->retrieveUser($userId);
 		if (!isset($user))
-		{
+		{	
 			$name = '';
 			$realName = '';
 			$isValid = false;
 			$userPageLink = '';
 			$dbr = \wfGetDB( DB_SLAVE );
-			$rs = $dbr->select('user', array('user_name', 'user_real_name'), array( 'user_id' => $userId));
+			$rs = $dbr->select('user', array('user_name', 'user_real_name', 'user_email', 'user_email_authenticated'), array( 'user_id' => $userId));
 			if ($rs == false)
 			{
 				$name = 'Invalid User';
@@ -65,20 +65,22 @@ class UserManager
 				{
 					$name = $row->user_name;
 					$realName = $row->user_real_name;
+					$emailAddress = $row->user_email;
+					$emailAddressValid = ($row->user_email_authenticated != null) ? true : false;
 					$isValid = true;
 					if (!isset($realName) || (isset($realName) && strlen(trim($realName)) == 0))
 					{
 						$realName = $name;
 					}
 				}
-				$rtc = new \PageAttachment\Config\RuntimeConfig();
+				$rtc = new \PageAttachment\Configuration\RuntimeConfiguration();
 				if (!$rtc->isShowUserRealName())
 				{
 					$realName = $name;
 				}
 				$userPageLink = \PageAttachment\UI\Command::getViewUserPageCommandLink($name, $realName);
 			}
-			$user = new User($userId, $name, $realName, $isValid, $userPageLink);
+			$user = new User($userId, $name, $realName, $isValid, $userPageLink, $emailAddress, $emailAddressValid);
 			$this->cacheManager->storeUser($user);
 		}
 		return $user;

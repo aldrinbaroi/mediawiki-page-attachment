@@ -50,8 +50,17 @@ class MediaWikiVersion
 		$this->version = $wgVersion;
 		$versionInfo = explode( '.', $wgVersion);
 		$this->majorVersion = $versionInfo[0];
-		$this->minorVersion = $versionInfo[1];
-		$this->patchNumber = $versionInfo[2];
+		$matches = array();
+		if (preg_match("/(\d+)([[:alpha:]]+)/", $versionInfo[1], $matches) > 0)
+		{
+			$this->minorVersion = $matches[1];
+			$this->patchNumber = $matches[2];
+		}
+		else
+		{
+			$this->minorVersion = $versionInfo[1];
+			$this->patchNumber = $versionInfo[2];
+		}
 	}
 
 	function getVersion()

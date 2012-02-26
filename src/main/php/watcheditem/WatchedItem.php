@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\AuditLog;
+namespace PageAttachment\WatchedItem;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,50 +30,60 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class AuditLogData
+class WatchedItem
 {
-	private $attachedToPageId;
-	private $attachmentFileName;
-	private $userId;
-	private $activityTime;
-	private $activityType;
-	private $activityDetail;
+	private $pageId;
+	private $pageTitle;
+	private $modifiedByUserId;
+	private $modificationType;
+	private $modificationTime;
+	private $watched;
+	private $watchers;
 
-	function __construct($attachedToPageId, $attachmentFileName, $activityType,
-	$activityTime = null, $userId = null)
+	function __construct($pageId, $pageTitle, $modifiedByUserId, $modificationType, $modificationTime, $watched, $watchers)
 	{
-		global $wgUser;
-
-		$this->attachedToPageId = $attachedToPageId;
-		$this->attachmentFileName = $attachmentFileName;
-		$this->userId = ($userId == null) ?  $wgUser->getId() : $userId;
-		$this->activityTime = ($activityTime == null) ? time() : $activityTime;
-		$this->activityType = $activityType;
+		$this->pageId = $pageId;
+		$this->pageTitle = $pageTitle;
+		$this->modifiedByUserId = $modifiedByUserId;
+		$this->modificationType = $modificationType;
+		$this->modificationTime = $modificationTime;
+		$this->watched = $watched;
+		$this->watchers = $watchers;
 	}
 
-	function getAttachedToPageId()
+	function getPageId()
 	{
-		return $this->attachedToPageId;
+		return $this->pageId;
 	}
 
-	function getAttachmentFileName()
+	function getPageTitle()
 	{
-		return $this->attachmentFileName;
+		return $this->pageTitle;
 	}
 
-	function getUserId()
+	function getModifiedByUserId()
 	{
-		return $this->userId;
+		return $this->modifiedByUserId;
 	}
 
-	function getActivityTime()
+	function getModificationType()
 	{
-		return $this->activityTime;
+		return $this->modificationType;
 	}
 
-	function getActivityType()
+	function getModificationTime()
 	{
-		return $this->activityType;
+		return $this->modificationTime;
+	}
+
+	function isWatched()
+	{
+		return $this->watched;
+	}
+
+	function getWatchers()
+	{
+		return $this->watchers;
 	}
 
 }

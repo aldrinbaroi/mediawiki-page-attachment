@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\AuditLog;
+namespace PageAttachment\Template;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,52 +30,19 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class AuditLogData
+$templateDirectory = dirname(__FILE__) . '/';
+$fileNamePattern = "/^template.*php$/";
+if ($directory = opendir($templateDirectory))
 {
-	private $attachedToPageId;
-	private $attachmentFileName;
-	private $userId;
-	private $activityTime;
-	private $activityType;
-	private $activityDetail;
-
-	function __construct($attachedToPageId, $attachmentFileName, $activityType,
-	$activityTime = null, $userId = null)
+	while (false !== ($fileName = readdir($directory)))
 	{
-		global $wgUser;
-
-		$this->attachedToPageId = $attachedToPageId;
-		$this->attachmentFileName = $attachmentFileName;
-		$this->userId = ($userId == null) ?  $wgUser->getId() : $userId;
-		$this->activityTime = ($activityTime == null) ? time() : $activityTime;
-		$this->activityType = $activityType;
+		if (preg_match($fileNamePattern, $fileName))
+		{
+			require_once($fileName);
+		}
 	}
-
-	function getAttachedToPageId()
-	{
-		return $this->attachedToPageId;
-	}
-
-	function getAttachmentFileName()
-	{
-		return $this->attachmentFileName;
-	}
-
-	function getUserId()
-	{
-		return $this->userId;
-	}
-
-	function getActivityTime()
-	{
-		return $this->activityTime;
-	}
-
-	function getActivityType()
-	{
-		return $this->activityType;
-	}
-
+	closedir($directory);
 }
+
 
 ## :: END ::

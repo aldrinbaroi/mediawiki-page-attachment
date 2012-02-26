@@ -52,7 +52,7 @@ class WebBrowser
 		$this->dateHelper = new \PageAttachment\Utility\DateUtil();
 		$this->attachmentManager = $attachmentManager;
 		$this->resource = $resource;
-		$this->runtimeConfig = new \PageAttachment\Config\RuntimeConfig();
+		$this->runtimeConfig = new \PageAttachment\Configuration\RuntimeConfiguration();
 		$this->fileManager = new \PageAttachment\File\FileManager($this->security);
 	}
 
@@ -68,38 +68,52 @@ class WebBrowser
 
 	function setupAttachmentListSection(&$data)
 	{
-		global $wgUser;
+		if ($this->isSetupAttachmentListSection())
+		{
+			$page = $this->session->getCurrentPage();
+			$pageTitle = $page->getPageTitle();
+			$attachmentDiv = \HTML::element('br') . \HTML::element('div', array('id' => 'PageAttachment'));
+			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return true; } ');
+			$script .= \HTML::inlineScript('  function pageAttachment_getAttachToPageTitle() { return "' . $pageTitle . '"; } ');
+			if ($this->session->isForceReload())
+			{
+				$script .= \HTML::inlineScript(' function pageAttachment_isForceReload() { return true; } ');
+			}
+			else
+			{
+				$script .= \HTML::inlineScript(' function pageAttachment_isForceReload() { return false; } ');
+			}
+			$data = $attachmentDiv . $script;
+		}
+		else
+		{
+			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return false; } ');
+			$data = $script;
+		}
+		return true;
+	}
 
+	private function isSetupAttachmentListSection()
+	{
+		$setup = false;
 		if (!$this->session->isViewPageSpecial())
 		{
 			$page = $this->session->getCurrentPage();
 			$pageId = $page->getId();
 			$pageNS = $page->getNameSpace();
-			$pageURL = $page->getRedirectURL();
 			$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
-			if (($pageInAllowedNameSpaces == false)
-			|| ($pageInAllowedNameSpaces == true
-			&& ($this->requestHelper->isEditMode() == true || $this->requestHelper->isPreviewMode() || $this->requestHelper->isViewChangesMode())))
+			if ($pageInAllowedNameSpaces)
 			{
-				$data = '';
-			}
-			else
-			{
-				$pageTitle = $page->getPageTitle();
-				$attachmentDiv = \HTML::element('br') . \HTML::element('div', array('id' => 'PageAttachment'));
-				$script = \HTML::inlineScript('  function pageAttachment_getAttachToPageTitle() { return "' . $pageTitle . '"; } ');
-				if ($this->session->isForceReload())
+				if (!($this->requestHelper->isEditMode()
+				|| $this->requestHelper->isPreviewMode()
+				|| $this->requestHelper->isViewHistoryMode()
+				|| $this->requestHelper->isViewChangesMode()))
 				{
-					$script .= \HTML::inlineScript(' function pageAttachment_isForceReload() { return true; } ');
+					$setup = true;
 				}
-				else
-				{
-					$script .= \HTML::inlineScript(' function pageAttachment_isForceReload() { return false; } ');
-				}
-				$data = $attachmentDiv . $script;
 			}
 		}
-		return true;
+		return $setup;
 	}
 
 	function addResources(&$out, &$sk)

@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\AuditLog;
+namespace PageAttachment\WatchedItem;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,52 +30,34 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class AuditLogData
+class WatchedItemFactory
 {
-	private $attachedToPageId;
-	private $attachmentFileName;
-	private $userId;
-	private $activityTime;
-	private $activityType;
-	private $activityDetail;
-
-	function __construct($attachedToPageId, $attachmentFileName, $activityType,
-	$activityTime = null, $userId = null)
+	private function __construct()
 	{
-		global $wgUser;
-
-		$this->attachedToPageId = $attachedToPageId;
-		$this->attachmentFileName = $attachmentFileName;
-		$this->userId = ($userId == null) ?  $wgUser->getId() : $userId;
-		$this->activityTime = ($activityTime == null) ? time() : $activityTime;
-		$this->activityType = $activityType;
 	}
 
-	function getAttachedToPageId()
+	public static function createWatchedItem($pageId, $modifiedByUserId, $modificationType, $modificationTime)
 	{
-		return $this->attachedToPageId;
+		$title = \Title::newFromID($pageId);
+		$pageTitle = $title->getText();
+		$watchers = self::loadWatchers($title, $modifiedByUserId);
+		$watched = count($watchers) > 0 ? true : false;
+		return new WatchedItem($pageId, $pageTitle, $modifiedByUserId, $modificationType, $modificationTime, $watched, $watchers);
 	}
 
-	function getAttachmentFileName()
+	private static function loadWatchers($title, $modifiedByUserId)
 	{
-		return $this->attachmentFileName;
+		$watchers = array();
+		$dbr = \wfGetDB( DB_SLAVE );
+		$res = $dbr->select(array( 'watchlist' ), array( 'wl_user' ),
+		array(  'wl_title' => $title->getDBkey(), 'wl_namespace' => $title->getNamespace(), 'wl_user != ' . intval( $modifiedByUserId ))
+		);
+		foreach ( $res as $row )
+		{
+			$watchers[] = intval( $row->wl_user );
+		}
+		return $watchers;
 	}
-
-	function getUserId()
-	{
-		return $this->userId;
-	}
-
-	function getActivityTime()
-	{
-		return $this->activityTime;
-	}
-
-	function getActivityType()
-	{
-		return $this->activityType;
-	}
-
 }
 
-## :: END ::
+## ::END::
