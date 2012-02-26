@@ -30,8 +30,6 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-use \PageAttachment\User\UserManager;
-
 class NotificationManagerFactory
 {
 	private static $NOTIFICATION_MANAGER;
@@ -76,7 +74,7 @@ class NotificationManagerFactory
 				}
 				unset($notificationMedium);
 			}
-			$userManager = new UserManager();
+			$userManager = new \PageAttachment\User\UserManager();
 			self::$NOTIFICATION_MANAGER = new NotificationManager($notificationEnabled, $useJobQueueForNotification, $notificationMediums, $messageComposers, $messageTransporters, $userManager);
 		}
 		return self::$NOTIFICATION_MANAGER;
