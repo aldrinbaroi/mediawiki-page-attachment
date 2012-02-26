@@ -31,33 +31,64 @@ if (!defined('MEDIAWIKI'))
 }
 
 $wgPageAttachment_messageTemplates['html'] = 
-'<div>
-	<div>HEADER<div>
-	<div>
+'
+<html>
+	<head>
+		<title>HEADER</title>
+		<style>
+			body,table 
+			{
+				font-family: verdana;
+				font-size: xx-small;
+				color: #0066FF;
+			}
+			caption 
+			{
+				font-weight: bold;
+				color: ##0066FF;
+			}
+			.label 
+			{
+				font-weight: bold;
+			}
+		</style>
+	</head>
+	<body>
 		<table>
+			<caption>
+				** HEADER **<br />
+				<br />&#187; SITENAME Wiki &#171;<br />
+				<br />
+			</caption>
 			<tr>
-				<td>ATTACHED_TO_PAGE_NAME_LABEL</td>
+				<td class="label">ATTACHED_TO_PAGE_NAME_LABEL</td>
+				<td>:&nbsp;&nbsp;</td>
 				<td>ATTACHED_TO_PAGE_NAME</td>
+			</tr>
 			<tr>
-			</tr>			
-				<td>ATTACHMENT_NAME_LABEL</td>
+				<td class="label">ATTACHMENT_NAME_LABEL</td>
+				<td>:&nbsp;&nbsp;</td>
 				<td>ATTACHMENT_NAME</td>
+			</tr>
 			<tr>
-			</tr>				
-				<td>ACTIVITY_TYPE_LABEL</td>
+				<td class="label">ACTIVITY_TYPE_LABEL</td>
+				<td>:&nbsp;&nbsp;</td>
 				<td>ACTIVITY_TYPE</td>
+			</tr>
 			<tr>
-			</tr>				
-				<td>ACTIVITY_TIME_LABEL</td>
+				<td class="label">ACTIVITY_TIME_LABEL</td>
+				<td>:&nbsp;&nbsp;</td>
 				<td>ACTIVITY_TIME</td>
+			</tr>
 			<tr>
-			</tr>				
-				<td>MODIFIED_BY_USER_LABEL</td>
-				<td>MODIFIED_BY_USER_LABEL</td>
+				<td class="label">MODIFIED_BY_USER_LABEL</td>
+				<td>:&nbsp;&nbsp;</td>
+				<td>MODIFIED_BY_USER</td>
 			</tr>
 		</table>
-	</div>
-</div>';
+	</body>
+</html>
+';
 
 ## :: END ::
  
