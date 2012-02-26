@@ -32,8 +32,9 @@ if (!defined('MEDIAWIKI'))
 
 class RequestHelper
 {
-	const PREVIEW_MODE = 'PREVIEW MODE';
-	const EDIT_MODE = 'EDIT MODE';
+	const PREVIEW_MODE      = 'PREVIEW MODE';
+	const EDIT_MODE         = 'EDIT MODE';
+	const VIEW_HISTORY_MODE = 'VIEW HISTORY MODE';
 	const VIEW_CHANGES_MODE = 'VIEW CHANGES MODE';
 
 	function __construct()
@@ -41,14 +42,18 @@ class RequestHelper
 
 	}
 
-	function setPageMode($editpage, $request)
+	function setPageMode($request, $editpage = null)
 	{
-		if (is_bool($editpage->preview) && ($editpage->preview == true))
+		\wfDebugLog("PageAttachment", "HERE START 88888888888888888888888888888888888888888888888888888888888");
+		\wfDebugLog("PageAttachment", "HERE editpage = " . (isset($editpage) ? 'TRUE' : 'FALSE'));
+		if (isset($editpage) && is_bool($editpage->preview) && ($editpage->preview == true))
 		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 1");
 			$this->setPreviewMode(true);
 		}
 		else
 		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 2");
 			$this->setPreviewMode(false);
 		}
 
@@ -58,28 +63,46 @@ class RequestHelper
 		$action = $wgRequest->getVal('action');
 		if ($action == 'edit')
 		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 3");
 			$this->setEditMode(true);
 		}
 		else
 		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 4");
 			$this->setEditMode(false);
 		}
 
-		if (is_bool($editpage->diff) && ($editpage->diff == true))
+
+		if ($action == 'history')
 		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 3.1");
+			$this->setViewHistoryMode(true);
+		}
+		else
+		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 4.1");
+			$this->setViewHistoryMode(false);
+		}
+
+
+		if (isset($editpage) && is_bool($editpage->diff) && ($editpage->diff == true))
+		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 5");
 			$this->setViewChangesMode(true);
 		}
 		else
 		{
+			\wfDebugLog("PageAttachment", "setPageMode HERE 6");
 			$this->setViewChangesMode(false);
 		}
+		\wfDebugLog("PageAttachment", "HERE END 88888888888888888888888888888888888888888888888888888888888");
 	}
 
 	private function setPreviewMode($trueFalse)
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[self::PREVIEW_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::PREVIEW_MODE] = $trueFalse;
 		}
 		else
 		{
@@ -103,10 +126,12 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[self::EDIT_MODE] = ($trueFalse == true) ? true : false;
+			\wfDebugLog("PageAttachment", ">>>>>>>>>>>>>>>>>>>> SET EDIT MODE : " . ($trueFalse ? 'TRUE' : 'FALSE'));
+			$_REQUEST[self::EDIT_MODE] = $trueFalse;
 		}
 		else
 		{
+			\wfDebugLog("PageAttachment", ">>>>>>>>>>>>>>>>>>>> SET EDIT MODE : false");
 			$_REQUEST[self::EDIT_MODE] = false;
 		}
 	}
@@ -115,6 +140,7 @@ class RequestHelper
 	{
 		if (isset($_REQUEST[self::EDIT_MODE]))
 		{
+			\wfDebugLog("PageAttachment", ">>>>>>>>>>>>>>>>>>>> GET EDIT MODE : " . ($_REQUEST[self::EDIT_MODE] ? 'TRUE' : 'FALSE'));
 			return $_REQUEST[self::EDIT_MODE];
 		}
 		else
@@ -127,7 +153,7 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			$_REQUEST[self::VIEW_CHANGES_MODE] = ($trueFalse == true) ? true : false;
+			$_REQUEST[self::VIEW_CHANGES_MODE] = $trueFalse;
 		}
 		else
 		{
@@ -140,6 +166,30 @@ class RequestHelper
 		if (isset($_REQUEST[self::VIEW_CHANGES_MODE]))
 		{
 			return $_REQUEST[self::VIEW_CHANGES_MODE];
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	private function setViewHistoryMode($trueFalse)
+	{
+		if (is_bool($trueFalse))
+		{
+			$_REQUEST[self::VIEW_HISTORY_MODE] = $trueFalse;
+		}
+		else
+		{
+			$_REQUEST[self::VIEW_HISTORY_MODE] = false;
+		}
+	}
+
+	function isViewHistoryMode()
+	{
+		if (isset($_REQUEST[self::VIEW_HISTORY_MODE]))
+		{
+			return $_REQUEST[self::VIEW_HISTORY_MODE];
 		}
 		else
 		{

@@ -46,14 +46,14 @@ $wgPageAttachment_mediaWikiUploadPermissionChecker[0][0]  = $wgPageAttachment_me
 # Notification
 # ---------------------------------------------------------------------------
 #
-# :: Notification Types ::
+# :: Notification Mediums ::
 #
-$wgPageAttachment_notificationTypes[] = 'email';
+$wgPageAttachment_notificationMediums[] = 'email';
 
 #
 # :: Message Composers ::
 #
-$wgPageAttachment_messageComposers['email'] = '\\PageAttachment\\Notification\\Email\\PlainTextMessageComposer';
+$wgPageAttachment_messageComposers['email'] = '\\PageAttachment\\Notification\\Email\\EmailMessageComposer';
 
 #
 # :: Message Transporters ::

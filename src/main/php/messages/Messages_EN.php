@@ -121,7 +121,9 @@ $messages['en'] = array(
     'requestedDownloadFileDoesNotExist'         => 'Requested Download File Does Not Exist',
     'unknownDownloadError'                      => 'Unknown Download Error',
 // Attachment Category
-    'selectCategory'                            => 'Select Category'
+    'selectCategory'                            => 'Select Category',
+// Attachment Change Notification
+    'attachmentChangeNotification'              => 'Attachment Change Notification'
 );
 
 
