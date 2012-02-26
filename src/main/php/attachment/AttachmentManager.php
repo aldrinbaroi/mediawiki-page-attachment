@@ -30,10 +30,6 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-use \PageAttachment\Cache\CacheManager;
-use \PageAttachment\File\FileManager;
-use \PageAttachment\Notification\NotificationManagerFactory;
-
 class AttachmentManager
 {
 	private $security;
@@ -52,9 +48,9 @@ class AttachmentManager
 		$this->security = $security;
 		$this->session = $session;
 		$this->auditLogManager = $auditLogManager;
-		$this->cacheManager = new CacheManager();
-		$this->fileManager = new FileManager($security, $this->cacheManager);
-		$this->notificationManager = NotificationManagerFactory::getNotificationManager();
+		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
+		$this->fileManager = new \PageAttachment\File\FileManager($security, $this->cacheManager);
+		$this->notificationManager = \PageAttachment\Notification\NotificationManagerFactory::getNotificationManager();
 	}
 
 	function getAttachmentIds($attachedToPageId)
