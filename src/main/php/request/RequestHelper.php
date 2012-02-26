@@ -44,58 +44,44 @@ class RequestHelper
 
 	function setPageMode($request, $editpage = null)
 	{
-		\wfDebugLog("PageAttachment", "HERE START 88888888888888888888888888888888888888888888888888888888888");
-		\wfDebugLog("PageAttachment", "HERE editpage = " . (isset($editpage) ? 'TRUE' : 'FALSE'));
 		if (isset($editpage) && is_bool($editpage->preview) && ($editpage->preview == true))
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 1");
 			$this->setPreviewMode(true);
 		}
 		else
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 2");
 			$this->setPreviewMode(false);
 		}
 
-		//
 		global $wgRequest;
 
 		$action = $wgRequest->getVal('action');
 		if ($action == 'edit')
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 3");
 			$this->setEditMode(true);
 		}
 		else
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 4");
 			$this->setEditMode(false);
 		}
 
-
 		if ($action == 'history')
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 3.1");
 			$this->setViewHistoryMode(true);
 		}
 		else
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 4.1");
 			$this->setViewHistoryMode(false);
 		}
-
-
+		
 		if (isset($editpage) && is_bool($editpage->diff) && ($editpage->diff == true))
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 5");
 			$this->setViewChangesMode(true);
 		}
 		else
 		{
-			\wfDebugLog("PageAttachment", "setPageMode HERE 6");
 			$this->setViewChangesMode(false);
 		}
-		\wfDebugLog("PageAttachment", "HERE END 88888888888888888888888888888888888888888888888888888888888");
 	}
 
 	private function setPreviewMode($trueFalse)
@@ -126,12 +112,10 @@ class RequestHelper
 	{
 		if (is_bool($trueFalse))
 		{
-			\wfDebugLog("PageAttachment", ">>>>>>>>>>>>>>>>>>>> SET EDIT MODE : " . ($trueFalse ? 'TRUE' : 'FALSE'));
 			$_REQUEST[self::EDIT_MODE] = $trueFalse;
 		}
 		else
 		{
-			\wfDebugLog("PageAttachment", ">>>>>>>>>>>>>>>>>>>> SET EDIT MODE : false");
 			$_REQUEST[self::EDIT_MODE] = false;
 		}
 	}
@@ -140,7 +124,6 @@ class RequestHelper
 	{
 		if (isset($_REQUEST[self::EDIT_MODE]))
 		{
-			\wfDebugLog("PageAttachment", ">>>>>>>>>>>>>>>>>>>> GET EDIT MODE : " . ($_REQUEST[self::EDIT_MODE] ? 'TRUE' : 'FALSE'));
 			return $_REQUEST[self::EDIT_MODE];
 		}
 		else
