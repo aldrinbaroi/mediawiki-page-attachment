@@ -30,8 +30,6 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-use \PageAttachment\WatchedItem\WatchedItemFactory;
-
 class NotificationManager
 {
 	private $notificationEnabled;
@@ -63,7 +61,7 @@ class NotificationManager
 			global $wgUser;
 
 			$modifiedByUserId = $wgUser->getId();
-			$watchedItem =  WatchedItemFactory::createWatchedItem($pageId, $modifiedByUserId, $modificationType, $modificationTime) ;
+			$watchedItem =  \PageAttachment\WatchedItem\WatchedItemFactory::createWatchedItem($pageId, $modifiedByUserId, $modificationType, $modificationTime) ;
 			if ($watchedItem->isWatched())
 			{
 				if ($this->useJobQueueForNotification)
