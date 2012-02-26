@@ -73,6 +73,8 @@ class EmailMessageComposer implements \PageAttachment\Notification\MessageCompos
 
 	protected function getKeyValuePairs($watchedItem, $attachmentName)
 	{
+		global $wgSitename;
+		
 		$user = $this->userManager->getUser($watchedItem->getModifiedByUserId());
 		$header = \wfMsg('AttachmentChangeNotification');
 		$attachedToPageNameLabel = str_pad(\wfMsg('attached_to_page_id'), 30);
@@ -87,6 +89,7 @@ class EmailMessageComposer implements \PageAttachment\Notification\MessageCompos
 		$modifiedByUser = $user->getRealName();
 		$keyValuePairs = array();
 		$keyValuePairs['HEADER'] = $header;
+		$keyValuePairs['SITENAME'] = $wgSitename;
 		$keyValuePairs['ATTACHED_TO_PAGE_NAME_LABEL'] = $attachedToPageNameLabel;
 		$keyValuePairs['ATTACHMENT_NAME_LABEL'] = $attachmentNameLabel;
 		$keyValuePairs['ACTIVITY_TYPE_LABEL'] = $activityTypeLabel;
