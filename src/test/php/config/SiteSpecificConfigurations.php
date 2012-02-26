@@ -44,4 +44,11 @@ $wgPageAttachment_removeAttachments['permanently']      = false;
 $wgPageAttachment_removeAttachments['ignoreIfAttached'] = true;
 $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
 
+#
+# Notificaiton
+#
+$wgPageAttachment_enableNotification = true;
+$wgPageAttachment_useJobQueueForNotification = true;
+$wgPageAttachment_messageFormat = 'html'; //'plaintext';
+
 

@@ -40,6 +40,7 @@ class AttachmentManager
 	private $auditLogManager;
 	private $cacheManager;
 	private $fileManager;
+	private $notificationManager;
 
 
 	function __construct($security, $session, $auditLogManager)
@@ -49,6 +50,7 @@ class AttachmentManager
 		$this->auditLogManager = $auditLogManager;
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
 		$this->fileManager = new \PageAttachment\File\FileManager($security, $this->cacheManager);
+		$this->notificationManager = \PageAttachment\Notification\NotificationManagerFactory::getNotificationManager();
 	}
 
 	function getAttachmentIds($attachedToPageId)
@@ -183,13 +185,16 @@ class AttachmentManager
 		{
 			return;
 		}
+		$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
+		$notificationEnabled = $this->notificationManager->isNotificationEnabled();
+		$activityTime = time();
 		$dbr = \wfGetDB( DB_SLAVE );
 		$rs = $dbr->select('page_attachment_data', '*','attached_to_page_id = ' . $attachToPageId . ' and attachment_page_id = ' . $attachmentId );
 		if ($row = $dbr->fetchRow($rs))
 		{
 			// Attachment link exists, no need to re-attach.
 			$this->session->setStatusMessage('AttachmentUpdated', $attachmentName);
-			if ($this->auditLogManager->isAuditLogEnabled())
+			if ($auditLogEnabled || $notificationEnabled)
 			{
 				if ($uploadedOrExisting == PA_UPLOADED)
 				{
@@ -199,7 +204,9 @@ class AttachmentManager
 				{
 					$activityType = \PageAttachment\AuditLog\ActivityType::REATTACHED_EXISTING;
 				}
-				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType);
+				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType, $activityTime);
+				$this->notificationManager->sendNotification($attachToPageId, $attachmentName, $activityType, $activityTime);
+
 			}
 		}
 		else
@@ -209,7 +216,7 @@ class AttachmentManager
 				$dbw = \wfGetDB( DB_MASTER );
 				$dbw->insert('page_attachment_data', array(0 => array('attached_to_page_id' => $attachToPageId, 'attachment_page_id' => $attachmentId)));
 				$this->session->setStatusMessage('AttachmentAdded', $attachmentName);
-				if ($this->auditLogManager->isAuditLogEnabled())
+				if ($auditLogEnabled || $notificationEnabled)
 				{
 					if ($uploadedOrExisting == PA_UPLOADED)
 					{
@@ -219,7 +226,8 @@ class AttachmentManager
 					{
 						$activityType = \PageAttachment\AuditLog\ActivityType::ATTACHED_EXISTING;
 					}
-					$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType);
+					$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType, $activityTime);
+					$this->notificationManager->sendNotification($attachToPageId, $attachmentName, $activityType, $activityTime);
 				}
 			}
 			catch(Exception $e)
@@ -276,6 +284,9 @@ class AttachmentManager
 		}
 		if ($abort == false)
 		{
+			$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
+			$notificationEnabled = $this->notificationManager->isNotificationEnabled();
+			$activityTime = time();
 			$fileName = $title2->getText();
 			$dbr = \wfGetDB( DB_SLAVE );
 			$rs = $dbr->select('page_attachment_data', '*','attached_to_page_id = ' . $attachedToPageId . ' and attachment_page_id = ' . $attachmentId );
@@ -292,29 +303,32 @@ class AttachmentManager
 						if ($deleted == true)
 						{
 							$this->session->setStatusMessage('AttachmentRemovedPermanently', $fileName);
-							if ($this->auditLogManager->isAuditLogEnabled())
+							if ($auditLogEnabled || $notificationEnabled)
 							{
 								$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED_PERMANENTLY;
-								$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+								$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType, $activityTime);
+								$this->notificationManager->sendNotification($attachedToPageId, $attachmentName, $activityType, $activityTime);
 							}
 						}
 						else
 						{
 							$this->session->setStatusMessage('FailedToRemovedAttachmentPermanently', $fileName);
-							if ($this->auditLogManager->isAuditLogEnabled())
+							if ($auditLogEnabled || $notificationEnabled)
 							{
 								$activityType = \PageAttachment\AuditLog\ActivityType::REMOVE_PERMANENTLY_FAILED;
-								$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+								$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType, $activityTime);
+								$this->notificationManager->sendNotification($attachedToPageId, $attachmentName, $activityType, $activityTime);
 							}
 						}
 					}
 					else
 					{
 						$this->session->setStatusMessage('AttachmentRemoved', $fileName);
-						if ($this->auditLogManager->isAuditLogEnabled())
+						if ($auditLogEnabled || $notificationEnabled)
 						{
 							$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED;
-							$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+							$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType, $activityTime);
+							$this->notificationManager->sendNotification($attachedToPageId, $attachmentName, $activityType, $activityTime);
 						}
 					}
 				}
@@ -360,6 +374,8 @@ class AttachmentManager
 		else
 		{
 			$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
+			$notificationEnabled = $this->notificationManager->isNotificationEnabled();
+			$activityTime = time();
 			$activityType = \PageAttachment\AuditLog\ActivityType::REMOVED_DELETED;
 			$attachedToPageIds = array();
 			foreach($rs as $row)
@@ -373,9 +389,10 @@ class AttachmentManager
 				$insertData = array('attachment_file_name' => $attachmentName, 'attached_to_page_id' => $attachedToPageId);
 				$dbw->insert('page_attachment_delete_data', $insertData);
 				$this->cacheManager->removeAttachmentList($attachedToPageId);
-				if ($auditLogEnabled == true)
+				if ($auditLogEnabled || $notificationEnabled)
 				{
-					$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+					$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType, $activityTime);
+					$this->notificationManager->sendNotification($attachedToPageId, $attachmentName, $activityType, $activityTime);
 				}
 			}
 			$dbw->delete('page_attachment_data', array('attachment_page_id' => $page->getId()));
@@ -401,6 +418,8 @@ class AttachmentManager
 		else
 		{
 			$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
+			$notificationEnabled = $this->notificationManager->isNotificationEnabled();
+			$activityTime = time();
 			$activityType = \PageAttachment\AuditLog\ActivityType::REATTACHED_UNDELETED;
 			$attachedToPageIds = array();
 			foreach($rs as $row)
@@ -413,9 +432,10 @@ class AttachmentManager
 				$insertData =  array('attached_to_page_id' => $attachedToPageId, 'attachment_page_id' => $attachmentId);
 				$dbw->insert('page_attachment_data', $insertData);
 				$this->cacheManager->removeAttachmentList($attachedToPageId);
-				if ($auditLogEnabled == true)
+				if ($auditLogEnabled || $notificationEnabled)
 				{
-					$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType);
+					$this->auditLogManager->createLog($attachedToPageId, $attachmentName, $activityType, $activityTime);
+					$this->notificationManager->sendNotification($attachedToPageId, $attachmentName, $activityType, $activityTime);
 				}
 			}
 			$deleteCriteria =  array('attachment_file_name' => $dbw->strencode($attachmentName));

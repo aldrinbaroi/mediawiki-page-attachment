@@ -416,7 +416,7 @@ $wgPageAttachment_ajaxCacheDuration = 0;
 #
 #              $wgPageAttachment_attachmentCategory['allowedCategories'] = 'BothPredefinedAndMediaWikiCategories';
 # 
-#    4. If do not specify which category selection restriction, the restriction
+#    4. If you do not specify which category selection restriction to use, the restriction
 #       would default to 'MediaWikiCategoriesOnly'
 #
 $wgPageAttachment_attachmentCategory['setOnUpload']              = false;
@@ -424,5 +424,16 @@ $wgPageAttachment_attachmentCategory['setOnUpload']              = false;
 # $wgPageAttachment_attachmentCategory['defaultCategory']        = ''; 
 # $wgPageAttachment_attachmentCategory['allowedCategories']      = '';
 # $wgPageAttachment_attachmentCategory['predefinedCategories'][] = '';
+
+# ---------------------------------------------------------------------------
+# Notification
+# ---------------------------------------------------------------------------
+#
+# TODO Need documentation 
+#
+$wgPageAttachment_enableNotification = false;
+# $wgPageAttachment_useJobQueueForNotification = false;
+# $wgPageAttachment_messageFormat = 'plaintext';
+
 
 ## ::END ::

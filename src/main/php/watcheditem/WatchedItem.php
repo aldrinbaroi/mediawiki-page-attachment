@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\User;
+namespace PageAttachment\WatchedItem;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,62 +30,62 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class User
+class WatchedItem
 {
-	private $id;
-	private $name;
-	private $realName;
-	private $isValidUser;
-	private $userPageLink;
-	private $emailAddress;
-	private $emailAddressValid;
+	private $pageId;
+	private $pageTitle;
+	private $modifiedByUserId;
+	private $modificationType;
+	private $modificationTime;
+	private $watched;
+	private $watchers;
 
-	function __construct($id, $name, $realName, $isValidUser, $userPageLink, $emailAddress, $emailAddressValid)
+	function __construct($pageId, $pageTitle, $modifiedByUserId, $modificationType, $modificationTime, $watched, $watchers)
 	{
-		$this->id = $id;
-		$this->name = $name;
-		$this->realName = $realName;
-		$this->isValidUser = $isValidUser;
-		$this->userPageLink = $userPageLink;
-		$this->emailAddress = $emailAddress;
-		$this->emailAddressValid = (is_bool($emailAddressValid) && $emailAddressValid == true) ? true : false;
-	}
-
-	function getId()
-	{
-		return $this->id;
+		$this->pageId = $pageId;
+		$this->pageTitle = $pageTitle;
+		$this->modifiedByUserId = $modifiedByUserId;
+		$this->modificationType = $modificationType;
+		$this->modificationTime = $modificationTime;
+		$this->watched = $watched;
+		$this->watchers = $watchers;
 	}
 
-	function getName()
+	function getPageId()
 	{
-		return $this->name;
+		return $this->pageId;
 	}
 
-	function getRealName()
+	function getPageTitle()
 	{
-		return $this->realName;
+		return $this->pageTitle;
 	}
 
-	function isValidUser()
+	function getModifiedByUserId()
 	{
-		return $this->isValidUser;
+		return $this->modifiedByUserId;
 	}
 
-	function getUserPageLink()
+	function getModificationType()
 	{
-		return $this->userPageLink;
+		return $this->modificationType;
 	}
-	
-	function getEmailAddress()
+
+	function getModificationTime()
 	{
-		return $this->emailAddress;
+		return $this->modificationTime;
 	}
-	
-	function isEmailAddressValid()
+
+	function isWatched()
 	{
-		return $this->emailAddressValid;
+		return $this->watched;
+	}
+
+	function getWatchers()
+	{
+		return $this->watchers;
 	}
 
 }
 
-## ::END::
+## :: END ::

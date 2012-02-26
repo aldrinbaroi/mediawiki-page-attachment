@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\User;
+namespace PageAttachment\WatchedItem;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,62 +30,34 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class User
+class WatchedItemFactory
 {
-	private $id;
-	private $name;
-	private $realName;
-	private $isValidUser;
-	private $userPageLink;
-	private $emailAddress;
-	private $emailAddressValid;
-
-	function __construct($id, $name, $realName, $isValidUser, $userPageLink, $emailAddress, $emailAddressValid)
+	private function __construct()
 	{
-		$this->id = $id;
-		$this->name = $name;
-		$this->realName = $realName;
-		$this->isValidUser = $isValidUser;
-		$this->userPageLink = $userPageLink;
-		$this->emailAddress = $emailAddress;
-		$this->emailAddressValid = (is_bool($emailAddressValid) && $emailAddressValid == true) ? true : false;
 	}
 
-	function getId()
+	public static function createWatchedItem($pageId, $modifiedByUserId, $modificationType, $modificationTime)
 	{
-		return $this->id;
+		$title = \Title::newFromID($pageId);
+		$pageTitle = $title->getText();
+		$watchers = self::loadWatchers($title, $modifiedByUserId);
+		$watched = count($watchers) > 0 ? true : false;
+		return new WatchedItem($pageId, $pageTitle, $modifiedByUserId, $modificationType, $modificationTime, $watched, $watchers);
 	}
 
-	function getName()
+	private static function loadWatchers($title, $modifiedByUserId)
 	{
-		return $this->name;
+		$watchers = array();
+		$dbr = \wfGetDB( DB_SLAVE );
+		$res = $dbr->select(array( 'watchlist' ), array( 'wl_user' ),
+		array(  'wl_title' => $title->getDBkey(), 'wl_namespace' => $title->getNamespace(), 'wl_user != ' . intval( $modifiedByUserId ))
+		);
+		foreach ( $res as $row )
+		{
+			$watchers[] = intval( $row->wl_user );
+		}
+		return $watchers;
 	}
-
-	function getRealName()
-	{
-		return $this->realName;
-	}
-
-	function isValidUser()
-	{
-		return $this->isValidUser;
-	}
-
-	function getUserPageLink()
-	{
-		return $this->userPageLink;
-	}
-	
-	function getEmailAddress()
-	{
-		return $this->emailAddress;
-	}
-	
-	function isEmailAddressValid()
-	{
-		return $this->emailAddressValid;
-	}
-
 }
 
 ## ::END::
