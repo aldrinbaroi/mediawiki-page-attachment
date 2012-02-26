@@ -63,42 +63,46 @@ class NotificationManager
 			global $wgUser;
 
 			$modifiedByUserId = $wgUser->getId();
-			$wathchedItem =  WatchedItemFactory::createWatchedItem($pageId, $modifiedByUserId, $modificationType, $modificationTime) ;
-			if ($wathchedItem->isWatched())
+			$watchedItem =  WatchedItemFactory::createWatchedItem($pageId, $modifiedByUserId, $modificationType, $modificationTime) ;
+			if ($watchedItem->isWatched())
 			{
 				if ($this->useJobQueueForNotification)
 				{
-					$this->queueNotificationJob($wathchedItem, $attachmentName);
+					$this->queueNotificationJob($watchedItem, $attachmentName);
 				}
 				else
 				{
-					$this->sendNotficationNow($wathchedItem, $attachmentName);
+					$this->sendNotficationNow($watchedItem, $attachmentName);
 				}
 			}
 		}
 	}
 
-	private function sendNotficationNow($wathchedItem, $attachmentName)
+	function sendNotficationNow($watchedItem, $attachmentName)
 	{
-
 		foreach($this->notificationTypes as $nt)
 		{
 			$messageComposer = $this->messageComposers[$nt];
-			$watchers = $wathchedItem->getWatchers();
+			$watchers = $watchedItem->getWatchers();
 			foreach($watchers as $watcher)
 			{
 				$user = $this->userManager->getUser($watcher);
-				$subject = $messageComposer->composeSubject($wathchedItem);
-				$message = $messageComposer->composeMessage($wathchedItem, $attachmentName);
+				$subject = $messageComposer->composeSubject($watchedItem);
+				$message = $messageComposer->composeMessage($watchedItem, $attachmentName);
 				$this->messageTransporters[$nt]->sendMessage($user, $subject, $message);
 			}
 		}
 		unset($nt);
 	}
 
-	private function queueNotificationJob($wathchedItem, $attachmentName)
+	function queueNotificationJob($watchedItem, $attachmentName)
 	{
-
+		$title = \Title::newFromID($watchedItem->getPageId());
+		$params = array();
+		$params['watchedItem'] = serialize($watchedItem);
+		$params['attachmentName'] = $attachmentName;
+		$notificationJob = new NotificationJob($title, $params);
+		$notificationJob->insert();
 	}
 
 }

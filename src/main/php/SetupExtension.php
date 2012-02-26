@@ -126,6 +126,7 @@ $wgAutoloadClasses['PageAttachment\\Notification\\MessageComposer']             
 $wgAutoloadClasses['PageAttachment\\Notification\\MessageTransporter']            = $dir . 'notification/MessageTransporter.php';
 $wgAutoloadClasses['PageAttachment\\Notification\\NotificationManager']           = $dir . 'notification/NotificationManager.php';
 $wgAutoloadClasses['PageAttachment\\Notification\\NotificationManagerFactory']    = $dir . 'notification/NotificationManagerFactory.php';
+$wgAutoloadClasses['PageAttachment\\Notification\\NotificationJob']               = $dir . 'notification/NotificationJob.php';
 $wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailMessageComposer']   = $dir . 'notification/email/EmailMessageComposer.php';
 $wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailTransporter']       = $dir . 'notification/email/EmailTransporter.php';
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
@@ -171,5 +172,8 @@ function pageAttachment_registerEventHandlers()
 	$wgHooks['LinksUpdateComplete'][]                 = array($requestHandler, 'onLinksUpdateComplete');
 
 }
+
+## Register Notification Job Handler
+$wgJobClasses['pageAttachmentNotification'] = 'PageAttachment\\Notification\\NotificationJob';
 
 ## ::END::
