@@ -38,11 +38,14 @@ class Page
 	private $prefixedUrl;
 	private $fullUrl;
 	private $pageTitle;
+	private $protected;
 
 	function __construct($title = NULL)
 	{
 		if (isset($title))
 		{
+			global $wgUser;
+			
 			if ($title instanceof \Title)
 			{
 				$_title = $title;
@@ -57,6 +60,8 @@ class Page
 			$this->prefixedUrl = $_title->getPrefixedDBkey();
 			$this->fullUrl = $_title->getFullURL();
 			$this->pageTitle  = trim($_title->getText());
+			//$permissionErrors = $title->getUserPermissionsErrors('edit', $wgUser);
+			$this->protected = (count($title->getUserPermissionsErrors('edit', $wgUser)) > 0) ? true : false;
 		}
 		else
 		{
@@ -65,6 +70,7 @@ class Page
 			$this->url = '';
 			$this->prefixedUrl = '';
 			$this->pageTitle = '';
+			$this->protected = false;
 		}
 	}
 
@@ -108,6 +114,11 @@ class Page
 	function getPageTitle()
 	{
 		return $this->pageTitle;
+	}
+	
+	function isProtected()
+	{
+		return $this->protected;
 	}
 }
 

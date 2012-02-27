@@ -45,7 +45,7 @@ class UIComposer
 		$this->resource = $resouce;
 	}
 
-	function composeAttachmentListTable($titleRowColumns, $headerRowColumns, $attachmentRows)
+	function composeAttachmentListTable($protectedPage, $titleRowColumns, $headerRowColumns, $attachmentRows)
 	{
 		global $wgLang;
 		global $wgPageAttachment_colToDisplay;
@@ -92,7 +92,7 @@ class UIComposer
 		$viewMoreImgURL = $this->resource->getViewMoreImageURL();
 		$viewMoreImgIcon = \HTML::rawElement('img', array('src' => $viewMoreImgURL));
 		$atRows = '';
-		if ($this->security->isViewAttachmentsAllowed())
+		if ($this->security->isViewAttachmentsAllowed($protectedPage))
 		{
 			if (isset($attachmentRows) && (count($attachmentRows) > 0))
 			{

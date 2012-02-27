@@ -33,7 +33,7 @@ if (!defined('MEDIAWIKI'))
 class SecurityManager
 {
 	private $mediaWikiSecurityManager;
-	
+
 	const REQUEST_VALIDATION_TOKEN = 'REQUEST_VALIDATION_TOKEN';
 	const DOWNLOAD_REQUEST_VALID   = 'DOWNLOAD_REQUEST_VALID';
 	//
@@ -44,18 +44,30 @@ class SecurityManager
 	const UPLOAD_AND_ATTACH  = 'uploadAndAttach';
 	const BROWSE_SEARCH      = 'browseSearch';
 	const REMOVE             = 'remove';
-	const REMOVE_PERMANENTLY =  'removePermanently';
+	const REMOVE_PERMANENTLY = 'removePermanently';
 	const DOWNLOAD           = 'download';
 	const LOGIN_REQUIRED     = 'loginRequired';
 	const ALLOWED            = 'allowed';
 	const GROUP              = 'group';
 	const GROUP_ALL          = '*';
 	const USER               = 'user';
-	
-	# Permanent file removal
+
+	// Permanent file removal
 	const PERMANENTLY        = 'permanently';
 	const IGNORE_IF_EMBEDDED = 'ignoreIfEmbedded';
 	const IGNORE_IF_ATTACHED = 'ignoreIfAttached';
+
+	// The following constants are used for permissions
+	const VIEW_ON_PROTECTED_PAGES               = 'viewOnProtectedPages';
+	const VIEW_AUDIT_LOG_ON_PROTECTED_PAGES     = 'viewAuditLogOnProtectedPages';
+	const VIEW_HISTORY_LOG_ON_PROTECTED_PAGES   = 'viewHistoryOnProtectedPages';
+	const UPLOAD_AND_ATTACH_ON_PROTECTED_PAGES  = 'uploadAndAttachOnProtectedPages';
+	const BROWSE_SEARCH_ON_PROTECTED_PAGES      = 'browseSearchOnProtectedPages';
+	const REMOVE_ON_PROTECTED_PAGES             = 'removeOnProtectedPages';
+	const REMOVE_PERMANENTLY_ON_PROTECTED_PAGES = 'removePermanentlyOnProtectedPages';
+	const DOWNLOAD_ON_PROTECTED_PAGES           = 'downloadOnProtectedPages';
+	const LOGIN_REQUIRED_ON_PROTECTED_PAGES     = 'loginRequiredOnProtectedPages';
+
 
 	function __construct()
 	{
@@ -214,32 +226,88 @@ class SecurityManager
 		return ($actionAllowed == true ) ? true : false;
 	}
 
-	function isViewAttachmentsAllowed()
+	function isViewAttachmentsAllowed($protectedPage)
 	{
-		return $this->__isAllowed(self::VIEW);
+		if ($protectedPage)
+		{
+			if ($this->__isAllowed(self::VIEW))
+			{
+				return $this->__isAllowed(self::VIEW_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->__isAllowed(self::VIEW);
+		}
 	}
 
-	function isViewAttachmentsRequireLogin()
+	function isViewAttachmentsRequireLogin($protectedPage)
 	{
-		return $this->isLoginRequired(self::VIEW);
+		if ($protectedPage)
+		{
+			if ($this->isLoginRequired(self::VIEW))
+			{
+				return $this->isLoginRequired(self::VIEW_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->isLoginRequired(self::VIEW);
+		}
 	}
 
 	function isAttachmentAddUpdateRequireLogin()
 	{
-		return $this->isLoginRequired(self::UPLOAD_AND_ATTACH);
+		if ($protectedPage)
+		{
+			if ($this->isLoginRequired(self::UPLOAD_AND_ATTACH))
+			{
+				return $this->isLoginRequired(self::UPLOAD_AND_ATTACH_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->isLoginRequired(self::UPLOAD_AND_ATTACH);
+		}
 	}
 
-	function isAttachmentUploadAndAttachAllowed()
+	function isAttachmentUploadAndAttachAllowed($protectedPage)
 	{
 		global $wgEnableUploads;
 
 		if ($wgEnableUploads == true)
 		{
-			if ($this->isViewAttachmentsAllowed()
+			if ($this->isViewAttachmentsAllowed($protectedPage)
 			&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
 			&& !$this->mediaWikiSecurityManager->isUserBlocked())
 			{
-				return $this->isAllowed(self::UPLOAD_AND_ATTACH);
+				if ($protectedPage)
+				{
+					if ($this->isAllowed(self::UPLOAD_AND_ATTACH))
+					{
+						return $this->isAllowed(self::UPLOAD_AND_ATTACH_ON_PROTECTED_PAGES);
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					return $this->isAllowed(self::UPLOAD_AND_ATTACH);
+				}
 			}
 			else
 			{
@@ -252,18 +320,46 @@ class SecurityManager
 		}
 	}
 
-	function isBrowseSearchAttachRequireLogin()
+	function isBrowseSearchAttachRequireLogin($protectedPage)
 	{
-		return $this->isLoginRequired(self::BROWSE_SEARCH);
+		if ($protectedPage)
+		{
+			if ($this->isLoginRequired(self::BROWSE_SEARCH))
+			{
+				return $this->isLoginRequired(self::BROWSE_SEARCH_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->isLoginRequired(self::BROWSE_SEARCH);
+		}
 	}
 
-	function isBrowseSearchAttachAllowed()
+	function isBrowseSearchAttachAllowed($protectedPage)
 	{
-		if ($this->isViewAttachmentsAllowed()
+		if ($this->isViewAttachmentsAllowed($protectedPage)
 		&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(self::BROWSE_SEARCH);
+			if ($protectedPage)
+			{
+				if($this->isAllowed(self::BROWSE_SEARCH))
+				{
+					return $this->isAllowed(self::BROWSE_SEARCH_ON_PROTECTED_PAGES);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return $this->isAllowed(self::BROWSE_SEARCH);
+			}
 		}
 		else
 		{
@@ -271,9 +367,23 @@ class SecurityManager
 		}
 	}
 
-	function isAttachmentRemovalRequireLogin()
+	function isAttachmentRemovalRequireLogin($protectedPage)
 	{
-		return $this->isLoginRequired(self::REMOVE);
+		if ($protectedPage)
+		{
+			if ($this->isLoginRequired(self::REMOVE))
+			{
+				return $this->isLoginRequired(self::REMOVE_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->isLoginRequired(self::REMOVE);
+		}
 	}
 
 	function isRemoveAttachmentPermanentlyEnabled()
@@ -303,11 +413,11 @@ class SecurityManager
 			return false;
 		}
 	}
-	
+
 	function isRemoveAttachmentPermanentlyEvenIfAttached()
 	{
 		global $wgPageAttachment_removeAttachments;
-	
+
 		if (isset($wgPageAttachment_removeAttachments[self::IGNORE_IF_ATTACHED]))
 		{
 			return  ($wgPageAttachment_removeAttachments[self::IGNORE_IF_ATTACHED] == true) ? true : false;
@@ -317,15 +427,15 @@ class SecurityManager
 			return false;
 		}
 	}
-	
+
 	function isUserAllowedToDeleteFile()
 	{
 		return $this->mediaWikiSecurityManager->isUserAllowedToDeleteFile();
 	}
 
-	function isAttachmentRemovalAllowed()
+	function isAttachmentRemovalAllowed($protectedPage)
 	{
-		if ($this->isViewAttachmentsAllowed()
+		if ($this->isViewAttachmentsAllowed($protectedPage)
 		&& !$this->mediaWikiSecurityManager->isWikiInReadonlyMode()
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
@@ -335,7 +445,14 @@ class SecurityManager
 				{
 					if ($this->isUserAllowedToDeleteFile())
 					{
-						return  true;
+						if ($protectedPage)
+						{
+							return $this->isAllowed(self::REMOVE_ON_PROTECTED_PAGES);
+						}
+						else
+						{
+							return true;
+						}
 					}
 					else
 					{
@@ -344,8 +461,19 @@ class SecurityManager
 				}
 				else
 				{
-					return true;
+					if ($protectedPage)
+					{
+						return $this->isAllowed(self::REMOVE_ON_PROTECTED_PAGES);
+					}
+					else
+					{
+						return true;
+					}
 				}
+			}
+			else
+			{
+				return false;
 			}
 		}
 		else
@@ -354,17 +482,45 @@ class SecurityManager
 		}
 	}
 
-	function isAttachmentDownloadRequireLogin()
+	function isAttachmentDownloadRequireLogin($protectedPage)
 	{
-		return $this->isLoginRequired(self::DOWNLOAD);
+		if ($protectedPage)
+		{
+			if($this->isLoginRequired(self::DOWNLOAD))
+			{
+				return $this->isLoginRequired(self::DOWNLOAD_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->isLoginRequired(self::DOWNLOAD);
+		}
 	}
 
-	function isAttachmentDownloadAllowed()
+	function isAttachmentDownloadAllowed($protectedPage)
 	{
-		if ($this->isViewAttachmentsAllowed()
+		if ($this->isViewAttachmentsAllowed($protectedPage)
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(self::DOWNLOAD);
+			if ($protectedPage)
+			{
+				if ($this->isAllowed(self::DOWNLOAD))
+				{
+					return $this->isAllowed(self::DOWNLOAD_ON_PROTECTED_PAGES);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return $this->isAllowed(self::DOWNLOAD);
+			}
 		}
 		else
 		{
@@ -372,21 +528,49 @@ class SecurityManager
 		}
 	}
 
-	function isAuditLogViewRequireLogin()
+	function isAuditLogViewRequireLogin($protectedPage)
 	{
-		return $this->isLoginRequired(self::VIEW_AUDIT_LOG);
+		if ($protectedPage)
+		{
+			if ($this->isLoginRequired(self::VIEW_AUDIT_LOG))
+			{
+				return $this->isLoginRequired(self::VIEW_AUDIT_LOG_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->isLoginRequired(self::VIEW_AUDIT_LOG);
+		}
 	}
 
-	function isAuditLogViewAllowed()
+	function isAuditLogViewAllowed($protectedPage)
 	{
 		global $wgPageAttachment_enableAuditLog;
 
 		if (isset($wgPageAttachment_enableAuditLog)
 		&& $wgPageAttachment_enableAuditLog == true
-		&& $this->isViewAttachmentsAllowed()
+		&& $this->isViewAttachmentsAllowed($protectedPage)
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(self::VIEW_AUDIT_LOG);
+			if ($protectedPage)
+			{
+				if ($this->isAllowed(self::VIEW_AUDIT_LOG))
+				{
+					return $this->isAllowed(self::VIEW_AUDIT_LOG_ON_PROTECTED_PAGES);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return $this->isAllowed(self::VIEW_AUDIT_LOG);
+			}
 		}
 		else
 		{
@@ -394,17 +578,45 @@ class SecurityManager
 		}
 	}
 
-	function isHistoryViewRequireLogin()
+	function isHistoryViewRequireLogin($protectedPage)
 	{
-		return $this->isLoginRequired(self::VIEW_HISTORY_LOG);
+		if ($protectedPage)
+		{
+			if ($this->isLoginRequired(self::VIEW_HISTORY_LOG))
+			{
+				return $this->isLoginRequired(self::VIEW_HISTORY_LOG_ON_PROTECTED_PAGES);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return $this->isLoginRequired(self::VIEW_HISTORY_LOG);
+		}
 	}
 
-	function isHistoryViewAllowed()
+	function isHistoryViewAllowed($protectedPage)
 	{
-		if ($this->isViewAttachmentsAllowed()
+		if ($this->isViewAttachmentsAllowed($protectedPage)
 		&& !$this->mediaWikiSecurityManager->isUserBlocked())
 		{
-			return $this->isAllowed(self::VIEW_HISTORY_LOG);
+			if ($protectedPage)
+			{
+				if ($this->isAllowed(self::VIEW_HISTORY_LOG))
+				{
+					return $this->isAllowed(self::VIEW_HISTORY_LOG_ON_PROTECTED_PAGES);
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				return $this->isAllowed(self::VIEW_HISTORY_LOG);
+			}
 		}
 		else
 		{
@@ -475,6 +687,7 @@ class SecurityManager
 			return false;
 		}
 	}
+
 
 }
 
