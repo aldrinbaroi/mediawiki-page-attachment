@@ -102,7 +102,7 @@ class RuntimeConfiguration
 		{
 			global $wgLang;
 			
-			$this->userLanguageCode = substr($wgLang->getCode());
+			$this->userLanguageCode = $wgLang->getCode();
 		}
 		return $this->userLanguageCode;
 	}
