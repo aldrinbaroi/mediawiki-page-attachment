@@ -45,10 +45,11 @@ class ListFiles extends \SpecialPage
 		$security = new \PageAttachment\Security\SecurityManager();
 		$session = new \PageAttachment\Session\Session($security);
 		$attachToPage = $session->getAttachToPage();
-		if (isset($attachToPage))
+		if (isset($attachToPage) && $attachToPage->getId() > 0)
 		{
 			$pageTitle = $attachToPage->getPageTitle();
-			if (!$security->isBrowseSearchAttachAllowed())
+			$protectedPage = $attachToPage->isProtected();
+			if (!$security->isBrowseSearchAttachAllowed($protectedPage))
 			{
 				if ($security->isBrowseSearchAttachRequireLogin() && !$security->isLoggedIn())
 				{

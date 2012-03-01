@@ -49,7 +49,7 @@ class Upload extends \SpecialUpload
 		$session = new \PageAttachment\Session\Session($security);
 			
 		$attachToPage = $session->getAttachToPage();
-		if (isset($attachToPage))
+		if (isset($attachToPage) && $attachToPage->getId() > 0)
 		{
 			$abort = false;
 			if ($security->isDownloadRequestValid())
@@ -60,7 +60,8 @@ class Upload extends \SpecialUpload
 			else
 			{
 				// First Pass - Display Form
-				if ($security->isAttachmentAddUpdateRequireLogin() && !$security->isLoggedIn())
+				$protectedPage = $attachToPage->isProtected();
+				if ($security->isAttachmentAddUpdateRequireLogin($protectedPage) && !$security->isLoggedIn())
 				{
 					$session->setStatusMessage('YouMustBeLoggedInToAddUpdateAttachments');
 					$abort = true;
