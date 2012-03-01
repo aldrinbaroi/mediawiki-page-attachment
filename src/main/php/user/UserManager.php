@@ -33,54 +33,35 @@ if (!defined('MEDIAWIKI'))
 class UserManager
 {
 	private $cacheManager;
+	private $rtc;
 	private $name;
 	private $isValidUser;
 
 	function __construct()
 	{
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
+		$this->rtc = new \PageAttachment\Configuration\RuntimeConfiguration();
 	}
 
 	function getUser($userId)
 	{
 		$user = $this->cacheManager->retrieveUser($userId);
 		if (!isset($user))
-		{	
-			$name = '';
-			$realName = '';
-			$isValid = false;
-			$userPageLink = '';
-			$dbr = \wfGetDB( DB_SLAVE );
-			$rs = $dbr->select('user', array('user_name', 'user_real_name', 'user_email', 'user_email_authenticated'), array( 'user_id' => $userId));
-			if ($rs == false)
+		{
+			$mwUser = \User::newFromId($userId);
+			$name = $mwUser->getName();
+			if ($this->rtc->isShowUserRealName())
 			{
-				$name = 'Invalid User';
+				$realName = $mwUser->getRealName();
+			}
+			if (!isset($realName))
+			{
 				$realName = $name;
-				$isValidUser = false;
-				$userPageLink = '';
 			}
-			else
-			{
-				foreach($rs as $row)
-				{
-					$name = $row->user_name;
-					$realName = $row->user_real_name;
-					$emailAddress = $row->user_email;
-					$emailAddressValid = ($row->user_email_authenticated != null) ? true : false;
-					$isValid = true;
-					if (!isset($realName) || (isset($realName) && strlen(trim($realName)) == 0))
-					{
-						$realName = $name;
-					}
-				}
-				$rtc = new \PageAttachment\Configuration\RuntimeConfiguration();
-				if (!$rtc->isShowUserRealName())
-				{
-					$realName = $name;
-				}
-				$userPageLink = \PageAttachment\UI\Command::getViewUserPageCommandLink($name, $realName);
-			}
-			$user = new User($userId, $name, $realName, $isValid, $userPageLink, $emailAddress, $emailAddressValid);
+			$emailAddress = $mwUser->getEmail();
+			$emailAddressValid = ($mwUser->isEmailConfirmed()) ? true : false;
+			$userPageLink = \PageAttachment\UI\Command::getViewUserPageCommandLink($name, $realName);
+			$user = new User($userId, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid);
 			$this->cacheManager->storeUser($user);
 		}
 		return $user;
