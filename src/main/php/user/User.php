@@ -38,8 +38,9 @@ class User
 	private $userPageLink;
 	private $emailAddress;
 	private $emailAddressValid;
+	private $timeCorrection;
 
-	function __construct($id, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid)
+	function __construct($id, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid, $timeCorrection)
 	{
 		$this->id = $id;
 		$this->name = $name;
@@ -47,6 +48,7 @@ class User
 		$this->userPageLink = $userPageLink;
 		$this->emailAddress = $emailAddress;
 		$this->emailAddressValid = (is_bool($emailAddressValid) && $emailAddressValid == true) ? true : false;
+		$this->timeCorrection = $timeCorrection;
 	}
 
 	function getId()
@@ -77,6 +79,11 @@ class User
 	function isEmailAddressValid()
 	{
 		return $this->emailAddressValid;
+	}
+	
+	function getTimeCorrection()
+	{
+		return $this->timeCorrection;
 	}
 
 }
