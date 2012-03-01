@@ -39,17 +39,12 @@ class EmailTransporter implements \PageAttachment\Notification\MessageTransporte
 	
 	function sendMessage($user, $subject, $message)
 	{
-		\wfDebugLog("PageAttachment", "***************** EMAIL <START> ***************************************************");
-		\wfDebugLog("PageAttachment", "EA valid: " . ($user->isEmailAddressValid() ? 'TRUE' : 'FALSE'));
-		\wfDebugLog("PageAttachment", "To:       " . $user->getEmailAddress());
-		\wfDebugLog("PageAttachment", "Subject:  " . $subject);
-		\wfDebugLog("PageAttachment", "Message   " . $message);
-		\wfDebugLog("PageAttachment", "***************** EMAIL <END> ***************************************************");
+		global $wgNoReplyAddress;
+		global $wgPasswordSender;
 		
 		$to = new \MailAddress($user->getEmailAddress());
-		$from = new \MailAddress($user->getEmailAddress());
-		$replyTo = new \MailAddress($user->getEmailAddress());
-		
+		$from = new \MailAddress($wgPasswordSender);
+		$replyTo = new \MailAddress($wgNoReplyAddress);		
 		\UserMailer::send( $to, $from, $subject, $message, $replyTo );
 	}
 }
