@@ -45,6 +45,12 @@ class UserManager
 
 	function getUser($userId)
 	{
+		$name = null;
+		$realName = null;
+		$userPageLink = null;
+		$emailAddress = null;
+		$emailAddressValid = false;
+		$timeCorrection = null;
 		$user = $this->cacheManager->retrieveUser($userId);
 		if (!isset($user))
 		{
@@ -54,14 +60,15 @@ class UserManager
 			{
 				$realName = $mwUser->getRealName();
 			}
-			if (!isset($realName))
+			if (!isset($realName) || (isset($realName) && strlen(trim($realName)) == 0))
 			{
 				$realName = $name;
 			}
 			$emailAddress = $mwUser->getEmail();
 			$emailAddressValid = ($mwUser->isEmailConfirmed()) ? true : false;
 			$userPageLink = \PageAttachment\UI\Command::getViewUserPageCommandLink($name, $realName);
-			$user = new User($userId, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid);
+			$timeCorrection = $mwUser->getOption( 'timecorrection' );
+			$user = new User($userId, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid, $timeCorrection);
 			$this->cacheManager->storeUser($user);
 		}
 		return $user;
