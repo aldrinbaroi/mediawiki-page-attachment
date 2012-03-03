@@ -32,7 +32,7 @@ if (!defined('MEDIAWIKI'))
 
 interface MessageTransporter
 {
-	function sendMessage($user, $subject, $message);
+	function sendMessage(\PageAttachment\User\User $user, $subject, $message);
 
 }
 

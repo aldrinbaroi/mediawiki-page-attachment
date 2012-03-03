@@ -32,9 +32,8 @@ if (!defined('MEDIAWIKI'))
 
 class EmailMessageComposer implements \PageAttachment\Notification\MessageComposer
 {
-	protected  $showModifiedByUser;
-	protected $userManager;
-	protected $dateUtil;
+	private $userManager;
+	private $dateUtil;
 
 	function __construct()
 	{
@@ -42,12 +41,12 @@ class EmailMessageComposer implements \PageAttachment\Notification\MessageCompos
 		$this->dateUtil = new \PageAttachment\Utility\DateUtil();
 	}
 
-	function composeSubject($wathchedItem)
+	function composeSubject(\PageAttachment\WatchedItem\WatchedItem $wathchedItem, \PageAttachment\Localization\LocalizationHelper $localizationHelper)
 	{
 		return \wfMsg('AttachmentChangeNotification');
 	}
 
-	function composeMessage($watchedItem, $attachmentName)
+	function composeMessage(\PageAttachment\WatchedItem\WatchedItem $watchedItem, $attachmentName, \PageAttachment\Localization\LocalizationHelper $localizationHelper)
 	{
 		global $wgPageAttachment_messageFormat;
 		global $wgPageAttachment_messageTemplates;
@@ -56,7 +55,7 @@ class EmailMessageComposer implements \PageAttachment\Notification\MessageCompos
 		{
 			if (isset($wgPageAttachment_messageTemplates[$wgPageAttachment_messageFormat]))
 			{
-				$keyValuePairs = $this->getKeyValuePairs($watchedItem, $attachmentName);
+				$keyValuePairs = $this->getKeyValuePairs($watchedItem, $attachmentName, $localizationHelper);
 				$message = strtr($wgPageAttachment_messageTemplates[$wgPageAttachment_messageFormat], $keyValuePairs);
 				return $message;
 			}
@@ -71,21 +70,22 @@ class EmailMessageComposer implements \PageAttachment\Notification\MessageCompos
 		}
 	}
 
-	protected function getKeyValuePairs($watchedItem, $attachmentName)
+	protected function getKeyValuePairs($watchedItem, $attachmentName, \PageAttachment\Localization\LocalizationHelper $localizationHelper)
 	{
 		global $wgSitename;
+		global $wgContLang;
 		
 		$user = $this->userManager->getUser($watchedItem->getModifiedByUserId());
-		$header = \wfMsg('AttachmentChangeNotification');
-		$attachedToPageNameLabel = str_pad(\wfMsg('attached_to_page_id'), 30);
-		$attachmentNameLabel = str_pad(\wfMsg('attachment_file_name'), 30);
-		$activityTypeLabel = str_pad(\wfMsg('activity_type'), 30);
-		$activityTimeLabel = str_pad(\wfMsg('activity_time'), 30);
-		$modifiedByUserLabel = str_pad(\wfMsg('user_id'), 30);
+		$header = $localizationHelper->getMessage('AttachmentChangeNotification');
+		$attachedToPageNameLabel = str_pad($localizationHelper->getMessage('attached_to_page_id'), 30);
+		$attachmentNameLabel = str_pad($localizationHelper->getMessage('attachment_file_name'), 30);
+		$activityTypeLabel = str_pad($localizationHelper->getMessage('activity_type'), 30);
+		$activityTimeLabel = str_pad($localizationHelper->getMessage('activity_time'), 30);
+		$modifiedByUserLabel = str_pad($localizationHelper->getMessage('user_id'), 30);
 		$attachedToPageName = $watchedItem->getPageTitle();
 		//$attachmentName = $attachmentName;
-		$activityType =  \wfMsg($watchedItem->getModificationType());
-		$activityTime = date('YmdHis T',$watchedItem->getModificationTime());
+		$activityType =  $localizationHelper->getMessage($watchedItem->getModificationType());
+		$activityTime = $localizationHelper->formatDate($watchedItem->getModificationTime()) . ' ' . $localizationHelper->getTimeZoneName();		
 		$modifiedByUser = $user->getRealName();
 		$keyValuePairs = array();
 		$keyValuePairs['HEADER'] = $header;

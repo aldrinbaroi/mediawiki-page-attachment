@@ -87,8 +87,9 @@ class NotificationManager
 				foreach($watchers as $watcher)
 				{
 					$user = $this->userManager->getUser($watcher);
-					$subject = $messageComposer->composeSubject($watchedItem);
-					$message = $messageComposer->composeMessage($watchedItem, $attachmentName);
+					$localizationHelper = new \PageAttachment\Localization\LocalizationHelper($user);
+					$subject = $messageComposer->composeSubject($watchedItem, $localizationHelper);
+					$message = $messageComposer->composeMessage($watchedItem, $attachmentName, $localizationHelper);
 					$this->messageTransporters[$nt]->sendMessage($user, $subject, $message);
 				}
 			}
