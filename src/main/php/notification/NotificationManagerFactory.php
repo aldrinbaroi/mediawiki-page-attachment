@@ -42,6 +42,7 @@ class NotificationManagerFactory
 	{
 		if (!(isset(self::$NOTIFICATION_MANAGER) && (self::$NOTIFICATION_MANAGER instanceof NotificationManager)))
 		{
+			global $wgEnableEmail;
 			global $wgPageAttachment_enableNotification;
 			global $wgPageAttachment_notificationMediums;
 			global $wgPageAttachment_messageComposers;
@@ -53,9 +54,10 @@ class NotificationManagerFactory
 			$notificationMediums = array();
 			$messageComposers = array();
 			$messageTransporters = array();
-			if (isset($wgPageAttachment_enableNotification) && is_bool($wgPageAttachment_enableNotification))
+			if ((isset($wgEnableEmail) && is_bool($wgEnableEmail)) &&
+			(isset($wgPageAttachment_enableNotification) && is_bool($wgPageAttachment_enableNotification)))
 			{
-				$notificationEnabled = $wgPageAttachment_enableNotification;
+				$notificationEnabled = ($wgEnableEmail && $wgPageAttachment_enableNotification) ? true : false;
 			}
 			if ($notificationEnabled)
 			{

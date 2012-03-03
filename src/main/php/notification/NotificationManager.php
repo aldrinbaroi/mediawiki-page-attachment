@@ -78,29 +78,36 @@ class NotificationManager
 
 	function sendNotficationNow($watchedItem, $attachmentName)
 	{
-		foreach($this->notificationTypes as $nt)
+		if ($this->notificationEnabled)
 		{
-			$messageComposer = $this->messageComposers[$nt];
-			$watchers = $watchedItem->getWatchers();
-			foreach($watchers as $watcher)
+			foreach($this->notificationTypes as $nt)
 			{
-				$user = $this->userManager->getUser($watcher);
-				$subject = $messageComposer->composeSubject($watchedItem);
-				$message = $messageComposer->composeMessage($watchedItem, $attachmentName);
-				$this->messageTransporters[$nt]->sendMessage($user, $subject, $message);
+				$messageComposer = $this->messageComposers[$nt];
+				$watchers = $watchedItem->getWatchers();
+				foreach($watchers as $watcher)
+				{
+					$user = $this->userManager->getUser($watcher);
+					$localizationHelper = new \PageAttachment\Localization\LocalizationHelper($user);
+					$subject = $messageComposer->composeSubject($watchedItem, $localizationHelper);
+					$message = $messageComposer->composeMessage($watchedItem, $attachmentName, $localizationHelper);
+					$this->messageTransporters[$nt]->sendMessage($user, $subject, $message);
+				}
 			}
+			unset($nt);
 		}
-		unset($nt);
 	}
 
 	function queueNotificationJob($watchedItem, $attachmentName)
 	{
-		$title = \Title::newFromID($watchedItem->getPageId());
-		$params = array();
-		$params['watchedItem'] = serialize($watchedItem);
-		$params['attachmentName'] = $attachmentName;
-		$notificationJob = new NotificationJob($title, $params);
-		$notificationJob->insert();
+		if ($this->notificationEnabled)
+		{
+			$title = \Title::newFromID($watchedItem->getPageId());
+			$params = array();
+			$params['watchedItem'] = serialize($watchedItem);
+			$params['attachmentName'] = $attachmentName;
+			$notificationJob = new NotificationJob($title, $params);
+			$notificationJob->insert();
+		}
 	}
 
 }
