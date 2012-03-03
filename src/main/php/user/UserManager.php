@@ -54,21 +54,23 @@ class UserManager
 		$user = $this->cacheManager->retrieveUser($userId);
 		if (!isset($user))
 		{
-			$mwUser = \User::newFromId($userId);
-			$name = $mwUser->getName();
+			$mediaWikiUser = \User::newFromId($userId);
+			$name = $mediaWikiUser->getName();
 			if ($this->rtc->isShowUserRealName())
 			{
-				$realName = $mwUser->getRealName();
+				$realName = $mediaWikiUser->getRealName();
 			}
 			if (!isset($realName) || (isset($realName) && strlen(trim($realName)) == 0))
 			{
 				$realName = $name;
 			}
-			$emailAddress = $mwUser->getEmail();
-			$emailAddressValid = ($mwUser->isEmailConfirmed()) ? true : false;
+			$emailAddress = $mediaWikiUser->getEmail();
+			$emailAddressValid = ($mediaWikiUser->isEmailConfirmed()) ? true : false;
 			$userPageLink = \PageAttachment\UI\Command::getViewUserPageCommandLink($name, $realName);
-			$timeCorrection = $mwUser->getOption( 'timecorrection' );
-			$user = new User($userId, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid, $timeCorrection);
+			$timeCorrection = $mediaWikiUser->getOption( 'timecorrection' );
+			$languageCode = $mediaWikiUser->getOption('language');
+			$dateFormat = $mediaWikiUser->getOption('date');
+			$user = new User($userId, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid, $timeCorrection, $languageCode, $dateFormat);
 			$this->cacheManager->storeUser($user);
 		}
 		return $user;
