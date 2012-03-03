@@ -137,8 +137,8 @@ class DateUtil
 				$tzRegion = $tzInfo[0];
 				$tzCity = $tzInfo[1];
 				$tzRegionMsgCode = 'timezoneregion-' . strtolower($tzRegion);
-				$tzRegionUserLang = \wfMsg($tzRegionMsgCode);
-				$tzCityUserLang = $tzCity;
+				$tzRegionUserLang = str_replace('_', ' ', \wfMsg($tzRegionMsgCode));
+				$tzCityUserLang = str_replace('_', ' ', $tzCity);
 				if ($this->runtimeConfig->isRightToLeftLanguage())
 				{
 					$tzNameUserLang = $tzCityUserLang . '\\' . $tzRegionUserLang;
