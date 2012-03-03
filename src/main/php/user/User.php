@@ -39,8 +39,10 @@ class User
 	private $emailAddress;
 	private $emailAddressValid;
 	private $timeCorrection;
+	private $languageCode;
+	private $dateFormat;
 
-	function __construct($id, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid, $timeCorrection)
+	function __construct($id, $name, $realName, $userPageLink, $emailAddress, $emailAddressValid, $timeCorrection, $languageCode, $dateFormat)
 	{
 		$this->id = $id;
 		$this->name = $name;
@@ -49,6 +51,8 @@ class User
 		$this->emailAddress = $emailAddress;
 		$this->emailAddressValid = (is_bool($emailAddressValid) && $emailAddressValid == true) ? true : false;
 		$this->timeCorrection = $timeCorrection;
+		$this->languageCode = $languageCode;
+		$this->dateFormat = $dateFormat;
 	}
 
 	function getId()
@@ -84,6 +88,16 @@ class User
 	function getTimeCorrection()
 	{
 		return $this->timeCorrection;
+	}
+	
+	function getLanguageCode()
+	{
+		return $this->languageCode;
+	}
+	
+	function getDateFormat()
+	{
+		return $this->dateFormat;
 	}
 
 }
