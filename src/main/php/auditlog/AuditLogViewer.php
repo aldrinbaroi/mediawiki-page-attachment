@@ -48,7 +48,8 @@ class AuditLogViewer extends \SpecialPage
 		$attachToPage = $session->getAttachToPage();
 		if (isset($attachToPage) && $attachToPage->getId() > 0)
 		{
-			if (!$security->isAuditLogViewAllowed())
+			$protectedPage = $attachToPage->isProtected();
+			if (!$security->isAuditLogViewAllowed($protectedPage))
 			{
 				if ($security->isAuditLogViewRequireLogin() && !$security->isLoggedIn())
 				{

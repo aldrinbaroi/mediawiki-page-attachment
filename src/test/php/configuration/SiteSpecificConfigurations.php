@@ -61,7 +61,7 @@ $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 3';
 # Notificaiton 
 #
 $wgPageAttachment_enableNotification = true;
-$wgPageAttachment_useJobQueueForNotification = true;
+$wgPageAttachment_useJobQueueForNotification = false;
 $wgPageAttachment_messageFormat = 'plaintext';
 
 
