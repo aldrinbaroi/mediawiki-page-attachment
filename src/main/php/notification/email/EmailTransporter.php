@@ -37,7 +37,7 @@ class EmailTransporter implements \PageAttachment\Notification\MessageTransporte
 		
 	}
 	
-	function sendMessage($user, $subject, $message)
+	function sendMessage(\PageAttachment\User\User $user, $subject, $message)
 	{
 		global $wgNoReplyAddress;
 		global $wgPasswordSender;

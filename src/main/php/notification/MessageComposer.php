@@ -32,8 +32,8 @@ if (!defined('MEDIAWIKI'))
 
 interface MessageComposer
 {
-	function composeSubject($wathchedItem);
-	function composeMessage($wathchedItem, $attachmentName);
+	function composeSubject(\PageAttachment\WatchedItem\WatchedItem $wathchedItem, \PageAttachment\Localization\LocalizationHelper $localizationHelper);
+	function composeMessage(\PageAttachment\WatchedItem\WatchedItem $watchedItem, $attachmentName, \PageAttachment\Localization\LocalizationHelper $localizationHelper);
 }
 
 ## :: END ::
