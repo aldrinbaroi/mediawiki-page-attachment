@@ -278,7 +278,62 @@ $wgPageAttachment_permissions['viewHistory'    ]['group']['*'    ] = false;
 #
 # Use the following format to add user specific permissions.
 #
-# $wgPageAttachment_permissions['remove'      ]['user']['admin' ] = true;
+# $wgPageAttachment_permissions['remove'      ]['user']['johndoe' ] = true;
+
+# ---------------------------------------------------------------------------
+# Permission - Protected Page
+# ---------------------------------------------------------------------------
+# TODO Need documentation
+#
+$wgPageAttachment_permissions['viewOnProtectedPages'           ]['loginRequired'] = false;
+$wgPageAttachment_permissions['uploadAndAttachOnProtectedPages']['loginRequired'] = true;
+$wgPageAttachment_permissions['browseSearchOnProtectedPages'   ]['loginRequired'] = true;
+$wgPageAttachment_permissions['removeOnProtectedPages'         ]['loginRequired'] = true;
+$wgPageAttachment_permissions['downloadOnProtectedPages'       ]['loginRequired'] = true;
+$wgPageAttachment_permissions['viewAuditlogOnProtectedPages'   ]['loginRequired'] = true;
+$wgPageAttachment_permissions['viewHistoryOnProtectedPages'    ]['loginRequired'] = true;
+#
+# :: When login is not required ::
+#
+$wgPageAttachment_permissions['viewOnProtectedPages'           ]['allowed'] = true;
+$wgPageAttachment_permissions['uploadAndAttachOnProtectedPages']['allowed'] = true;
+$wgPageAttachment_permissions['browseSearchOnProtectedPages'   ]['allowed'] = true;
+$wgPageAttachment_permissions['removeOnProtectedPages'         ]['allowed'] = true;
+$wgPageAttachment_permissions['downloadOnProtectedPages'       ]['allowed'] = true;
+$wgPageAttachment_permissions['viewAuditLogOnProtectedPages'   ]['allowed'] = true;
+$wgPageAttachment_permissions['viewHistoryOnProtectedPages'    ]['allowed'] = true;
+#
+# :: When login is required - Group Permission ::
+#
+$wgPageAttachment_permissions['viewOnProtectedPages'           ]['group']['sysop'] = true;
+$wgPageAttachment_permissions['uploadAndAttachOnProtectedPages']['group']['sysop'] = true;
+$wgPageAttachment_permissions['browseSearchOnProtectedPages'   ]['group']['sysop'] = true;
+$wgPageAttachment_permissions['removeOnProtectedPages'         ]['group']['sysop'] = true;
+$wgPageAttachment_permissions['downloadOnProtectedPages'       ]['group']['sysop'] = true;
+$wgPageAttachment_permissions['viewAuditLogOnProtectedPages'   ]['group']['sysop'] = true;
+$wgPageAttachment_permissions['viewHistoryOnProtectedPages'    ]['group']['sysop'] = true;
+
+$wgPageAttachment_permissions['viewOnProtectedPages'           ]['group']['user' ] = true;
+$wgPageAttachment_permissions['uploadAndAttachOnProtectedPages']['group']['user' ] = false;
+$wgPageAttachment_permissions['browseSearchOnProtectedPages'   ]['group']['user' ] = false;
+$wgPageAttachment_permissions['removeOnProtectedPages'         ]['group']['user' ] = false;
+$wgPageAttachment_permissions['downloadOnProtectedPages'       ]['group']['user' ] = true;
+$wgPageAttachment_permissions['viewAuditLogOnProtectedPages'   ]['group']['user' ] = false;
+$wgPageAttachment_permissions['viewHistoryOnProtectedPages'    ]['group']['user' ] = false;
+
+$wgPageAttachment_permissions['viewOnProtectedPages'           ]['group']['*'    ] = true;
+$wgPageAttachment_permissions['uploadAndAttachOnProtectedPages']['group']['*'    ] = false;
+$wgPageAttachment_permissions['browseSearchOnProtectedPages'   ]['group']['*'    ] = false;
+$wgPageAttachment_permissions['removeOnProtectedPages'         ]['group']['*'    ] = false;
+$wgPageAttachment_permissions['downloadOnProtectedPages'       ]['group']['*'    ] = false;
+$wgPageAttachment_permissions['viewAuditLogOnProtectedPages'   ]['group']['*'    ] = false;
+$wgPageAttachment_permissions['viewHistoryOnProtectedPages'    ]['group']['*'    ] = false;
+#
+# :: When login is required - User Specific Permission ::
+#
+# Use the following format to add user specific permissions.
+#
+# $wgPageAttachment_permissions['viewOnProtectedPages'           ]['user' ]['johndoe' ] = true;
 
 # ---------------------------------------------------------------------------
 # Attachment Removal - Permanently

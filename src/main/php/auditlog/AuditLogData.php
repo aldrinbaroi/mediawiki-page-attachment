@@ -40,7 +40,7 @@ class AuditLogData
 	private $activityDetail;
 
 	function __construct($attachedToPageId, $attachmentFileName, $activityType,
-						$userId = null, $activityTime = null)
+	$activityTime = null, $userId = null)
 	{
 		global $wgUser;
 

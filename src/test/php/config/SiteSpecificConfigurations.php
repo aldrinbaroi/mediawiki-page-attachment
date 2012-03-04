@@ -45,10 +45,25 @@ $wgPageAttachment_removeAttachments['ignoreIfAttached'] = true;
 $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
 
 #
-# Notificaiton
+# Attachment Category
+#
+$wgPageAttachment_attachmentCategory['setOnUpload']            = false;
+$wgPageAttachment_attachmentCategory['mustSet']                = false;
+$wgPageAttachment_attachmentCategory['defaultCategory']        = 'MyCategory 2';
+$wgPageAttachment_attachmentCategory['allowedCategories']      = 'PredefinedCategoriesOnly';
+#$wgPageAttachment_attachmentCategory['allowedCategories']     = 'MediaWikiCategoriesOnly';
+#$wgPageAttachment_attachmentCategory['allowedCategories']     = 'BothPredefinedAndMediaWikiCategories';
+$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 1';
+$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 2';
+$wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 3';
+
+#
+# Notificaiton 
 #
 $wgPageAttachment_enableNotification = true;
-$wgPageAttachment_useJobQueueForNotification = true;
-$wgPageAttachment_messageFormat = 'html'; //'plaintext';
+$wgPageAttachment_useJobQueueForNotification = false;
+$wgPageAttachment_messageFormat = 'plaintext';
+
+
 
 

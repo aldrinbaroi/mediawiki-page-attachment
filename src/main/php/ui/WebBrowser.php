@@ -68,9 +68,13 @@ class WebBrowser
 
 	function setupAttachmentListSection(&$data)
 	{
-		if ($this->isSetupAttachmentListSection())
+		$page = $this->session->getCurrentPage();
+		$pageId = $page->getId();
+		$pageNS = $page->getNameSpace();
+		$protectedPage = $page->isProtected();
+		if ($this->isSetupAttachmentListSection($pageId, $pageNS, $protectedPage))
 		{
-			$page = $this->session->getCurrentPage();
+			//$page = $this->session->getCurrentPage();
 			$pageTitle = $page->getPageTitle();
 			$attachmentDiv = \HTML::element('br') . \HTML::element('div', array('id' => 'PageAttachment'));
 			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return true; } ');
@@ -93,14 +97,15 @@ class WebBrowser
 		return true;
 	}
 
-	private function isSetupAttachmentListSection()
+	private function isSetupAttachmentListSection($pageId, $pageNS, $protectedPage)
 	{
 		$setup = false;
 		if (!$this->session->isViewPageSpecial())
 		{
-			$page = $this->session->getCurrentPage();
-			$pageId = $page->getId();
-			$pageNS = $page->getNameSpace();
+			//$page = $this->session->getCurrentPage();
+			//$pageId = $page->getId();
+			//$pageNS = $page->getNameSpace();
+			//$protectedPage = $page->isProtected();
 			$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
 			if ($pageInAllowedNameSpaces)
 			{
@@ -109,7 +114,14 @@ class WebBrowser
 				|| $this->requestHelper->isViewHistoryMode()
 				|| $this->requestHelper->isViewChangesMode()))
 				{
-					$setup = true;
+					if ($this->security->isViewAttachmentsAllowed($protectedPage))
+					{
+						$setup = true;
+					}
+					else
+					{
+						$setup = false;
+					}
 				}
 			}
 		}
@@ -135,6 +147,7 @@ class WebBrowser
 		$pageNS = $page->getNameSpace();
 		$pageURL = $page->getURL();
 		$pageTitle = $page->getPageTitle();
+		$protectedPage = $page->isProtected();
 		if (!$this->security->isPageInAllowedNameSpaces($pageId, $pageNS))
 		{
 			$data = '';
@@ -142,11 +155,11 @@ class WebBrowser
 		}
 		$rvt = $this->security->newRequestValidationToken();
 		$command = new Command($this->session, $this->resource, $rvt);
-		$titleRowColumns = $this->getTitleRowColumns($command);
+		$titleRowColumns = $this->getTitleRowColumns($protectedPage, $command);
 		$headerRowColumns = $this->getHeaderRowColumns();
-		$attachmentRows = $this->getAttachmentRows($pageId, $command);
+		$attachmentRows = $this->getAttachmentRows($protectedPage, $pageId, $command);
 		$uiComposer = new UIComposer($this->security, $this->session, $this->runtimeConfig, $this->resource);
-		$data = $uiComposer->composeAttachmentListTable($titleRowColumns, $headerRowColumns, $attachmentRows);
+		$data = $uiComposer->composeAttachmentListTable($protectedPage, $titleRowColumns, $headerRowColumns, $attachmentRows);
 		$this->session->setForceReload(false);
 		return $data;
 	}
@@ -160,7 +173,7 @@ class WebBrowser
 	/*
 	 * Do not cache this, otherwise, request validation token would be invalid
 	*/
-	private function getTitleRowColumns($command)
+	private function getTitleRowColumns($protectedPage, $command)
 	{
 		$tzName = $this->dateHelper->getUserTimeZoneInUserLang();
 		$rtlLang = $this->runtimeConfig->isRTL();
@@ -175,15 +188,15 @@ class WebBrowser
 			$titleRowColumns['DisplayTimeZone'] = \wfMsg('DisplayTimeZone') . ': ' . $tzName;
 		}
 		$titleRowColumns['Buttons'] = '';
-		if ($this->security->isAuditLogViewAllowed())
+		if ($this->security->isAuditLogViewAllowed($protectedPage))
 		{
 			$titleRowColumns['Buttons'] .= $command->getViewAuditLogAllCommandLink();
 		}
-		if ($this->security->isBrowseSearchAttachAllowed())
+		if ($this->security->isBrowseSearchAttachAllowed($protectedPage))
 		{
 			$titleRowColumns['Buttons'] .= $command->getBrowseSearchAttachCommandLink();
 		}
-		if ($this->security->isAttachmentUploadAndAttachAllowed())
+		if ($this->security->isAttachmentUploadAndAttachAllowed($protectedPage))
 		{
 			$titleRowColumns['Buttons'] .= $command->getUploadAndAttachCommandLink();
 		}
@@ -216,18 +229,25 @@ class WebBrowser
 	/*
 	 * Do not cache this, otherwise, request validation token would be invalid
 	*/
-	private function getAttachmentRows($pageId, $command)
+	private function getAttachmentRows($protectedPage, $pageId, $command)
 	{
-		global $wgUser;
-		global $wgPageAttachment_colToDisplay;
+		//global $wgUser;
+		//global $wgPageAttachment_colToDisplay;
 
-		$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
-		$sk = $wgUser->getSkin();
-		$aIds = $this->attachmentManager->getAttachmentIds($pageId);
-		$aCount = 0;
+		//$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
+		//$sk = $wgUser->getSkin();
+		//$aIds = $this->attachmentManager->getAttachmentIds($pageId);
+		//$aCount = 0;
 		$attachmentRows = array();
-		if ($this->security->isViewAttachmentsAllowed())
+		if ($this->security->isViewAttachmentsAllowed($protectedPage))
 		{
+			global $wgUser;
+			global $wgPageAttachment_colToDisplay;
+				
+			$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
+			$sk = $wgUser->getSkin();
+			$aIds = $this->attachmentManager->getAttachmentIds($pageId);
+			$aCount = 0;
 			foreach($aIds as $aId)
 			{
 				$attachmentData = $pageAttachmentDataFactory->newAttachmentData($aId);
@@ -237,7 +257,7 @@ class WebBrowser
 					switch ($wgPageAttachment_colToDisplay[$i])
 					{
 						case 'Name':
-							$attachmentRows[$aCount]['Name'] = $this->getNameColumn($command, $fileName);
+							$attachmentRows[$aCount]['Name'] = $this->getNameColumn($protectedPage, $command, $fileName);
 							break;
 						case 'Size':
 							$attachmentRows[$aCount]['Size'] = $sk->formatSize($attachmentData->getSize());
@@ -252,7 +272,7 @@ class WebBrowser
 							$attachmentRows[$aCount]['UploadedBy'] = $attachmentData->getUploadedBy();
 							break;
 						case 'Buttons':
-							$attachmentRows[$aCount]['Buttons'] = $this->getButtonsColumn($command, $fileName, $attachmentData);
+							$attachmentRows[$aCount]['Buttons'] = $this->getButtonsColumn($protectedPage, $command, $fileName, $attachmentData);
 							break;
 					}
 				}
@@ -262,7 +282,7 @@ class WebBrowser
 		return $attachmentRows;
 	}
 
-	private function getNameColumn($command, $fileName)
+	private function getNameColumn($protectedPage, $command, $fileName)
 	{
 		global $wgPageAttachment_attachmentNameMaxLength;
 
@@ -281,13 +301,13 @@ class WebBrowser
 				$fileNameLabel = substr($fileName, 0, ($wgPageAttachment_attachmentNameMaxLength - 4)) . ' ...';
 			}
 		}
-		if ($this->security->isAttachmentDownloadAllowed() == true)
+		if ($this->security->isAttachmentDownloadAllowed($protectedPage) == true)
 		{
 			$nameColum = $command->getDownloadCommandLink($fileName, $fileNameLabel);
 		}
 		else
 		{
-			if ($this->security->isAttachmentDownloadRequireLogin() && !$this->security->isLoggedIn())
+			if ($this->security->isAttachmentDownloadRequireLogin($protectedPage) && !$this->security->isLoggedIn())
 			{
 				$nameColum = HTML::buildLabel('PleaseLoginToActivateDownloadLink', $fileNameLabel);
 			}
@@ -305,18 +325,18 @@ class WebBrowser
 	}
 
 
-	private function getButtonsColumn($command, $fileName, $attachmentData)
+	private function getButtonsColumn($protectedPage, $command, $fileName, $attachmentData)
 	{
 		$buttonsColumn = '';
-		if ($this->security->isAuditLogViewAllowed())
+		if ($this->security->isAuditLogViewAllowed($protectedPage))
 		{
 			$buttonsColumn .= $command->getViewAuditLogCommandLink($fileName);
 		}
-		if ($this->security->isHistoryViewAllowed())
+		if ($this->security->isHistoryViewAllowed($protectedPage))
 		{
 			$buttonsColumn .= $command->getViewHistoryCommandLink($fileName);
 		}
-		if ($this->security->isAttachmentRemovalAllowed())
+		if ($this->security->isAttachmentRemovalAllowed($protectedPage))
 		{
 			if ($this->security->isRemoveAttachmentPermanentlyEnabled())
 			{

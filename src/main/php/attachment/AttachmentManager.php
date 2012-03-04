@@ -145,12 +145,14 @@ class AttachmentManager
 			return true;
 		}
 		$abort = false;
-		if (!$this->security->isBrowseSearchAttachAllowed())
+		$page = $this->session->getAttachToPage();
+		$protectedPage = $page->isProtected();
+		if (!$this->security->isBrowseSearchAttachAllowed($protectedPage))
 		{
 			$this->session->setStatusMessage('BrowseSearchAttachIsNotPermitted');
 			$abort = true;
 		}
-		elseif ($this->security->isBrowseSearchAttachRequireLogin() && !$this->security->isLoggedIn())
+		elseif ($this->security->isBrowseSearchAttachRequireLogin($protectedPage) && !$this->security->isLoggedIn())
 		{
 			$this->session->setStatusMessage('YouMustBeLoggedInToBrowseSearchAttach');
 			$abort = true;
@@ -250,14 +252,15 @@ class AttachmentManager
 		$abort = false;
 		$page = $this->session->getCurrentPage();
 		$attachedToPage = $page->getRedirectURL();
+		$protectedPage = $page->isProtected();
 		if (!$this->security->isRequestValidationTokenValid2($rvt))
 		{
 			$this->session->setStatusMessage('UnableToAuthenticateYourRequest');
 			$abort = true;
 		}
-		elseif (!$this->security->isAttachmentRemovalAllowed())
+		elseif (!$this->security->isAttachmentRemovalAllowed($protectedPage))
 		{
-			if ($this->security->isAttachmentRemovalRequireLogin() &&
+			if ($this->security->isAttachmentRemovalRequireLogin($protectedPage) &&
 			!$this->security->isLoggedIn())
 			{
 				$this->session->setStatusMessage('YouMustBeLoggedInToRemoveAttachments');

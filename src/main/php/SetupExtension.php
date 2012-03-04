@@ -123,6 +123,7 @@ $wgAutoloadClasses['PageAttachment\\User\\UserManager']                         
 $wgAutoloadClasses['PageAttachment\\File\\File']                                  = $dir . 'file/File.php';
 $wgAutoloadClasses['PageAttachment\\File\\FileManager']                           = $dir . 'file/FileManager.php';
 $wgAutoloadClasses['PageAttachment\\Category\\CategoryManager']                   = $dir . 'category/CategoryManager.php';
+$wgAutoloadClasses['PageAttachment\\Localization\\LocalizationHelper']            = $dir . 'localization/LocalizationHelper.php';
 $wgAutoloadClasses['PageAttachment\\WatchedItem\\WatchedItem']                    = $dir . 'watcheditem/WatchedItem.php';
 $wgAutoloadClasses['PageAttachment\\WatchedItem\\WatchedItemFactory']             = $dir . 'watcheditem/WatchedItemFactory.php';
 $wgAutoloadClasses['PageAttachment\\Notification\\MessageComposer']               = $dir . 'notification/MessageComposer.php';
