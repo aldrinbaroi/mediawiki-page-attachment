@@ -172,6 +172,34 @@ function pageAttachment_removePopup(element)
 }
 /**
  * 
+ * @param html
+ */
+function pageAttachment_renderAttachmentSection(html)
+{
+	var e = document.getElementById('PageAttachment');
+	e.innerHTML = html;
+}
+/**
+ * 
+ * @param functionName
+ * @param callbackFunction
+ */
+function pageAttachment_makeAjaxCall(functionName)
+{
+	var args = Array.prototype.slice.call(arguments, 0);
+	args.shift();
+	$.get(
+	        mw.util.wikiScript(), 
+	        {
+	                action: 'ajax',
+	                rs:     functionName,
+	                rsargs: args 
+	        },
+	        pageAttachment_renderAttachmentSection
+	);
+}
+/**
+ * 
  */
 function pageAttachment_loadPageAttachments()
 {
@@ -182,17 +210,11 @@ function pageAttachment_loadPageAttachments()
 		if (pageAttachment_isForceReload())
 		{
 			randomToken = pageAttachment_randomToken();
-			sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
-				[
-						pageTitle, randomToken
-				], div);
+			pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\getPageAttachments", pageTitle, randomToken);
 		}
 		else
 		{
-			sajax_do_call("PageAttachment\\Ajax\\getPageAttachments",
-				[
-					pageTitle
-				], div);
+			pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\getPageAttachments", pageTitle);
 		}
 	}
 }
