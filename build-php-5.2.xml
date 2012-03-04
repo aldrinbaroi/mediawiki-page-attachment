@@ -146,7 +146,7 @@
 			</fileset>
 		</replaceregexp>
 		<!-- Remove extraneous underscores -->
-		<replaceregexp match="_PageAttachment" replace="PageAttachment" byline="true">
+		<replaceregexp match="_PageAttachment" replace="PageAttachment" flags="g" byline="true">
 			<fileset dir="${work.dir}">
 				<include name="*.php" />
 			</fileset>
@@ -431,7 +431,7 @@
 		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="configuration" />
-			<param name="namespace" value="PageAttachment_Config" />
+			<param name="namespace" value="PageAttachment_Configuration" />
 		</antcall>
 		<antcall target="replaceText">
 			<param name="directoryName" value="configuration" />
@@ -502,6 +502,25 @@
 			<param name="replacement" value="FileDeleteForm" />
 		</antcall>
 		<!-- 
+			Directory: localization 
+		-->		
+		<antcall target="transformFiles">
+			<param name="directoryName" value="localization" />
+			<param name="namespace" value="PageAttachment_Localization" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="localization" />
+			<param name="fileName" value="LocalizationHelper" />
+			<param name="match" value="= _Language" />
+			<param name="replacement" value="= Language" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="localization" />
+			<param name="fileName" value="LocalizationHelper" />
+			<param name="match" value="= new _DateTime" />
+			<param name="replacement" value="= new DateTime" />
+		</antcall>
+		<!-- 
 			Directory: messages 
 			
 			This directory does not require any namespace related transformation.
@@ -509,6 +528,38 @@
 		<copy todir="${php52.build.dir}/messages" overwrite="true">
 			<fileset dir="${source.main.dir}/messages" />
 		</copy>
+		<!-- 
+			Directory: notification 
+		-->		
+		<antcall target="transformFiles">
+			<param name="directoryName" value="notification" />
+			<param name="namespace" value="PageAttachment_Notification" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="notification" />
+			<param name="fileName" value="NotificationManagerFactory" />
+			<param name="namespace" value="PageAttachment_Notification" />
+			<param name="className" value="NotificationManager" />
+		</antcall>
+		<!-- 
+			Directory: notification/email 
+		-->		
+		<antcall target="transformFiles">
+			<param name="directoryName" value="notification/email" />
+			<param name="namespace" value="PageAttachment_Notification_Email" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="notification/email" />
+			<param name="fileName" value="EmailTransporter" />
+			<param name="match" value="_MailAddress" />
+			<param name="replacement" value="MailAddress" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="notification/email" />
+			<param name="fileName" value="EmailTransporter" />
+			<param name="match" value="_UserMailer" />
+			<param name="replacement" value="UserMailer" />
+		</antcall>
 		<!-- 
 			Directory: request 
 		-->
@@ -583,6 +634,13 @@
 			<param name="directoryName" value="security/mediawiki/upload" />
 			<param name="match" value="_UploadBase" />
 			<param name="replacement" value="UploadBase" />
+		</antcall>
+		<!-- 
+			Directory: template 
+		-->		
+		<antcall target="transformFiles">
+			<param name="directoryName" value="template" />
+			<param name="namespace" value="PageAttachment_Template" />
 		</antcall>
 		<!-- 
 			Directory: session 
@@ -683,6 +741,12 @@
 			<param name="namespace" value="PageAttachment_User" />
 			<param name="className" value="User" />
 		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="user" />
+			<param name="fileName" value="UserManager" />
+			<param name="match" value="= _User" />
+			<param name="replacement" value="= User" />
+		</antcall>
 		<!-- 
 			Directory: utility 
 		-->
@@ -701,6 +765,19 @@
 			<param name="fileName" value="DateUtil" />
 			<param name="match" value="_DateTime" />
 			<param name="replacement" value="DateTime" />
+		</antcall>
+		<!-- 
+			Directory: watcheditem 
+		-->		
+		<antcall target="transformFiles">
+			<param name="directoryName" value="watcheditem" />
+			<param name="namespace" value="PageAttachment_WatchedItem" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="watcheditem" />
+			<param name="fileName" value="WatchedItemFactory" />
+			<param name="namespace" value="PageAttachment_WatchedItem" />
+			<param name="className" value="WatchedItem" />
 		</antcall>
 	</target>
 </project>

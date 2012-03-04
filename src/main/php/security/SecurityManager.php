@@ -264,7 +264,7 @@ class SecurityManager
 		}
 	}
 
-	function isAttachmentAddUpdateRequireLogin()
+	function isAttachmentAddUpdateRequireLogin($protectedPage)
 	{
 		if ($protectedPage)
 		{
