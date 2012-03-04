@@ -230,10 +230,7 @@ function pageAttachment_removePageAttachment(attachmentName, rvt,
 	{
 		var pageTitle = pageAttachment_getAttachToPageTitle();
 		var div = document.getElementById("PageAttachment");
-		sajax_do_call("PageAttachment\\Ajax\\removePageAttachment",
-			[
-					pageTitle, attachmentName, rvt
-			], div);
+		pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\removePageAttachment", pageTitle, attachmentName, rvt);
 	}
 }
 /**
@@ -247,10 +244,7 @@ function pageAttachment_removePageAttachmentPermanently(attachmentName, rvt, con
 	{
 		var pageTitle = pageAttachment_getAttachToPageTitle();
 		var div = document.getElementById("PageAttachment");
-		sajax_do_call("PageAttachment\\Ajax\\removePageAttachmentPermanently",
-			[
-					pageTitle, attachmentName, rvt
-			], div);
+		pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\removePageAttachmentPermanently", pageTitle, attachmentName, rvt);
 	}
 }
 /**
