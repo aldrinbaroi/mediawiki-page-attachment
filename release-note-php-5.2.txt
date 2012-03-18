@@ -10,7 +10,7 @@ and NOT compatible with
 
 	PHP 5.3
 
-This release contains following fixes/enhancements:
+This release contains the following fixes/enhancements:
 
 Issue# 26 - For Right-to-Left languages, correctly trim the description text 
 Issue# 37 - Add Watch Capability 
