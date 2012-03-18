@@ -6,7 +6,7 @@ This is a BETA release compatible with
 	 MediaWiki 1.16 & 1.17
 	 PHP 5.2
 	 
-and compatible with 
+and NOT compatible with 
 
 	PHP 5.3
 
