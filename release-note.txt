@@ -4,6 +4,7 @@ MediaWiki PageAttachment Extension Release Note
 This is a BETA release compatible with
 
 	 MediaWiki 1.16 & 1.17
+	 PHP 5.3
 	 
 and NOT compatible with 
 
