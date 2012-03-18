@@ -15,3 +15,5 @@ syntax: regexp
 ^src/main/php/Version\.php$
 syntax: regexp
 ^src/test/php/template/template-notification-email\.html$
+syntax: regexp
+^tmp$
