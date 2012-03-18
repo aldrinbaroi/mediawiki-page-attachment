@@ -17,3 +17,5 @@ syntax: regexp
 ^src/main/php/configuration$
 syntax: regexp
 ^src/test/php/configuration$
+syntax: regexp
+^tmp$

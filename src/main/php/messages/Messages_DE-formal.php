@@ -32,7 +32,7 @@ if (!defined('MEDIAWIKI'))
 }
 
 $messages['de-formal'] = array(
-	'pageAttachmentExtensionDescription'        => 'Diese Erweiterung erlaubt es, Anhänge an Seiten in Mediawiki anzuhängen',
+	'pageAttachmentExtensionDescription'        => 'Diese Erweiterung ermöglicht es, Dateien an Seiten in Mediawiki anzuhängen',
     'attachments'                               => 'Anhänge',
     'attachment'                                => 'Anhang',
     'name'                                      => 'Name',
@@ -124,7 +124,9 @@ $messages['de-formal'] = array(
     'requestedDownloadFileDoesNotExist'         => 'Angeforderte Datei existiert nicht',
     'unknownDownloadError'                      => 'Unbekannter Fehler beim Herunterladen',
 // Attachment Category
-    'selectCategory'                            => 'Bitte wählen Sie eine Kategorie'
+    'selectCategory'                            => 'Bitte wählen Sie eine Kategorie',
+// Attachment Change Notification
+    'attachmentChangeNotification'              => 'Benachrichtigung bei Änderungen des Anhangs'
 );
 
 
