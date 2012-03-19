@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE project>
-<project name="PageAttachment-Common" basedir="." default="createVersionFile">
+<project name="PageAttachment-Common" basedir=".">
 	<!-- 
 	/**
 	 *
@@ -48,7 +48,37 @@
 				<isset property="pageAttachment_version" />
 			</not>
 		</condition>
-
+		<antcall target="generateVersionFile">
+			<param name="pageAttachment_version" value="${pageAttachment_version}" />
+		</antcall>
+	</target>
+	<target name="createVersionFile_php52">
+		<condition property="pageAttachment_version" value="${php52.extension.version.alpha-release}">
+			<and>
+				<isset property="php52.extension.version.alpha" />
+				<not>
+					<equals arg1="${php52.extension.version.alpha}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="pageAttachment_version" value="${extension.version.beta-release}">
+			<and>
+				<isset property="php52.extension.version.beta" />
+				<not>
+					<equals arg1="${php52.extension.version.beta}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="pageAttachment_version" value="${php52.extension.version.normal-release}">
+			<not>
+				<isset property="pageAttachment_version" />
+			</not>
+		</condition>
+		<antcall target="generateVersionFile">
+			<param name="pageAttachment_version" value="${pageAttachment_version}" />
+		</antcall>
+	</target>
+	<target name="generateVersionFile">
 		<echo file="${source.main.dir}/Version.php">&lt;?php
 /**
  *
