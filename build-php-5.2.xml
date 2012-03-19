@@ -37,8 +37,26 @@
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
 	<target name="distribute" depends="transform" description="Generate Distribution ZIP file">
-		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.beta-release}" else="${php52.distribution.zipfile.normal-release}">
-			<isset property="php52.extension.version.beta" />
+		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.alpha-release}">
+			<and>
+				<isset property="php52.extension.version.alpha" />
+				<not>
+					<equals arg1="${php52.extension.version.alpha}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.beta-release}">
+			<and>
+				<isset property="php52.extension.version.beta" />
+				<not>
+					<equals arg1="${php52.extension.version.beta}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.normal-release}">
+			<not>
+				<isset property="php52.distribution.zipfile" />
+			</not>
 		</condition>
 		<delete file="${php52.distribution.zipfile}" />
 		<zip destfile="${php52.distribution.zipfile}">
