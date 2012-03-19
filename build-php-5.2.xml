@@ -26,6 +26,7 @@
 	 */
 	-->
 	<property file="build.properties" />
+	<import file="build-common.xml" as="common"/>
 	<target name="showProjectSettings">
 		<echo>extension.name        = ${extension.name}</echo>
 		<echo>mediawiki.install.dir = ${mediawiki.install.dir}</echo>
@@ -36,7 +37,7 @@
 		<echo>distribution.dir      = ${distribution.dir}</echo>
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
-	<target name="distribute" depends="transform" description="Generate Distribution ZIP file">
+	<target name="distribute" depends="common.createVersionFile_php52,transform" description="Generate Distribution ZIP file">
 		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.alpha-release}">
 			<and>
 				<isset property="php52.extension.version.alpha" />
@@ -67,7 +68,7 @@
 	<target name="cleanDeployDir" depends="showProjectSettings">
 		<delete dir="${deploy.dir}" />
 	</target>
-	<target name="deploy" depends="cleanDeployDir, transform" description="Deploy to local MediaWiki installation">
+	<target name="deploy" depends="cleanDeployDir,common.createVersionFile_php52,transform" description="Deploy to local MediaWiki installation">
 		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
 			<fileset dir="${php52.resources.main.dir}" />
 		</copy>
