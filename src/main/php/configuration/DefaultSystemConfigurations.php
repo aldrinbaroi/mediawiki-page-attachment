@@ -37,8 +37,8 @@ if (!defined('MEDIAWIKI'))
 #
 #
 #
-$wgPageAttachment_mediaWikiUploadPermissionChecker[1][16] = '\\PageAttachment\\Security\\MediaWiki\\Upload\\UploadPermissionChecker_MediaWiki_v1162';
-$wgPageAttachment_mediaWikiUploadPermissionChecker[1][17] = '\\PageAttachment\\Security\\MediaWiki\\Upload\\UploadPermissionChecker_MediaWiki_v1170';
+$wgPageAttachment_mediaWikiUploadPermissionChecker[1][16] = 'PageAttachment\\Security\\MediaWiki\\Upload\\UploadPermissionChecker_MediaWiki_v1162';
+$wgPageAttachment_mediaWikiUploadPermissionChecker[1][17] = 'PageAttachment\\Security\\MediaWiki\\Upload\\UploadPermissionChecker_MediaWiki_v1170';
 $wgPageAttachment_mediaWikiUploadPermissionChecker[0][0]  = $wgPageAttachment_mediaWikiUploadPermissionChecker[1][17];
 
 
@@ -53,12 +53,12 @@ $wgPageAttachment_notificationMediums[] = 'email';
 #
 # :: Message Composers ::
 #
-$wgPageAttachment_messageComposers['email'] = '\\PageAttachment\\Notification\\Email\\EmailMessageComposer';
+$wgPageAttachment_messageComposers['email'] = 'PageAttachment\\Notification\\Email\\EmailMessageComposer';
 
 #
 # :: Message Transporters ::
 #
-$wgPageAttachment_messageTransporters['email'] = '\\PageAttachment\\Notification\\Email\\EmailTransporter';
+$wgPageAttachment_messageTransporters['email'] = 'PageAttachment\\Notification\\Email\\EmailTransporter';
 
 
 ## ::END ::
