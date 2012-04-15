@@ -42,12 +42,12 @@ $wgPageAttachment_notificationMediums[] = 'email';
 #
 # :: Message Composers ::
 #
-$wgPageAttachment_messageComposers['email'] = '\\PageAttachment\\Notification\\Email\\EmailMessageComposer';
+$wgPageAttachment_messageComposers['email'] = 'PageAttachment\\Notification\\Email\\EmailMessageComposer';
 
 #
 # :: Message Transporters ::
 #
-$wgPageAttachment_messageTransporters['email'] = '\\PageAttachment\\Notification\\Email\\EmailTransporter';
+$wgPageAttachment_messageTransporters['email'] = 'PageAttachment\\Notification\\Email\\EmailTransporter';
 
 
 ## ::END ::
