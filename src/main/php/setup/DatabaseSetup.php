@@ -75,7 +75,7 @@ class DatabaseSetup
 		
 		if (isset($wgPageAttachment_useInternalCache) && ($wgPageAttachment_useInternalCache == true))
 		{
-			if (isset($wgPageAttachment_internalCacheType) && ($wgPageAttachment_internalCacheType == 'MySQL'))
+			if (isset($wgPageAttachment_internalCacheType) && ($wgPageAttachment_internalCacheType == 'Database'))
 			{
 				$wgExtNewTables[]  = array($tableName['cache'], $tableSqlFile['cache']);
 				$wgExtNewIndexes[] = array($tableName['cache'], $tableName['cache'], $indexSqlFile['cache']);
