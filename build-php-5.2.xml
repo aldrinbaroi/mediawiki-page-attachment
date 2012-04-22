@@ -445,6 +445,12 @@
 			<param name="directoryName" value="category" />
 			<param name="namespace" value="PageAttachment_Category" />
 		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="category" />
+			<param name="fileName" value="CategoryManager" />
+			<param name="namespace" value="PageAttachment_Category" />
+			<param name="className" value="CategoryManagerHelper" />
+		</antcall>
 		<!-- 
 			Directory: configuration 
 		-->
