@@ -50,8 +50,10 @@ class ImageListPager extends \ImageListPager
 		global $wgPageAttachment_imgAddUpdateAttachment;
 
 		parent::__construct();
+		$cacheManager = new \PageAttachment\Cache\CacheManager();
+		$pageFactory = new \PageAttachment\Session\PageFactory($cacheManager);
 		$this->security = new \PageAttachment\Security\SecurityManager();
-		$this->session = new \PageAttachment\Session\Session($this->security);
+		$this->session = new \PageAttachment\Session\Session($this->security, $pageFactory);
 		$this->resource = new \PageAttachment\UI\Resource($this->security, $this->session);
 		$this->rvt = $this->security->getCurrentRequestValidationToken();
 		$this->command = new \PageAttachment\UI\Command($this->session, $this->resource, $this->rvt);

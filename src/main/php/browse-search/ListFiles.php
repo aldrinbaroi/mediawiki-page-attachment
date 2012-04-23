@@ -42,8 +42,10 @@ class ListFiles extends \SpecialPage
 	{
 		global $wgOut;
 
+		$cacheManager = new \PageAttachment\Cache\CacheManager();
+		$pageFactory = new \PageAttachment\Session\PageFactory($cacheManager);
 		$security = new \PageAttachment\Security\SecurityManager();
-		$session = new \PageAttachment\Session\Session($security);
+		$session = new \PageAttachment\Session\Session($security, $pageFactory);
 		$attachToPage = $session->getAttachToPage();
 		if (isset($attachToPage) && $attachToPage->getId() > 0)
 		{
