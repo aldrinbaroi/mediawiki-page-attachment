@@ -79,6 +79,7 @@ class PageFactory
 			$nameSpace = -1;
 			$url = '';
 			$prefixedUrl = '';
+			$fullUrl = '';
 			$pageTitle = '';
 			$protected = false;
 			$categories = array();
