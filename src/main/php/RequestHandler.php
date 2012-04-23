@@ -60,9 +60,10 @@ class RequestHandler
 	function __construct()
 	{
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
+		$this->pageFactory = new \PageAttachment\Session\PageFactory($this->cacheManager);
 		$this->requestHelper = new \PageAttachment\Request\RequestHelper();
 		$this->security = new \PageAttachment\Security\SecurityManager();
-		$this->session = new \PageAttachment\Session\Session($this->security);
+		$this->session = new \PageAttachment\Session\Session($this->security, $this->pageFactory);
 		$this->auditLogManager = new \PageAttachment\AuditLog\AuditLogManager();
 		$this->attachmentManager = new \PageAttachment\Attachment\AttachmentManager($this->security, $this->session, $this->auditLogManager);
 		$this->resource = new \PageAttachment\UI\Resource($this->security, $this->session);
@@ -70,7 +71,6 @@ class RequestHandler
 		$this->downloadManager = new \PageAttachment\Download\DownloadManager($this->security, $this->session, $this->attachmentManager);
 		$this->categoryManager = new \PageAttachment\Category\CategoryManager($this->session);
 		$this->uploadHelper = new \PageAttachment\Upload\UploadHelper($this->categoryManager);
-		$this->pageFactory = new \PageAttachment\Session\PageFactory($this->cacheManager);
 	}
 
 	function onSetupDatabase()
