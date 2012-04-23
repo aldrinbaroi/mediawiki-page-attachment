@@ -38,6 +38,7 @@ class CacheManager
 	private $articleNameCache;
 	private $fileCache;
 	private $categoryListCache;
+	private $pageCache;
 
 	function __construct()
 	{
@@ -47,6 +48,7 @@ class CacheManager
 		$this->articleNameCache = new ArticleNameCache();
 		$this->fileCache = new FileCache();
 		$this->categoryListCache = new CategoryListCache();
+		$this->pageCache = new PageCache();
 	}
 
 	function storeAttachmentData($attachmentData)
@@ -137,6 +139,21 @@ class CacheManager
 	function removeCategoryList()
 	{
 		$this->categoryListCache->remove();
+	}
+	
+	function storePage(\PageAttachment\session\Page $page)
+	{
+		$this->pageCache->store($page);
+	}
+	
+	function retrievePage($pageId)
+	{
+		return $this->pageCache->retrieve($pageId);
+	}
+	
+	function removePage($pageId)
+	{
+		$this->pageCache->remove($pageId);
 	}
 
 }

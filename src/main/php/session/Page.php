@@ -39,13 +39,15 @@ class Page
 	private $fullUrl;
 	private $pageTitle;
 	private $protected;
+	private $categories;
 
+	/* * /
 	function __construct($title = NULL)
 	{
 		if (isset($title))
 		{
 			global $wgUser;
-			
+
 			if ($title instanceof \Title)
 			{
 				$_title = $title;
@@ -62,6 +64,7 @@ class Page
 			$this->pageTitle  = trim($_title->getText());
 			//$permissionErrors = $title->getUserPermissionsErrors('edit', $wgUser);
 			$this->protected = (count($title->getUserPermissionsErrors('edit', $wgUser)) > 0) ? true : false;
+			$categories =  getCategories($pageId);
 		}
 		else
 		{
@@ -71,7 +74,20 @@ class Page
 			$this->prefixedUrl = '';
 			$this->pageTitle = '';
 			$this->protected = false;
+			$categories = array();
 		}
+	}
+	/ * */
+
+	function __construct($id, $nameSpace, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories)
+	{
+		$this->id = $id;
+		$this->nameSpace = $nameSpace;
+		$this->url = $url;
+		$this->prefixedUrl = $prefixedUrl;
+		$this->pageTitle = $pageTitle;
+		$this->protected = $protected;
+		$this->categories = $categories;
 	}
 
 	function getId()
@@ -105,7 +121,7 @@ class Page
 			return $this->prefixedUrl;
 		}
 	}
-	
+
 	function getFullURL()
 	{
 		return $this->fullUrl;
@@ -115,10 +131,15 @@ class Page
 	{
 		return $this->pageTitle;
 	}
-	
+
 	function isProtected()
 	{
 		return $this->protected;
+	}
+	
+	function getCategories()
+	{
+		return $this->categories;
 	}
 }
 

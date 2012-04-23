@@ -44,6 +44,7 @@ class RequestHandler
 	private $pageId = -1;
 	private $pageNS = -1;
 	private $page;
+	private $cacheManager;
 	private $requestHelper;
 	private $security;
 	private $session;
@@ -54,9 +55,11 @@ class RequestHandler
 	private $downloadManager;
 	private $uploadHelper;
 	private $categoryManager;
+	private $pageFactory;
 
 	function __construct()
 	{
+		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
 		$this->requestHelper = new \PageAttachment\Request\RequestHelper();
 		$this->security = new \PageAttachment\Security\SecurityManager();
 		$this->session = new \PageAttachment\Session\Session($this->security);
@@ -67,6 +70,7 @@ class RequestHandler
 		$this->downloadManager = new \PageAttachment\Download\DownloadManager($this->security, $this->session, $this->attachmentManager);
 		$this->categoryManager = new \PageAttachment\Category\CategoryManager($this->session);
 		$this->uploadHelper = new \PageAttachment\Upload\UploadHelper($this->categoryManager);
+		$this->pageFactory = new \PageAttachment\Session\PageFactory($this->cacheManager);
 	}
 
 	function onSetupDatabase()
@@ -87,7 +91,7 @@ class RequestHandler
 		$this->session->startSessionIfNotStarted();
 		$this->requestHelper->setPageMode($request);
 		$action = $wgRequest->getVal('action');
-		$currentViewPage = new \PageAttachment\Session\Page($title);
+		$currentViewPage = $this->pageFactory->createPage($title);
 		$viewPageId = $currentViewPage->getId();
 		$viewPageNS = $currentViewPage->getNameSpace();
 		$viewPageTitle = $currentViewPage->getPrefixedURL();
@@ -135,6 +139,7 @@ class RequestHandler
 		{
 			$this->attachmentManager->cleardAttachmentData($article->getID());
 		}
+		$this->cacheManager->removePage($article->getID());
 		$this->session->setForceReload(true);
 		return true;
 	}

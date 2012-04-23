@@ -51,6 +51,16 @@ $wgPageAttachment_showUserRealName = true;
 $wgPageAttachment_allowedNameSpaces[] = NS_MAIN; 
 
 # ---------------------------------------------------------------------------
+# Allowed categories
+# ---------------------------------------------------------------------------
+#
+# You can specify which MediaWiki categories can have attachments.
+#
+# By default, no categories are configured.
+#
+#$wgPageAttachment_allowedCategories[] = '';
+
+# ---------------------------------------------------------------------------
 # Date Format
 # ---------------------------------------------------------------------------
 # You can specify language specific date formatting option.
