@@ -40,45 +40,7 @@ class Page
 	private $pageTitle;
 	private $protected;
 	private $categories;
-
-	/* * /
-	function __construct($title = NULL)
-	{
-		if (isset($title))
-		{
-			global $wgUser;
-
-			if ($title instanceof \Title)
-			{
-				$_title = $title;
-			}
-			else
-			{
-				$_title = \Title::newFromText($title);
-			}
-			$this->id = $_title->getArticleID();
-			$this->nameSpace = $_title->getNamespace();
-			$this->url = $_title->getPartialURL();
-			$this->prefixedUrl = $_title->getPrefixedDBkey();
-			$this->fullUrl = $_title->getFullURL();
-			$this->pageTitle  = trim($_title->getText());
-			//$permissionErrors = $title->getUserPermissionsErrors('edit', $wgUser);
-			$this->protected = (count($title->getUserPermissionsErrors('edit', $wgUser)) > 0) ? true : false;
-			$categories =  getCategories($pageId);
-		}
-		else
-		{
-			$this->id = -1;
-			$this->nameSpace = -1;
-			$this->url = '';
-			$this->prefixedUrl = '';
-			$this->pageTitle = '';
-			$this->protected = false;
-			$categories = array();
-		}
-	}
-	/ * */
-
+	
 	function __construct($id, $nameSpace, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories)
 	{
 		$this->id = $id;
