@@ -38,8 +38,26 @@
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
 	<target name="distribute" depends="common.createVersionFile">
-		<condition property="distribution.zipfile" value="${distribution.zipfile.beta-release}" else="${distribution.zipfile.normal-release}">
-			<isset property="extension.version.beta" />
+		<condition property="distribution.zipfile" value="${distribution.zipfile.alpha-release}">
+			<and>
+				<isset property="extension.version.alpha" />
+				<not>
+					<equals arg1="${extension.version.alpha}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="distribution.zipfile" value="${distribution.zipfile.beta-release}">
+			<and>
+				<isset property="extension.version.beta" />
+				<not>
+					<equals arg1="${extension.version.beta}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="distribution.zipfile" value="${distribution.zipfile.normal-release}">
+			<not>
+				<isset property="distribution.zipfile" />
+			</not>
 		</condition>
 		<delete file="${distribution.zipfile}" />
 		<zip destfile="${distribution.zipfile}">
