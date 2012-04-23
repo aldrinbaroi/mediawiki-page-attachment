@@ -69,10 +69,10 @@ class WebBrowser
 	function setupAttachmentListSection(&$data)
 	{
 		$page = $this->session->getCurrentPage();
-		$pageId = $page->getId();
-		$pageNS = $page->getNameSpace();
-		$protectedPage = $page->isProtected();
-		if ($this->isSetupAttachmentListSection($pageId, $pageNS, $protectedPage))
+		//$pageId = $page->getId();
+		//$pageNS = $page->getNameSpace();
+		//$protectedPage = $page->isProtected();
+		if ($this->isSetupAttachmentListSection($page)) // $pageId, $pageNS, $protectedPage))
 		{
 			//$page = $this->session->getCurrentPage();
 			$pageTitle = $page->getPageTitle();
@@ -97,17 +97,13 @@ class WebBrowser
 		return true;
 	}
 
-	private function isSetupAttachmentListSection($pageId, $pageNS, $protectedPage)
+	private function isSetupAttachmentListSection($page) 
 	{
 		$setup = false;
 		if (!$this->session->isViewPageSpecial())
 		{
-			//$page = $this->session->getCurrentPage();
-			//$pageId = $page->getId();
-			//$pageNS = $page->getNameSpace();
-			//$protectedPage = $page->isProtected();
-			$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
-			if ($pageInAllowedNameSpaces)
+			$protectedPage = $page->isProtected();
+			if ($this->security->isAttachmentAllowed($page))
 			{
 				if (!($this->requestHelper->isEditMode()
 				|| $this->requestHelper->isPreviewMode()
@@ -144,11 +140,16 @@ class WebBrowser
 
 		$page = $this->session->getCurrentPage();
 		$pageId = $page->getId();
-		$pageNS = $page->getNameSpace();
-		$pageURL = $page->getURL();
-		$pageTitle = $page->getPageTitle();
+		// $pageNS = $page->getNameSpace();
+		//$pageURL = $page->getURL();
+		// $pageTitle = $page->getPageTitle();
 		$protectedPage = $page->isProtected();
-		if (!$this->security->isPageInAllowedNameSpaces($pageId, $pageNS))
+		//$pageCategories = $page->getCategories();
+		//$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
+		//$pageInAllowedCategories = $this->security->isPageInAllowedCategories($pageCategories);
+		//if (!$this->security->isPageInAllowedNameSpaces($pageId, $pageNS))
+		//if (!$pageInAllowedNameSpaces && !$pageInAllowedCategories)
+		if (!$this->security->isAttachmentAllowed($page))
 		{
 			$data = '';
 			return $data;

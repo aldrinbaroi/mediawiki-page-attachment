@@ -412,6 +412,12 @@
 			<param name="namespace" value="PageAttachment_Cache" />
 			<param name="className" value="CategoryListCache" />
 		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="cache" />
+			<param name="fileName" value="CacheManager" />
+			<param name="namespace" value="PageAttachment_Cache" />
+			<param name="className" value="PageCache" />
+		</antcall>
 		<!-- 
 			Directory: cache/provider 
 		-->

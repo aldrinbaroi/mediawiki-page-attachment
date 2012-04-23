@@ -64,6 +64,8 @@ $wgPageAttachment_enableNotification = true;
 $wgPageAttachment_useJobQueueForNotification = false;
 $wgPageAttachment_messageFormat = 'plaintext';
 
+# Allowed categories
+$wgPageAttachment_allowedCategories[] = 'Docs';
 
 
 

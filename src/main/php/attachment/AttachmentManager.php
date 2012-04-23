@@ -119,12 +119,9 @@ class AttachmentManager
 			$attachToPage = $this->session->getAttachToPage();
 			if (isset($attachToPage))
 			{
-				$attachToPageId = $attachToPage->getId();
-				$attachToPageNS = $attachToPage->getNameSpace();
-				$attachToPageTitle = $attachToPage->getPageTitle();
 				$attachmentId   = $image->getTitle()->getArticleID();
 				$attachmentName = $image->getTitle()->getText();
-				$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, self::UPLOADED);
+				$this->addUpdateAttachment($attachToPage, $attachmentName, $attachmentId, self::UPLOADED);
 			}
 			else
 			{
@@ -145,8 +142,10 @@ class AttachmentManager
 			return true;
 		}
 		$abort = false;
-		$page = $this->session->getAttachToPage();
-		$protectedPage = $page->isProtected();
+		//$page = $this->session->getAttachToPage();
+		//$protectedPage = $page->isProtected();
+		$attachToPage = $this->session->getAttachToPage();
+		$protectedPage = $attachToPage->isProtected();
 		if (!$this->security->isBrowseSearchAttachAllowed($protectedPage))
 		{
 			$this->session->setStatusMessage('BrowseSearchAttachIsNotPermitted');
@@ -164,27 +163,29 @@ class AttachmentManager
 		}
 		if ($abort == false)
 		{
-			$attachToPage = $page->getRedirectURL();
-			$attachToPageTitle = \Title::newFromText($attachToPage);
-			$attachToPageId = $attachToPageTitle->getArticleID();
-			$attachToPageNS = $attachToPageTitle->getNamespace();
+			//$attachToPage = $page->getRedirectURL();
+			//$attachToPageTitle = \Title::newFromText($attachToPage);
+			//$attachToPageId = $attachToPageTitle->getArticleID();
+			//$attachToPageNS = $attachToPageTitle->getNamespace();
 			$attachmentFileName = $wgRequest->getVal('fileName','');
 			$attachmentTitle = \Title::newFromText($attachmentFileName, NS_FILE);
 			$attachmentId = $attachmentTitle->getArticleID();
 			$attachmentName = $attachmentTitle->getText();
-			$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, self::EXISTING);
+			//$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, self::EXISTING);
+			$this->addUpdateAttachment($attachToPage, $attachmentName, $attachmentId, self::EXISTING);
 		}
 		$action = 'view';
 		$wgRequest->setVal('action', $action);
 		return true;
 	}
 
-	private function addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, $uploadedOrExisting)
+	private function addUpdateAttachment($attachToPage, $attachmentName, $attachmentId, $uploadedOrExisting)
 	{
-		if (!$this->security->isPageInAllowedNameSpaces($attachToPageId, $attachToPageNS))
+		if (!$this->security->isAttachmentAllowed($attachToPage))
 		{
 			return;
 		}
+		$attachToPageId = $attachToPage->getId();
 		$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
 		$notificationEnabled = $this->notificationManager->isNotificationEnabled();
 		$activityTime = time();

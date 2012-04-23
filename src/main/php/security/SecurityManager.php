@@ -79,21 +79,59 @@ class SecurityManager
 	{
 		global $wgPageAttachment_allowedNameSpaces;
 
-		if ($pageId < 1)
+		$inAllowedNameSpaces = false;
+		if (isset($wgPageAttachment_allowedNameSpaces) && is_array($wgPageAttachment_allowedNameSpaces))
 		{
-			return false;
-		}
-		if ($pageId > 0 )
-		{
-			for ($i = 0; $i < count($wgPageAttachment_allowedNameSpaces); $i++)
+			if ($pageId > 0 )
 			{
-				if ($pageNS == $wgPageAttachment_allowedNameSpaces[$i])
+				for ($i = 0; $i < count($wgPageAttachment_allowedNameSpaces); $i++)
 				{
-					return true;
+					if ($pageNS == $wgPageAttachment_allowedNameSpaces[$i])
+					{
+						$inAllowedNameSpaces = true;
+						break;
+					}
 				}
 			}
-			return false;
 		}
+		return $inAllowedNameSpaces;
+	}
+
+	function isPageInAllowedCategories($pageCategories)
+	{
+		global $wgPageAttachment_allowedCategories;
+
+		$pageInAllowedCategories = false;
+		if (isset($wgPageAttachment_allowedCategories) && is_array($wgPageAttachment_allowedCategories))
+		{
+			if (is_array($pageCategories) && (count($pageCategories) > 0))
+			{
+				for($i = 0; $i < count($pageCategories); $i++)
+				{
+					if (in_array($pageCategories[$i], $wgPageAttachment_allowedCategories))
+					{
+						$pageInAllowedCategories = true;
+						break;
+					}
+				}
+			}
+		}
+		return $pageInAllowedCategories;
+	}
+
+	function isAttachmentAllowed(\PageAttachment\Session\Page $page)
+	{
+		$attachmentAllowed = false;
+		$pageId = $page->getId();
+		$pageNS = $page->getNameSpace();
+		$pageCategories = $page->getCategories();
+		$pageInAllowedNameSpaces = $this->isPageInAllowedNameSpaces($pageId, $pageNS);
+		$pageInAllowedCategories = $this->isPageInAllowedCategories($pageCategories);
+		if ($pageInAllowedNameSpaces || $pageInAllowedCategories)
+		{
+			$attachmentAllowed =  true;
+		}
+		return $attachmentAllowed;
 	}
 
 	// Check if upload is enabled in MediaWiki configuration

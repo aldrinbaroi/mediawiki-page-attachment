@@ -49,11 +49,14 @@ class Resource
 		if (!isset($this->addResources))
 		{
 			$page = $this->session->getCurrentPage();
-			$pageId = $page->getId();
-			$pageNS = $page->getNameSpace();
-			$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
+			//$pageId = $page->getId();
+			//$pageNS = $page->getNameSpace();
+			//$pageCategories = $page->getCategories();
+			//$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
+			//$pageInAllowedCategories = $this->security->isPageInAllowedCategories($pageCategories);
 			$isViewPageSpecial = $this->session->isViewPageSpecial();
-			if ($pageInAllowedNameSpaces == true || $isViewPageSpecial == true)
+			//if ($pageInAllowedNameSpaces == true || $pageInAllowedCategories || $isViewPageSpecial == true)
+			if ($this->security->isAttachmentAllowed($page) || ( $isViewPageSpecial == true))
 			{
 				$this->addResources =  true;
 			}
