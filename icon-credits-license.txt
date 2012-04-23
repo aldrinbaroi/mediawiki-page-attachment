@@ -1,0 +1,12 @@
+
+Icon credits & license:
+
+The icons used are obtained from "http://tango.freedesktop.org"
+under "Creative Commons Attribution-ShareAlike 2.5" license and
+resized. You are free to use the resized icons under the same 
+"Creative Commons Attribution-ShareAlike 2.5" license. You can
+obtain a copy of the license from the following link:
+
+    http://creativecommons.org/licenses/by-sa/2.5/
+  
+  

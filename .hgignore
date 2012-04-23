@@ -1,0 +1,19 @@
+
+syntax: regexp
+^dist$
+syntax: regexp
+^src/test/php/Test\.php$
+syntax: regexp
+^src/test/html$
+
+
+syntax: regexp
+^dist-php52$
+syntax: regexp
+^build-php52$
+syntax: regexp
+^src/main/php/Version\.php$
+syntax: regexp
+^src/test/php/template/template-notification-email\.html$
+syntax: regexp
+^tmp$
