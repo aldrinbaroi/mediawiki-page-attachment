@@ -33,6 +33,7 @@ if (!defined('MEDIAWIKI'))
 class Session
 {
 	private $security;
+	private $pageFactory;
 	
 	const MESSAGE                        = 'MESSAGE';
 	const MESSAGE_DOWNLOAD_ERROR         = 'MESSAGE_DOWNLOAD_ERROR';
@@ -48,9 +49,10 @@ class Session
 	const DELETED_FILE_INFO              = 'DELETED_FILE_INFO';
 	const REINITIALIZE_CATEGORY_LIST     = 'REINITIALIZE_CATEGORY_LIST';
 	
-	function __construct($security)
+	function __construct(\PageAttachment\Security\SecurityManager $security, \PageAttachment\Session\PageFactory $pageFactory)
 	{
 		$this->security = $security;
+		$this->pageFactory = $pageFactory;
 	}
 
 	function startSessionIfNotStarted()
@@ -83,7 +85,7 @@ class Session
 		}
 		else
 		{
-			return (new \PageAttachment\Session\Page());
+			return ($this->pageFactory->createPage());
 		}
 	}
 
