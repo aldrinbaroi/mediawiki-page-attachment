@@ -63,8 +63,13 @@ class ListFiles extends \SpecialPage
 			}
 			else
 			{
+				global $wgUser;
+				
+				$context = $this->getContext();
+				$userName = $wgUser->getName();
+				
 				$this->setHeaders();
-				$pager = new ImageListPager();
+				$pager = new ImageListPager($context, $userName);
 				$limit = $pager->getForm();
 				$body = $pager->getBody();
 				$nav = $pager->getNavigationBar();
