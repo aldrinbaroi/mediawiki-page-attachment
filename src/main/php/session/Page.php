@@ -34,6 +34,7 @@ class Page
 {
 	private $id;
 	private $nameSpace;
+	private $nameSpacePrefix;
 	private $url;
 	private $prefixedUrl;
 	private $fullUrl;
@@ -41,10 +42,11 @@ class Page
 	private $protected;
 	private $categories;
 	
-	function __construct($id, $nameSpace, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories)
+	function __construct($id, $nameSpace, $nameSpacePrefix, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories)
 	{
 		$this->id = $id;
 		$this->nameSpace = $nameSpace;
+		$this->nameSpacePrefix = $nameSpacePrefix;
 		$this->url = $url;
 		$this->prefixedUrl = $prefixedUrl;
 		$this->pageTitle = $pageTitle;
@@ -60,6 +62,11 @@ class Page
 	function getNameSpace()
 	{
 		return $this->nameSpace;
+	}
+	
+	function getNameSpacePrefix()
+	{
+		return $this->nameSpacePrefix;
 	}
 
 	function getURL()

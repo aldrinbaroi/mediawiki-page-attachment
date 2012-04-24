@@ -119,6 +119,28 @@ class SecurityManager
 		return $pageInAllowedCategories;
 	}
 
+	function isPageExcluded(\PageAttachment\Session\Page $page)
+	{
+		global $wgPageAttachment_excludedPages;
+
+		if (isset($wgPageAttachment_excludedPages) && is_array($wgPageAttachment_excludedPages))
+		{
+			if ($page->getNameSpacePrefix() == '')
+			{
+				$pageTitle = $page->getPageTitle();
+			}
+			else
+			{
+				$pageTitle = $page->getNameSpacePrefix() . ':' . $page->getPageTitle();
+			}
+			if (in_array($pageTitle, $wgPageAttachment_excludedPages))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	function isAttachmentAllowed(\PageAttachment\Session\Page $page)
 	{
 		$attachmentAllowed = false;
@@ -129,7 +151,14 @@ class SecurityManager
 		$pageInAllowedCategories = $this->isPageInAllowedCategories($pageCategories);
 		if ($pageInAllowedNameSpaces || $pageInAllowedCategories)
 		{
-			$attachmentAllowed =  true;
+			if ($this->isPageExcluded($page))
+			{
+				$attachmentAllowed =  false;
+			}
+			else
+			{
+				$attachmentAllowed =  true;
+			}
 		}
 		return $attachmentAllowed;
 	}
