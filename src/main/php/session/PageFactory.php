@@ -65,11 +65,12 @@ class PageFactory
 				$nameSpace = $_title->getNamespace();
 				$url = $_title->getPartialURL();
 				$prefixedUrl = $_title->getPrefixedDBkey();
+				$nameSpacePrefix = $this->getNameSpacePrefix($prefixedUrl);
 				$fullUrl = $_title->getFullURL();
 				$pageTitle  = trim($_title->getText());
 				$protected = (count($title->getUserPermissionsErrors('edit', $wgUser)) > 0) ? true : false;
 				$categories = $this->getCategories($id);
-				$page = new Page($id, $nameSpace, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories);
+				$page = new Page($id, $nameSpace, $nameSpacePrefix, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories);
 				$this->cacheManager->storePage($page);
 			}
 		}
@@ -77,13 +78,14 @@ class PageFactory
 		{
 			$id = -1;
 			$nameSpace = -1;
+			$nameSpacePrefix = '';
 			$url = '';
 			$prefixedUrl = '';
 			$fullUrl = '';
 			$pageTitle = '';
 			$protected = false;
 			$categories = array();
-			$page = new Page($id, $nameSpace, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories);
+			$page = new Page($id, $nameSpace, $nameSpacePrefix, $url, $prefixedUrl, $fullUrl, $pageTitle, $protected, $categories);
 		}
 		return $page;
 	}
@@ -101,6 +103,20 @@ class PageFactory
 			}
 		}
 		return $categories;
+	}
+
+	private function getNameSpacePrefix($prefixedUrl)
+	{
+		$tokens = explode(':', $prefixedUrl);
+		if (count($tokens) == 2)
+		{
+			$nameSpacePrefix = $tokens[0];
+		}
+		else
+		{
+			$nameSpacePrefix = '';
+		}
+		return $nameSpacePrefix;
 	}
 
 }
