@@ -47,12 +47,12 @@ $wgPageAttachment_removeAttachments['ignoreIfEmbedded'] = true;
 #
 # Attachment Category
 #
-$wgPageAttachment_attachmentCategory['setOnUpload']            = false;
+$wgPageAttachment_attachmentCategory['setOnUpload']            = true;
 $wgPageAttachment_attachmentCategory['mustSet']                = false;
 $wgPageAttachment_attachmentCategory['defaultCategory']        = 'MyCategory 2';
-$wgPageAttachment_attachmentCategory['allowedCategories']      = 'PredefinedCategoriesOnly';
+#$wgPageAttachment_attachmentCategory['allowedCategories']      = 'PredefinedCategoriesOnly';
 #$wgPageAttachment_attachmentCategory['allowedCategories']     = 'MediaWikiCategoriesOnly';
-#$wgPageAttachment_attachmentCategory['allowedCategories']     = 'BothPredefinedAndMediaWikiCategories';
+$wgPageAttachment_attachmentCategory['allowedCategories']     = 'BothPredefinedAndMediaWikiCategories';
 $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 1';
 $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 2';
 $wgPageAttachment_attachmentCategory['predefinedCategories'][] = 'MyCategory 3';
@@ -71,4 +71,5 @@ $wgPageAttachment_allowedCategories[] = 'Docs';
 $wgPageAttachment_excludedPages[] = 'Main Page';
 $wgPageAttachment_excludedPages[] = 'Third Page';
 $wgPageAttachment_excludedPages[] = 'Talk:Third Page';
+
 
