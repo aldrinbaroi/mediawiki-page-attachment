@@ -138,15 +138,7 @@ class WebBrowser
 
 		$page = $this->session->getCurrentPage();
 		$pageId = $page->getId();
-		// $pageNS = $page->getNameSpace();
-		//$pageURL = $page->getURL();
-		// $pageTitle = $page->getPageTitle();
 		$protectedPage = $page->isProtected();
-		//$pageCategories = $page->getCategories();
-		//$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
-		//$pageInAllowedCategories = $this->security->isPageInAllowedCategories($pageCategories);
-		//if (!$this->security->isPageInAllowedNameSpaces($pageId, $pageNS))
-		//if (!$pageInAllowedNameSpaces && !$pageInAllowedCategories)
 		if (!$this->security->isAttachmentAllowed($page))
 		{
 			$data = '';
@@ -230,13 +222,6 @@ class WebBrowser
 	*/
 	private function getAttachmentRows($protectedPage, $pageId, $command)
 	{
-		//global $wgUser;
-		//global $wgPageAttachment_colToDisplay;
-
-		//$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
-		//$sk = $wgUser->getSkin();
-		//$aIds = $this->attachmentManager->getAttachmentIds($pageId);
-		//$aCount = 0;
 		$attachmentRows = array();
 		if ($this->security->isViewAttachmentsAllowed($protectedPage))
 		{
