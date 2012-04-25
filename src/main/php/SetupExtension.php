@@ -133,6 +133,7 @@ $wgAutoloadClasses['PageAttachment\\Notification\\NotificationJob']             
 $wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailMessageComposer']   = $dir . 'notification/email/EmailMessageComposer.php';
 $wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailTransporter']       = $dir . 'notification/email/EmailTransporter.php';
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
+$wgAutoloadClasses['PageAttachment\\MagicWord\\MagicWordHandler']                 = $dir . 'magicword/MagicWordHandler.php';
 
 ## Ajax Hooks
 $wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\getPageAttachments';
@@ -173,7 +174,13 @@ function pageAttachment_registerEventHandlers()
 	$wgHooks['FileUndeleteComplete'][]                = array($requestHandler, 'onFileUndeleteComplete');
 	$wgHooks['LinksUpdate'][]                         = array($requestHandler, 'onLinksUpdate');
 	$wgHooks['LinksUpdateComplete'][]                 = array($requestHandler, 'onLinksUpdateComplete');
-
+	
+	$magicWordHandler = new PageAttachment\MagicWord\MagicWordHandler();
+	
+	$wgHooks['MagicWordwgVariableIDs'][]              = array($magicWordHandler, 'onMagicWordwgVariableIDs');
+	$wgHooks['LanguageGetMagic'][]                    = array($magicWordHandler, 'onLanguageGetMagic');
+	$wgHooks['ParserBeforeInternalParse'][]           = array($magicWordHandler, 'onParserBeforeInternalParse');
+	
 }
 
 ## Register Notification Job Handler

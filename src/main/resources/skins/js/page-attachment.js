@@ -182,7 +182,6 @@ function pageAttachment_renderAttachmentSection(html)
 /**
  * 
  * @param functionName
- * @param callbackFunction
  */
 function pageAttachment_makeAjaxCall(functionName)
 {
@@ -201,10 +200,23 @@ function pageAttachment_makeAjaxCall(functionName)
 /**
  * 
  */
+function pageAttachment_addAttachmentListBox()
+{
+	var attachmentListBox = document.createElement("div");
+	var id = document.createAttribute("PageAttachment");
+	attachmentListBox.setAttributeNode(id);
+	attachmentListBox.id = "PageAttachment";
+	var pageAttachmentContainer = document.getElementById("PageAttachmentContainer");
+	pageAttachmentContainer.appendChild(attachmentListBox);
+}
+/**
+ * 
+ */
 function pageAttachment_loadPageAttachments()
 {
 	if (pageAttachment_isLoadPageAttachments())
 	{
+		pageAttachment_addAttachmentListBox();
 		var pageTitle = pageAttachment_getAttachToPageTitle();
 		var div = document.getElementById("PageAttachment");
 		if (pageAttachment_isForceReload())
