@@ -68,7 +68,7 @@ $wgPageAttachment_messageFormat = 'plaintext';
 $wgPageAttachment_allowedCategories[] = 'Docs';
 
 # Excluded Pages
-$wgPageAttachment_excludedPages[] = 'Main Page';
-$wgPageAttachment_excludedPages[] = 'Third Page';
-$wgPageAttachment_excludedPages[] = 'Talk:Third Page';
+//$wgPageAttachment_excludedPages[] = 'Main Page';
+//$wgPageAttachment_excludedPages[] = 'Third Page';
+//$wgPageAttachment_excludedPages[] = 'Talk:Third Page';
 

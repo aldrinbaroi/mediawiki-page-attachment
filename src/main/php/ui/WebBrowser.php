@@ -68,16 +68,13 @@ class WebBrowser
 
 	function setupAttachmentListSection(&$data)
 	{
+		$_data = '';
+		$attachmentContainerDiv = \HTML::element('br') . \HTML::element('div', array('id' => 'PageAttachmentContainer'));
 		$page = $this->session->getCurrentPage();
-		//$pageId = $page->getId();
-		//$pageNS = $page->getNameSpace();
-		//$protectedPage = $page->isProtected();
-		if ($this->isSetupAttachmentListSection($page)) // $pageId, $pageNS, $protectedPage))
+		if ($this->isSetupAttachmentListSection($page)) 
 		{
-			//$page = $this->session->getCurrentPage();
 			$pageTitle = $page->getPageTitle();
-			$attachmentDiv = \HTML::element('br') . \HTML::element('div', array('id' => 'PageAttachment'));
-			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return true; } ');
+			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : true); } ');
 			$script .= \HTML::inlineScript('  function pageAttachment_getAttachToPageTitle() { return "' . $pageTitle . '"; } ');
 			if ($this->session->isForceReload())
 			{
@@ -87,13 +84,14 @@ class WebBrowser
 			{
 				$script .= \HTML::inlineScript(' function pageAttachment_isForceReload() { return false; } ');
 			}
-			$data = $attachmentDiv . $script;
+			$_data = $script;
 		}
 		else
 		{
 			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return false; } ');
-			$data = $script;
+			$_data = $script;
 		}
+		$data = $attachmentContainerDiv . $_data;
 		return true;
 	}
 
