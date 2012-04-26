@@ -26,6 +26,7 @@
 	 */
 	-->
 	<property file="build.properties" />
+	<import file="build-common.xml" as="common"/>
 	<target name="showProjectSettings">
 		<echo>extension.name        = ${extension.name}</echo>
 		<echo>mediawiki.install.dir = ${mediawiki.install.dir}</echo>
@@ -36,9 +37,27 @@
 		<echo>distribution.dir      = ${distribution.dir}</echo>
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
-	<target name="distribute" depends="transform" description="Generate Distribution ZIP file">
-		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.beta-release}" else="${php52.distribution.zipfile.normal-release}">
-			<isset property="php52.extension.version.beta" />
+	<target name="distribute" depends="common.createVersionFile_php52,transform" description="Generate Distribution ZIP file">
+		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.alpha-release}">
+			<and>
+				<isset property="php52.extension.version.alpha" />
+				<not>
+					<equals arg1="${php52.extension.version.alpha}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.beta-release}">
+			<and>
+				<isset property="php52.extension.version.beta" />
+				<not>
+					<equals arg1="${php52.extension.version.beta}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="php52.distribution.zipfile" value="${php52.distribution.zipfile.normal-release}">
+			<not>
+				<isset property="php52.distribution.zipfile" />
+			</not>
 		</condition>
 		<delete file="${php52.distribution.zipfile}" />
 		<zip destfile="${php52.distribution.zipfile}">
@@ -49,7 +68,7 @@
 	<target name="cleanDeployDir" depends="showProjectSettings">
 		<delete dir="${deploy.dir}" />
 	</target>
-	<target name="deploy" depends="cleanDeployDir, transform" description="Deploy to local MediaWiki installation">
+	<target name="deploy" depends="cleanDeployDir,common.createVersionFile_php52,transform" description="Deploy to local MediaWiki installation">
 		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
 			<fileset dir="${php52.resources.main.dir}" />
 		</copy>
@@ -431,6 +450,12 @@
 		<antcall target="transformFiles">
 			<param name="directoryName" value="category" />
 			<param name="namespace" value="PageAttachment_Category" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="category" />
+			<param name="fileName" value="CategoryManager" />
+			<param name="namespace" value="PageAttachment_Category" />
+			<param name="className" value="CategoryManagerHelper" />
 		</antcall>
 		<!-- 
 			Directory: configuration 
