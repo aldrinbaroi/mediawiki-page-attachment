@@ -87,6 +87,7 @@ class StaticConfiguration
 		}
 		return $disllowAttachmentsUsingMagicWord;
 	}
+	
 }
 
 ## ::END::
