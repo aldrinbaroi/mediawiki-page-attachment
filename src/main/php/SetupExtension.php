@@ -67,6 +67,7 @@ require_once($dir . 'template/TemplateLoader.php');
 $wgAutoloadClasses['ImageListPager']                                              = $IP . '/includes/specials/SpecialListfiles.php';
 
 ## Autoload PageAttachment classes
+$wgAutoloadClasses['PageAttachment\\Configuration\\StaticConfiguration']          = $dir . 'configuration/StaticConfiguration.php';
 $wgAutoloadClasses['PageAttachment\\Configuration\\RuntimeConfiguration']         = $dir . 'configuration/RuntimeConfiguration.php';
 $wgAutoloadClasses['PageAttachment\\Setup\\DatabaseSetup']                        = $dir . 'setup/DatabaseSetup.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                   = $dir . 'utility/MediaWikiVersion.php';
