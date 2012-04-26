@@ -81,6 +81,32 @@ $wgPageAttachment_allowedNameSpaces[] = NS_MAIN;
 #$wgPageAttachment_excludedPages[] = '';
 
 # ---------------------------------------------------------------------------
+# Dynamic Inclusion
+# ---------------------------------------------------------------------------
+#
+# The magic word "__ALLOW_ATTACHMENTS__" can be used within a Wiki page content 
+# to allow attachments on a page when that page is not configured to have 
+# attachments through either namespace or, category settings.
+#
+# By default, this option is turned off.
+#
+$wgPageAttachment_allowAttachmentsUsingMagicWord = false;
+
+# ---------------------------------------------------------------------------
+# Dynamic Exclusion
+# ---------------------------------------------------------------------------
+#
+# The magic word "__NO_ATTACHMENTS__" can be used within a Wiki page content
+# to disallow attachments on a page when that page is configured to have
+# attachments through either namespace or, category settings.
+#
+# By default, this option is turned off.
+#
+$wgPageAttachment_disllowAttachmentsUsingMagicWord = false;
+
+
+
+# ---------------------------------------------------------------------------
 # Date Format
 # ---------------------------------------------------------------------------
 # You can specify language specific date formatting option.

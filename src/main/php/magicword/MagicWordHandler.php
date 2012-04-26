@@ -37,6 +37,12 @@ class MagicWordHandler
 
 	}
 
+	/**
+	 *
+	 * Register the MagicWord IDs
+	 *
+	 * @param array $magicWordVariableIDs
+	 */
 	function onMagicWordwgVariableIDs( &$magicWordVariableIDs )
 	{
 		$magicWordVariableIDs[] = 'PageAttachment_MagicWord_NOATTACHMENT';
@@ -44,6 +50,13 @@ class MagicWordHandler
 		return true;
 	}
 
+	/**
+	 *
+	 * Register the MagicWords
+	 *
+	 * @param array $magicWords
+	 * @param string $langCode
+	 */
 	function onLanguageGetMagic(&$magicWords, $langCode)
 	{
 		$magicWords['PageAttachment_MagicWord_NOATTACHMENT']    = array( 0, '__NO_ATTACHMENTS__' );
@@ -51,18 +64,29 @@ class MagicWordHandler
 		return true;
 	}
 
+	/**
+	 *
+	 * Process the MagicWords
+	 *
+	 * @param Parser $parser
+	 * @param string $text
+	 * @param StripState $stripState
+	 * @return boolean
+	 */
 	function onParserBeforeInternalParse(&$parser, &$text, &$stripState)
 	{
+		$config = \PageAttachment\Configuration\StaticConfiguration::getInstance();
+
 		$pageAttachmentDefinedMagicWord = false;
 		$allowAttachments = false;
-		$mw1 = \MagicWord::get( 'PageAttachment_MagicWord_NOATTACHMENT' );
-		if ( $mw1->matchAndRemove( $text ) )
+		$magicWord1 = \MagicWord::get( 'PageAttachment_MagicWord_NOATTACHMENT' );
+		if ( $magicWord1->matchAndRemove( $text ) )
 		{
 			$pageAttachmentDefinedMagicWord = true;
 			$allowAttachments = false;
 		}
-		$mw2 = \MagicWord::get( 'PageAttachment_MagicWord_ALLOWATTACHMENT' );
-		if ( $mw2->matchAndRemove( $text ) )
+		$magicWord2 = \MagicWord::get( 'PageAttachment_MagicWord_ALLOWATTACHMENT' );
+		if ( $magicWord2->matchAndRemove( $text ) )
 		{
 			$pageAttachmentDefinedMagicWord = true;
 			$allowAttachments = true;
@@ -71,11 +95,17 @@ class MagicWordHandler
 		{
 			if ($allowAttachments == true)
 			{
-				$parser->mOutput->addHeadItem('<script> pageAttachment__ALLOW_ATTACHMENTS__ = true; </script>');
+				if ($config->isAllowAttachmentsUsingMagicWord())
+				{
+					$parser->mOutput->addHeadItem('<script> pageAttachment__ALLOW_ATTACHMENTS__ = true; </script>');
+				}
 			}
 			else
 			{
-				$parser->mOutput->addHeadItem('<script> pageAttachment__ALLOW_ATTACHMENTS__ = false; </script>');
+				if ($config->isDisllowAttachmentsUsingMagicWord())
+				{
+					$parser->mOutput->addHeadItem('<script> pageAttachment__ALLOW_ATTACHMENTS__ = false; </script>');
+				}
 			}
 		}
 		return true;

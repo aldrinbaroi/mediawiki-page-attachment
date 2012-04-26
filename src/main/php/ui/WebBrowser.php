@@ -88,7 +88,8 @@ class WebBrowser
 		}
 		else
 		{
-			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return false; } ');
+			// $script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return false; } ');
+			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : false); } ');
 			$_data = $script;
 		}
 		$data = $attachmentContainerDiv . $_data;
