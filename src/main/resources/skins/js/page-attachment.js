@@ -206,7 +206,7 @@ function pageAttachment_addAttachmentListBox()
 	if (attachmentListBox == null)
 	{
 		attachmentListBox = document.createElement("div");
-		var id = document.createAttribute("PageAttachment");
+		var id = document.createAttribute("id");
 		attachmentListBox.setAttributeNode(id);
 		attachmentListBox.id = "PageAttachment";
 		var pageAttachmentContainer = document.getElementById("PageAttachmentContainer");
@@ -218,19 +218,22 @@ function pageAttachment_addAttachmentListBox()
  */
 function pageAttachment_loadPageAttachments()
 {
-	if (pageAttachment_isLoadPageAttachments())
-	{
-		pageAttachment_addAttachmentListBox();
-		var pageTitle = pageAttachment_getAttachToPageTitle();
-		var div = document.getElementById("PageAttachment");
-		if (pageAttachment_isForceReload())
+	if (typeof pageAttachment_isLoadPageAttachments == "function")
+	{	
+		if (pageAttachment_isLoadPageAttachments())
 		{
-			randomToken = pageAttachment_randomToken();
-			pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\getPageAttachments", pageTitle, randomToken);
-		}
-		else
-		{
-			pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\getPageAttachments", pageTitle);
+			pageAttachment_addAttachmentListBox();
+			var pageTitle = pageAttachment_getAttachToPageTitle();
+			var div = document.getElementById("PageAttachment");
+			if (pageAttachment_isForceReload())
+			{
+				randomToken = pageAttachment_randomToken();
+				pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\getPageAttachments", pageTitle, randomToken);
+			}
+			else
+			{
+				pageAttachment_makeAjaxCall("PageAttachment\\Ajax\\getPageAttachments", pageTitle);
+			}
 		}
 	}
 }

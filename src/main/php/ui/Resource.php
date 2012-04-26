@@ -36,12 +36,14 @@ class Resource
 	private $session;
 	private $runtimeConfig;
 	private $addResources;
+	private $staticConfig;
 
 	function __construct($security, $session)
 	{
 		$this->security = $security;
 		$this->session = $session;
 		$this->runtimeConfig = new \PageAttachment\Configuration\RuntimeConfiguration();
+		$this->staticConfig = \PageAttachment\Configuration\StaticConfiguration::getInstance();
 	}
 
 	private function isAddResources()
@@ -49,20 +51,21 @@ class Resource
 		if (!isset($this->addResources))
 		{
 			$page = $this->session->getCurrentPage();
-			//$pageId = $page->getId();
-			//$pageNS = $page->getNameSpace();
-			//$pageCategories = $page->getCategories();
-			//$pageInAllowedNameSpaces = $this->security->isPageInAllowedNameSpaces($pageId, $pageNS);
-			//$pageInAllowedCategories = $this->security->isPageInAllowedCategories($pageCategories);
 			$isViewPageSpecial = $this->session->isViewPageSpecial();
-			//if ($pageInAllowedNameSpaces == true || $pageInAllowedCategories || $isViewPageSpecial == true)
 			if ($this->security->isAttachmentAllowed($page) || ( $isViewPageSpecial == true))
 			{
 				$this->addResources =  true;
 			}
 			else
 			{
-				$this->addResources =  false;
+				if ($this->staticConfig->isAllowAttachmentsUsingMagicWord())
+				{
+					$this->addResources =  true; 
+				}
+				else
+				{
+					$this->addResources =  false;
+				}
 			}
 		}
 		return $this->addResources;
@@ -199,11 +202,11 @@ class Resource
 			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgBrowseSearchAttach['default'] ;
 		}
 	}
-	
+
 	function getUploadAndAttachtImageURL()
 	{
 		global $wgPageAttachment_imgUploadAndAttach;
-	
+
 		$skinName = $this->runtimeConfig->getSkinName();
 		if (isset($wgPageAttachment_imgUploadAndAttach[$skinName]))
 		{
@@ -214,11 +217,11 @@ class Resource
 			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgUploadAndAttach['default'] ;
 		}
 	}
-	
+
 	function getAttachFileImageURL()
 	{
 		global $wgPageAttachment_imgAttachFile;
-	
+
 		$skinName = $this->runtimeConfig->getSkinName();
 		if (isset($wgPageAttachment_imgAttachFile[$skinName]))
 		{
@@ -229,11 +232,11 @@ class Resource
 			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgAttachFile['default'] ;
 		}
 	}
-	
+
 	function getViewAuditLogImageURL()
 	{
 		global $wgPageAttachment_imgViewAuditLog;
-	
+
 		$skinName = $this->runtimeConfig->getSkinName();
 		if (isset($wgPageAttachment_imgViewAuditLog[$skinName]))
 		{
@@ -244,11 +247,11 @@ class Resource
 			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgViewAuditLog['default'] ;
 		}
 	}
-	
+
 	function getViewHistoryImageURL()
 	{
 		global $wgPageAttachment_imgViewHistory;
-	
+
 		$skinName = $this->runtimeConfig->getSkinName();
 		if (isset($wgPageAttachment_imgViewHistory[$skinName]))
 		{
@@ -259,8 +262,8 @@ class Resource
 			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgViewHistory['default'] ;
 		}
 	}
-	
-	
+
+
 	function getRemoveAttachmentImageURL()
 	{
 		$skinName = $this->runtimeConfig->getSkinName();
@@ -275,12 +278,12 @@ class Resource
 			return $this->getUrlPrefixForImage() . $wgPageAttachment_imgRemoveAttachment['default'] ;
 		}
 	}
-	
+
 	function getViewMoreImageURL()
 	{
 		$skinName = $this->runtimeConfig->getSkinName();
 		global $wgPageAttachment_imgViewMore;
-	
+
 		if (isset($wgPageAttachment_imgViewMore[$skinName]))
 		{
 			return $this->getUrlPrefixForImage($skinName) . $wgPageAttachment_imgViewMore[$skinName] ;

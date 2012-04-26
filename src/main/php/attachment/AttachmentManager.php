@@ -38,6 +38,7 @@ class AttachmentManager
 	private $cacheManager;
 	private $fileManager;
 	private $notificationManager;
+	private $staticConfig;
 
 	const UPLOADED  = 'UPLOADED';
 	const EXISTING  = 'EXISTING';
@@ -51,6 +52,7 @@ class AttachmentManager
 		$this->cacheManager = new \PageAttachment\Cache\CacheManager();
 		$this->fileManager = new \PageAttachment\File\FileManager($security, $this->cacheManager);
 		$this->notificationManager = \PageAttachment\Notification\NotificationManagerFactory::getNotificationManager();
+		$this->staticConfig = \PageAttachment\Configuration\StaticConfiguration::getInstance();
 	}
 
 	function getAttachmentIds($attachedToPageId)
@@ -142,8 +144,6 @@ class AttachmentManager
 			return true;
 		}
 		$abort = false;
-		//$page = $this->session->getAttachToPage();
-		//$protectedPage = $page->isProtected();
 		$attachToPage = $this->session->getAttachToPage();
 		$protectedPage = $attachToPage->isProtected();
 		if (!$this->security->isBrowseSearchAttachAllowed($protectedPage))
@@ -163,15 +163,10 @@ class AttachmentManager
 		}
 		if ($abort == false)
 		{
-			//$attachToPage = $page->getRedirectURL();
-			//$attachToPageTitle = \Title::newFromText($attachToPage);
-			//$attachToPageId = $attachToPageTitle->getArticleID();
-			//$attachToPageNS = $attachToPageTitle->getNamespace();
 			$attachmentFileName = $wgRequest->getVal('fileName','');
 			$attachmentTitle = \Title::newFromText($attachmentFileName, NS_FILE);
 			$attachmentId = $attachmentTitle->getArticleID();
 			$attachmentName = $attachmentTitle->getText();
-			//$this->addUpdateAttachment($attachToPageId, $attachToPageNS, $attachmentName, $attachmentId, self::EXISTING);
 			$this->addUpdateAttachment($attachToPage, $attachmentName, $attachmentId, self::EXISTING);
 		}
 		$action = 'view';
@@ -183,7 +178,14 @@ class AttachmentManager
 	{
 		if (!$this->security->isAttachmentAllowed($attachToPage))
 		{
-			return;
+			if ($this->staticConfig->isAllowAttachmentsUsingMagicWord())
+			{
+				//
+			}
+			else
+			{
+				return;
+			}
 		}
 		$attachToPageId = $attachToPage->getId();
 		$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
@@ -207,7 +209,6 @@ class AttachmentManager
 				}
 				$this->auditLogManager->createLog($attachToPageId, $attachmentName, $activityType, $activityTime);
 				$this->notificationManager->sendNotification($attachToPageId, $attachmentName, $activityType, $activityTime);
-
 			}
 		}
 		else

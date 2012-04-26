@@ -40,6 +40,7 @@ class WebBrowser
 	private $resource;
 	private $runtimeConfig;
 	private $fileManager;
+	private $staticConfig;
 
 
 	function __construct($security, $requestHelper, $session, $attachmentManager, $resource)
@@ -54,6 +55,7 @@ class WebBrowser
 		$this->resource = $resource;
 		$this->runtimeConfig = new \PageAttachment\Configuration\RuntimeConfiguration();
 		$this->fileManager = new \PageAttachment\File\FileManager($this->security);
+		$this->staticConfig = \PageAttachment\Configuration\StaticConfiguration::getInstance();
 	}
 
 	function setRedirectPage( $form )
@@ -71,10 +73,17 @@ class WebBrowser
 		$_data = '';
 		$attachmentContainerDiv = \HTML::element('br') . \HTML::element('div', array('id' => 'PageAttachmentContainer'));
 		$page = $this->session->getCurrentPage();
-		if ($this->isSetupAttachmentListSection($page)) 
+		if ($this->isSetupAttachmentListSection($page))
 		{
 			$pageTitle = $page->getPageTitle();
-			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : true); } ');
+			if ($this->staticConfig->isDisllowAttachmentsUsingMagicWord())
+			{
+				$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : true); } ');
+			}
+			else
+			{
+				$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return true; } ');
+			}
 			$script .= \HTML::inlineScript('  function pageAttachment_getAttachToPageTitle() { return "' . $pageTitle . '"; } ');
 			if ($this->session->isForceReload())
 			{
@@ -88,15 +97,31 @@ class WebBrowser
 		}
 		else
 		{
-			// $script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return false; } ');
-			$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : false); } ');
+			if ($this->staticConfig->isAllowAttachmentsUsingMagicWord())
+			{
+				$pageTitle = $page->getPageTitle();
+				$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : false); } ');
+				$script .= \HTML::inlineScript('  function pageAttachment_getAttachToPageTitle() { return "' . $pageTitle . '"; } ');
+				if ($this->session->isForceReload())
+				{
+					$script .= \HTML::inlineScript(' function pageAttachment_isForceReload() { return true; } ');
+				}
+				else
+				{
+					$script .= \HTML::inlineScript(' function pageAttachment_isForceReload() { return false; } ');
+				}
+			}
+			else
+			{
+				$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return false; } ');
+			}
 			$_data = $script;
 		}
 		$data = $attachmentContainerDiv . $_data;
 		return true;
 	}
 
-	private function isSetupAttachmentListSection($page) 
+	private function isSetupAttachmentListSection($page)
 	{
 		$setup = false;
 		if (!$this->session->isViewPageSpecial())
@@ -142,8 +167,15 @@ class WebBrowser
 		$protectedPage = $page->isProtected();
 		if (!$this->security->isAttachmentAllowed($page))
 		{
-			$data = '';
-			return $data;
+			if ($this->staticConfig->isAllowAttachmentsUsingMagicWord())
+			{
+				// Proceed normally
+			}
+			else
+			{
+				$data = '';
+				return $data;
+			}
 		}
 		$rvt = $this->security->newRequestValidationToken();
 		$command = new Command($this->session, $this->resource, $rvt);
@@ -228,7 +260,7 @@ class WebBrowser
 		{
 			global $wgUser;
 			global $wgPageAttachment_colToDisplay;
-				
+
 			$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
 			$sk = $wgUser->getSkin();
 			$aIds = $this->attachmentManager->getAttachmentIds($pageId);
