@@ -202,12 +202,16 @@ function pageAttachment_makeAjaxCall(functionName)
  */
 function pageAttachment_addAttachmentListBox()
 {
-	var attachmentListBox = document.createElement("div");
-	var id = document.createAttribute("PageAttachment");
-	attachmentListBox.setAttributeNode(id);
-	attachmentListBox.id = "PageAttachment";
-	var pageAttachmentContainer = document.getElementById("PageAttachmentContainer");
-	pageAttachmentContainer.appendChild(attachmentListBox);
+	var attachmentListBox = document.getElementById("PageAttachment");
+	if (attachmentListBox == null)
+	{
+		attachmentListBox = document.createElement("div");
+		var id = document.createAttribute("PageAttachment");
+		attachmentListBox.setAttributeNode(id);
+		attachmentListBox.id = "PageAttachment";
+		var pageAttachmentContainer = document.getElementById("PageAttachmentContainer");
+		pageAttachmentContainer.appendChild(attachmentListBox);
+	}
 }
 /**
  * 
