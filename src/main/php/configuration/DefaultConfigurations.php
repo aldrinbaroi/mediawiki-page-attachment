@@ -500,7 +500,7 @@ $wgPageAttachment_attachmentCategory['setOnUpload']              = false;
 #              documentation for this.
 #           2. Set the following to true:
 #
-#                  $wgPageAttachment_useJobQueueForNotification = false;
+#                  $wgPageAttachment_useJobQueueForNotification = true;
 #
 #    4. Notification messages are formatted using templates.  Two templates
 #       are included.  These templates are under the template folder.
