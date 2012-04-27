@@ -192,17 +192,6 @@ $wgPageAttachment_colWidth['default']['default']['Size'        ] = 10;
 $wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 14;
 $wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 14;
 $wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 7;  
- 
-//
-// For your refrence, here are the column widths before "description"
-// column was added.
-//
-//$wgPageAttachment_colWidth['default']['default']['Name'        ] = 53;
-//$wgPageAttachment_colWidth['default']['default']['Size'        ] = 10;  
-//$wgPageAttachment_colWidth['default']['default']['DateUploaded'] = 15; 
-//$wgPageAttachment_colWidth['default']['default']['UploadedBy'  ] = 15; 
-//$wgPageAttachment_colWidth['default']['default']['Buttons'     ] = 7;  
-//
 
 #
 # :: Title Row Column Spans ::
@@ -271,22 +260,19 @@ $wgPageAttachment_statusMessageFormat['default'] = '&nbsp;&#187; STATUS_MESSAGE 
 $wgPageAttachment_enableAuditLog = false;
 
 # ---------------------------------------------------------------------------
-# Permissions
+# Permissions - General
 # ---------------------------------------------------------------------------
 #
 # First, MediaWiki upload permissions are checked.
 # Second, the following permissions & the overrides are checked.
+# View must be permitted to allow all other actions.
 #
-# By default, anybody can view the attachments.  Login is required 
-# and only "sysop" & "user" groups are allowed to add/update/download/
-# remove the attachments and view the audit log (if audit logging is
-# enabled).
+# The default permission settings:
 #
-# By default, if audit logging is enable, when login is not required,
-# anybody can view the audit log, and when login is required, only "sysop"
-# and "user" groups are allowed to view the audit logs.
-#
-# View must be permitted to allowed all other actions
+#    1. Login is not required to view attachments
+#    2. Login is required for all other actions
+#    3. Logged in administrators can perform all the actions
+#    4. Logged in users can perform all the actions   
 # 
 $wgPageAttachment_permissions['view'           ]['loginRequired'] = false;
 $wgPageAttachment_permissions['uploadAndAttach']['loginRequired'] = true;
@@ -337,9 +323,20 @@ $wgPageAttachment_permissions['viewHistory'    ]['group']['*'    ] = false;
 # $wgPageAttachment_permissions['remove'      ]['user']['johndoe' ] = true;
 
 # ---------------------------------------------------------------------------
-# Permission - Protected Page
+# Permissions - Protected Pages
 # ---------------------------------------------------------------------------
-# TODO Need documentation
+# 
+# Permission settings for protected pages work exactly the same way as the 
+# general permissions settings.  The only difference is that general permissions
+# settings are checked first before check is performed for permissions for 
+# protected pages.
+#
+# The default settings for protected pages:
+#
+#    1. Login is not required to view attachments
+#    2. Login is required for all other actions
+#    3. Logged in administrators can perform all the actions
+#    4. Logged in users can only view & download attachments   
 #
 $wgPageAttachment_permissions['viewOnProtectedPages'           ]['loginRequired'] = false;
 $wgPageAttachment_permissions['uploadAndAttachOnProtectedPages']['loginRequired'] = true;
@@ -540,7 +537,37 @@ $wgPageAttachment_attachmentCategory['setOnUpload']              = false;
 # Notification
 # ---------------------------------------------------------------------------
 #
-# TODO Need documentation 
+# On watched pages, notifications can be sent out on attachment related changes.
+#
+# By default, notification is not enabled.
+#
+# To enable notifcation, do the following:
+#
+#    1. Setup MediaWiki to use an email server.  Consult MediaWiki's email setup 
+#       documentation.
+#    2. Set the following to true:
+#
+#           $wgPageAttachment_enableNotification = true;
+#
+#    3. If your Wiki has large user base then is it recommended to use MediaWiki's
+#       job queue to send the notificaitons.  To use the job queue, do the following:
+# 
+#           1. Setup MediaWiki's job queue.  Consult MediaWiki's job queue 
+#              documentation for this.
+#           2. Set the following to true:
+#
+#                  $wgPageAttachment_useJobQueueForNotification = false;
+#
+#    4. Notification messages are formatted using templates.  Two templates
+#       are included.  These templates are under the template folder.
+#
+#       To use the plain text template, set the following:
+#
+#           $wgPageAttachment_messageFormat = 'plaintext';
+#
+#       To use the HTML template, set the following:
+#
+#           $wgPageAttachment_messageFormat = 'html';
 #
 $wgPageAttachment_enableNotification = false;
 # $wgPageAttachment_useJobQueueForNotification = false;
