@@ -97,7 +97,8 @@ class WebBrowser
 		}
 		else
 		{
-			if ($this->staticConfig->isAllowAttachmentsUsingMagicWord())
+			$allowAttachmentsUsingMagicWord = $this->staticConfig->isAllowAttachmentsUsingMagicWord();
+			if ($allowAttachmentsUsingMagicWord && $this->isSetupAttachmentListSection($page, $allowAttachmentsUsingMagicWord))
 			{
 				$pageTitle = $page->getPageTitle();
 				$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : false); } ');
@@ -121,13 +122,13 @@ class WebBrowser
 		return true;
 	}
 
-	private function isSetupAttachmentListSection($page)
+	private function isSetupAttachmentListSection($page, $allowAttachmentsUsingMagicWord = false)
 	{
 		$setup = false;
 		if (!$this->session->isViewPageSpecial())
 		{
 			$protectedPage = $page->isProtected();
-			if ($this->security->isAttachmentAllowed($page))
+			if ($this->security->isAttachmentAllowed($page) || ($allowAttachmentsUsingMagicWord && !$this->security->isPageExcluded($page)))
 			{
 				if (!($this->requestHelper->isEditMode()
 				|| $this->requestHelper->isPreviewMode()
