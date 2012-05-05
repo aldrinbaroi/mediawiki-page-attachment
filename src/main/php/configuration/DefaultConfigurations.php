@@ -65,7 +65,9 @@ $wgPageAttachment_allowedNameSpaces[] = NS_MAIN;
 # ---------------------------------------------------------------------------
 #
 # You can specify which pages should not have attachments, even though the 
-# page may have attachments through defined namespaces or categories.
+# page may have attachments through defined namespaces or categories.  This
+# cannot be overriden with dynamic inclusion token __ALLOW_ATTACHMENTS__ to
+# allow attachments.
 #
 # 1) For pages in main namespace, just specify the page name.  For example,
 #    you don't want any attachment on the home/main wiki page:
