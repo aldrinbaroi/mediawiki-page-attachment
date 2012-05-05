@@ -101,6 +101,7 @@ $wgAutoloadClasses['PageAttachment\\AuditLog\\AuditLogManager']                 
 $wgAutoloadClasses['PageAttachment\\AuditLog\\AuditLogPager']                     = $dir . 'auditlog/AuditLogPager.php';
 $wgAutoloadClasses['PageAttachment\\AuditLog\\AuditLogViewer']                    = $dir . 'auditlog/AuditLogViewer.php';
 $wgAutoloadClasses['PageAttachment\\Request\\RequestHelper']                      = $dir . 'request/RequestHelper.php';
+$wgAutoloadClasses['PageAttachment\\Request\\AttachFileAction']                   = $dir . 'request/AttachFileAction.php';
 $wgAutoloadClasses['PageAttachment\\Session\\Session']                            = $dir . 'session/Session.php';
 $wgAutoloadClasses['PageAttachment\\Session\\Page']                               = $dir . 'session/Page.php';
 $wgAutoloadClasses['PageAttachment\\Session\\PageFactory']                        = $dir . 'session/PageFactory.php';
@@ -123,6 +124,7 @@ $wgAutoloadClasses['PageAttachment\\User\\UserManager']                         
 $wgAutoloadClasses['PageAttachment\\File\\File']                                  = $dir . 'file/File.php';
 $wgAutoloadClasses['PageAttachment\\File\\FileManager']                           = $dir . 'file/FileManager.php';
 $wgAutoloadClasses['PageAttachment\\Category\\CategoryManager']                   = $dir . 'category/CategoryManager.php';
+$wgAutoloadClasses['PageAttachment\\Category\\CategoryManagerHelper']             = $dir . 'category/CategoryManagerHelper.php';
 $wgAutoloadClasses['PageAttachment\\Localization\\LocalizationHelper']            = $dir . 'localization/LocalizationHelper.php';
 $wgAutoloadClasses['PageAttachment\\WatchedItem\\WatchedItem']                    = $dir . 'watcheditem/WatchedItem.php';
 $wgAutoloadClasses['PageAttachment\\WatchedItem\\WatchedItemFactory']             = $dir . 'watcheditem/WatchedItemFactory.php';
@@ -149,10 +151,11 @@ $wgSpecialPages['PageAttachmentAuditLogViewer']   = 'PageAttachment\\AuditLog\\A
 ## Extension Function Hook
 $wgExtensionFunctions[] = 'pageAttachment_registerEventHandlers';
 
-## Function to register the hooks
+## Function to register the hooks & enable custom actions
 function pageAttachment_registerEventHandlers()
 {
 	global $wgHooks;
+	global $wgActions;
 
 	$requestHandler = new PageAttachment\RequestHandler();
 
@@ -181,6 +184,12 @@ function pageAttachment_registerEventHandlers()
 	$wgHooks['MagicWordwgVariableIDs'][]              = array($magicWordHandler, 'onMagicWordwgVariableIDs');
 	$wgHooks['LanguageGetMagic'][]                    = array($magicWordHandler, 'onLanguageGetMagic');
 	$wgHooks['ParserBeforeInternalParse'][]           = array($magicWordHandler, 'onParserBeforeInternalParse');
+	
+	//
+	// Dummy custom action ('attachfile') handler class to avoid "No such action" error.
+	// In future actual attach file code may have to be moved into this class.
+	//
+	$wgActions['attachfile']                          = 'PageAttachment\\Request\\AttachFileAction';
 	
 }
 
