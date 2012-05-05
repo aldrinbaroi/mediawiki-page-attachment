@@ -451,6 +451,12 @@
 			<param name="match" value="^\$wgPageAttachment_dateFormat(.*)" />
 			<param name="replacement" value="// NOT SUPPORTED IN PHP 5.2 -- $wgPageAttachment_dateFormat\1" />
 		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="configuration" />
+			<param name="fileName" value="StaticConfiguration" />
+			<param name="namespace" value="PageAttachment_Configuration" />
+			<param name="className" value="StaticConfiguration" />
+		</antcall>
 		<!-- 
 			Directory: download 
 		-->
@@ -525,6 +531,21 @@
 			<param name="fileName" value="LocalizationHelper" />
 			<param name="match" value="= new _DateTime" />
 			<param name="replacement" value="= new DateTime" />
+		</antcall>
+		<!-- 
+			Directory: magicword 
+			
+			This directory does not require any namespace related transformation.
+		-->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="magicword" />
+			<param name="namespace" value="PageAttachment_MagicWord" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="magicword" />
+			<param name="fileName" value="MagicWordHandler" />
+			<param name="match" value="= _MagicWord" />
+			<param name="replacement" value="= \\\\MagicWord" />
 		</antcall>
 		<!-- 
 			Directory: messages 
@@ -654,6 +675,12 @@
 		<antcall target="transformFiles">
 			<param name="directoryName" value="session" />
 			<param name="namespace" value="PageAttachment_Session" />
+		</antcall>
+		<antcall target="expandClassName">
+			<param name="directoryName" value="session" />
+			<param name="fileName" value="PageFactory" />
+			<param name="namespace" value="PageAttachment_Session" />
+			<param name="className" value="Page" />
 		</antcall>
 		<!-- 
 			Directory: setup 
