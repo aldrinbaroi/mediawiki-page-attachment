@@ -35,6 +35,7 @@ class CategoryManager
 	private $session;
 	private $cacheManager;
 	private $defaultCategory;
+	private $categoryManagerHelper;
 
 	const MUST_SET                                 = 'mustSet';
 	const DEFAULT_CATEGORY                         = 'defaultCategory';
@@ -59,6 +60,7 @@ class CategoryManager
 		{
 			$this->defaultCategory =  null;
 		}
+		$this->categoryManagerHelper = new CategoryManagerHelper();
 	}
 
 	function getDefaultCatogry()
@@ -160,10 +162,7 @@ class CategoryManager
 
 	function setReinitializeCategoryList(&$linksUpdate)
 	{
-		$existing = $linksUpdate->getExistingCategories();
-		$categoryDeletes = $linksUpdate->getCategoryDeletions( $existing );
-		$categoryInserts = array_diff_assoc( $linksUpdate->mCategories, $existing );
-		if (count($categoryInserts) > 0 || count($categoryDeletes) > 0)
+		if ($this->categoryManagerHelper->isCategoriesCountChanged($linksUpdate))
 		{
 			$this->session->setReinitializeCategoryList();
 		}
@@ -177,6 +176,7 @@ class CategoryManager
 			$this->initializeCategoryList();
 		}
 	}
+		
 
 	private function getPredefinedCategories()
 	{
@@ -249,6 +249,7 @@ class CategoryManager
 		}
 		return $modifiedCategoryList;
 	}
+	
 }
 
 ## :: END ::
