@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="PageAttachment-Common" basedir=".">
+	<!-- 
+	/**
+	 *
+ 	 * Copyright (C) 2011 Aldrin Edison Baroi
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the GNU General Public License as published by
+     * the Free Software Foundation; either version 3 of the License, or
+     * (at your option) any later version.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     * GNU General Public License for more details.
+     *
+     * You should have received a copy of the GNU General Public License along
+     * with this program; if not, write to the 
+     *     Free Software Foundation, Inc.,
+     *     51 Franklin Street, Fifth Floor
+     *     Boston, MA 02110-1301, USA.
+     *     http://www.gnu.org/copyleft/gpl.html
+	 *
+	 */
+	-->
+	<property file="build.properties" />
+	<target name="createVersionFile">
+		<condition property="pageAttachment_version" value="${extension.version.alpha-release}">
+			<and>
+				<isset property="extension.version.alpha" />
+				<not>
+					<equals arg1="${extension.version.alpha}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="pageAttachment_version" value="${extension.version.beta-release}">
+			<and>
+				<isset property="extension.version.beta" />
+				<not>
+					<equals arg1="${extension.version.beta}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="pageAttachment_version" value="${extension.version.normal-release}">
+			<not>
+				<isset property="pageAttachment_version" />
+			</not>
+		</condition>
+		<antcall target="generateVersionFile">
+			<param name="pageAttachment_version" value="${pageAttachment_version}" />
+		</antcall>
+	</target>
+	<target name="createVersionFile_php52">
+		<condition property="pageAttachment_version" value="${php52.extension.version.alpha-release}">
+			<and>
+				<isset property="php52.extension.version.alpha" />
+				<not>
+					<equals arg1="${php52.extension.version.alpha}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="pageAttachment_version" value="${extension.version.beta-release}">
+			<and>
+				<isset property="php52.extension.version.beta" />
+				<not>
+					<equals arg1="${php52.extension.version.beta}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="pageAttachment_version" value="${php52.extension.version.normal-release}">
+			<not>
+				<isset property="pageAttachment_version" />
+			</not>
+		</condition>
+		<antcall target="generateVersionFile">
+			<param name="pageAttachment_version" value="${pageAttachment_version}" />
+		</antcall>
+	</target>
+	<target name="generateVersionFile">
+		<echo file="${source.main.dir}/Version.php">&lt;?php
+/**
+ *
+ * Note: This file is auto-generated for each &amp; every release.
+ *
+ */
+if (!defined('MEDIAWIKI'))
+{
+	echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
+	exit( 1 );
+}
+
+$wgPageAttachment_version = "${pageAttachment_version}";
+
+## ::END:: 
+
+		</echo>
+	</target>
+</project>

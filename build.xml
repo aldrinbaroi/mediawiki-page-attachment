@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE project>
+<project name="PageAttachment" basedir=".">
+	<!-- 
+	/**
+	 *
+ 	 * Copyright (C) 2011 Aldrin Edison Baroi
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the GNU General Public License as published by
+     * the Free Software Foundation; either version 3 of the License, or
+     * (at your option) any later version.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+     * GNU General Public License for more details.
+     *
+     * You should have received a copy of the GNU General Public License along
+     * with this program; if not, write to the 
+     *     Free Software Foundation, Inc.,
+     *     51 Franklin Street, Fifth Floor
+     *     Boston, MA 02110-1301, USA.
+     *     http://www.gnu.org/copyleft/gpl.html
+	 *
+	 */
+	-->
+	<property file="build.properties" />
+	<import file="build-common.xml" as="common"/>
+	<target name="showProjectSettings">
+		<echo>extension.name        = ${extension.name}</echo>
+		<echo>mediawiki.install.dir = ${mediawiki.install.dir}</echo>
+		<echo>source.main.dir       = ${source.main.dir}</echo>
+		<echo>source.test.dir       = ${source.test.dir}</echo>
+		<echo>resources.main.dir    = ${resources.main.dir}</echo>
+		<echo>resources.test.dir    = ${resources.test.dir}</echo>
+		<echo>distribution.dir      = ${distribution.dir}</echo>
+		<echo>deploy.dir            = ${deploy.dir}</echo>
+	</target>
+	<target name="distribute" depends="common.createVersionFile" description="Generate Distribution ZIP file">
+		<condition property="distribution.zipfile" value="${distribution.zipfile.alpha-release}">
+			<and>
+				<isset property="extension.version.alpha" />
+				<not>
+					<equals arg1="${extension.version.alpha}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="distribution.zipfile" value="${distribution.zipfile.beta-release}">
+			<and>
+				<isset property="extension.version.beta" />
+				<not>
+					<equals arg1="${extension.version.beta}" arg2="" trim="true" />
+				</not>
+			</and>
+		</condition>
+		<condition property="distribution.zipfile" value="${distribution.zipfile.normal-release}">
+			<not>
+				<isset property="distribution.zipfile" />
+			</not>
+		</condition>
+		<delete file="${distribution.zipfile}" />
+		<zip destfile="${distribution.zipfile}">
+			<zipfileset dir="${source.main.dir}" prefix="${extension.name}" />
+			<zipfileset dir="${resources.main.dir}" prefix="${extension.name}" />
+		</zip>
+	</target>
+	<target name="cleanDeployDir" depends="showProjectSettings">
+		<delete dir="${deploy.dir}" />
+	</target>
+	<target name="deploy" depends="cleanDeployDir,common.createVersionFile" description="Deploy to local MediaWiki installation">
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${source.main.dir}">
+				<include name="**/*.php" />
+			</fileset>
+		</copy>
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${resources.main.dir}" />
+		</copy>
+	</target>
+	<target name="deployTest" depends="deploy" description="Deploy to local MediaWiki installation">
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${source.test.dir}">
+				<include name="**/*.php" />
+			</fileset>
+		</copy>
+		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
+			<fileset dir="${resources.test.dir}" />
+		</copy>
+	</target>
+</project>
