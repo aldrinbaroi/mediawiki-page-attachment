@@ -251,7 +251,7 @@ class RequestHandler
 	function onArticleDelete(&$article, &$user, &$reason, &$error)
 	{
 		$title  = $article->getTitle();
-		$page = new \PageAttachment\Session\Page($title);
+		$page = $this->pageFactory->createPage($title);
 		if ($page->getNameSpace() == NS_FILE)
 		{
 			$this->session->storeDeletedFileInfo($page);
@@ -282,7 +282,7 @@ class RequestHandler
 
 	function onFileUndeleteComplete($file, $fileVersions, $user, $reason)
 	{
-		$page = new \PageAttachment\Session\Page($file);
+		$page = $this->pageFactory->createPage($file);
 		$this->attachmentManager->restoreDeletedAttachment($page, $user);
 		return true;
 	}
