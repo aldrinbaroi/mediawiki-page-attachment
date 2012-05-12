@@ -37,7 +37,7 @@
 		<echo>distribution.dir      = ${distribution.dir}</echo>
 		<echo>deploy.dir            = ${deploy.dir}</echo>
 	</target>
-	<target name="distribute" depends="common.createVersionFile">
+	<target name="distribute" depends="common.createVersionFile" description="Generate Distribution ZIP file">
 		<condition property="distribution.zipfile" value="${distribution.zipfile.beta-release}" else="${distribution.zipfile.normal-release}">
 			<isset property="extension.version.beta" />
 		</condition>
@@ -50,7 +50,7 @@
 	<target name="cleanDeployDir" depends="showProjectSettings">
 		<delete dir="${deploy.dir}" />
 	</target>
-	<target name="deploy" depends="cleanDeployDir,common.createVersionFile">
+	<target name="deploy" depends="cleanDeployDir,common.createVersionFile" description="Deploy to local MediaWiki installation">
 		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
 			<fileset dir="${source.main.dir}">
 				<include name="**/*.php" />
@@ -60,7 +60,7 @@
 			<fileset dir="${resources.main.dir}" />
 		</copy>
 	</target>
-	<target name="deployTest" depends="deploy">
+	<target name="deployTest" depends="deploy" description="Deploy to local MediaWiki installation">
 		<copy todir="${deploy.dir}" preservelastmodified="true" failonerror="true" overwrite="true">
 			<fileset dir="${source.test.dir}">
 				<include name="**/*.php" />
