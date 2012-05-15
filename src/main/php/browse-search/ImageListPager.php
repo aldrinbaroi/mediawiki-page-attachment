@@ -44,12 +44,12 @@ class ImageListPager extends \ImageListPager
 	
 	const ADD_ATTACHMENT = 'AddAttachment';
 
-	function __construct()
+	function __construct(\IContextSource $context, $userName = null, $search = '', $including = false)
 	{
 		global $wgScriptPath;
 		global $wgPageAttachment_imgAddUpdateAttachment;
 
-		parent::__construct();
+		parent::__construct($context, $userName, $search, $including);
 		$cacheManager = new \PageAttachment\Cache\CacheManager();
 		$pageFactory = new \PageAttachment\Session\PageFactory($cacheManager);
 		$this->security = new \PageAttachment\Security\SecurityManager();
