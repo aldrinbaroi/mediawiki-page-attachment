@@ -133,7 +133,8 @@ class WebBrowser
 				if (!($this->requestHelper->isEditMode()
 				|| $this->requestHelper->isPreviewMode()
 				|| $this->requestHelper->isViewHistoryMode()
-				|| $this->requestHelper->isViewChangesMode()))
+				|| $this->requestHelper->isViewChangesMode()
+				|| $this->requestHelper->isUpdatePageProtectionSettingsMode()))
 				{
 					if ($this->security->isViewAttachmentsAllowed($protectedPage))
 					{
