@@ -32,10 +32,11 @@ if (!defined('MEDIAWIKI'))
 
 class RequestHelper
 {
-	const PREVIEW_MODE      = 'PREVIEW MODE';
-	const EDIT_MODE         = 'EDIT MODE';
-	const VIEW_HISTORY_MODE = 'VIEW HISTORY MODE';
-	const VIEW_CHANGES_MODE = 'VIEW CHANGES MODE';
+	const PREVIEW_MODE                         = 'PREVIEW MODE';
+	const EDIT_MODE                            = 'EDIT MODE';
+	const VIEW_HISTORY_MODE                    = 'VIEW HISTORY MODE';
+	const VIEW_CHANGES_MODE                    = 'VIEW CHANGES MODE';
+	const UPDATE_PAGE_PROTECTION_SETTINGS_MODE = 'UPDATE PAGE PROTECTION SETTINGS MODE';
 
 	function __construct()
 	{
@@ -73,7 +74,16 @@ class RequestHelper
 		{
 			$this->setViewHistoryMode(false);
 		}
-		
+
+		if ($action == 'protect')
+		{
+			$this->setUpdatePageProtectionSettingsMode(true);
+		}
+		else
+		{
+			$this->setUpdatePageProtectionSettingsMode(false);
+		}
+
 		if (isset($editpage) && is_bool($editpage->diff) && ($editpage->diff == true))
 		{
 			$this->setViewChangesMode(true);
@@ -173,6 +183,30 @@ class RequestHelper
 		if (isset($_REQUEST[self::VIEW_HISTORY_MODE]))
 		{
 			return $_REQUEST[self::VIEW_HISTORY_MODE];
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function setUpdatePageProtectionSettingsMode($trueFalse)
+	{
+		if (is_bool($trueFalse))
+		{
+			$_REQUEST[self::UPDATE_PAGE_PROTECTION_SETTINGS_MODE] = $trueFalse;
+		}
+		else
+		{
+			$_REQUEST[self::UPDATE_PAGE_PROTECTION_SETTINGS_MODE] = false;
+		}
+	}
+
+	function isUpdatePageProtectionSettingsMode()
+	{
+		if (isset($_REQUEST[self::UPDATE_PAGE_PROTECTION_SETTINGS_MODE]))
+		{
+			return $_REQUEST[self::UPDATE_PAGE_PROTECTION_SETTINGS_MODE];
 		}
 		else
 		{
