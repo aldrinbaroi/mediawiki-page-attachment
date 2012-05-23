@@ -251,7 +251,7 @@ class AttachmentManager
 
 		$abort = false;
 		$page = $this->session->getCurrentPage();
-		$attachedToPage = $page->getRedirectURL();
+		$attachedToPage = $page->getPageTitle(); 
 		$protectedPage = $page->isProtected();
 		if (!$this->security->isRequestValidationTokenValid2($rvt))
 		{
