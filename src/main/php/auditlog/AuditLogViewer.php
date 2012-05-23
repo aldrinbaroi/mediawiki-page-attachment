@@ -43,8 +43,10 @@ class AuditLogViewer extends \SpecialPage
 		global $wgOut;
 		global $wgRequest;
 
+		$cacheManager = new \PageAttachment\Cache\CacheManager();
+		$pageFactory = new \PageAttachment\Session\PageFactory($cacheManager);
 		$security = new \PageAttachment\Security\SecurityManager();
-		$session = new \PageAttachment\Session\Session($security);
+		$session = new \PageAttachment\Session\Session($security, $pageFactory);
 		$attachToPage = $session->getAttachToPage();
 		if (isset($attachToPage) && $attachToPage->getId() > 0)
 		{
