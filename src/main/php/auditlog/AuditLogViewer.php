@@ -53,7 +53,7 @@ class AuditLogViewer extends \SpecialPage
 			$protectedPage = $attachToPage->isProtected();
 			if (!$security->isAuditLogViewAllowed($protectedPage))
 			{
-				if ($security->isAuditLogViewRequireLogin() && !$security->isLoggedIn())
+				if ($security->isAuditLogViewRequireLogin($protectedPage) && !$security->isLoggedIn())
 				{
 					$session->setStatusMessage('YouMustBeLoggedInToViewAuditLog');
 				}
