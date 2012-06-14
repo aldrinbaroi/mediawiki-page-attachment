@@ -50,7 +50,8 @@ class DownloadManager
 			
 		$downloadFromPage = $this->session->getCurrentPage();
 		$downloadFileName = $wgRequest->getVal('downloadFileName');
-		$attachmentDownloadAllowed = $this->security->isAttachmentDownloadAllowed();
+		$protectedPage = $downloadFromPage->isProtected();
+		$attachmentDownloadAllowed = $this->security->isAttachmentDownloadAllowed($protectedPage);
 		$requestValidationTokenValid = $this->security->isRequestValidationTokenValid();
 		$validAttachment = $this->attachmentManager->isAttachmentExist($downloadFileName);
 		if ($attachmentDownloadAllowed && $requestValidationTokenValid && isset($downloadFromPage) && $validAttachment)
