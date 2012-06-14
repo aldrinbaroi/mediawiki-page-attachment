@@ -132,7 +132,7 @@ class RequestHandler
 		return true;
 	}
 
-	function onArticleSaveComplete(&$article, &$user, $text, $summary, $minoredit, $watchthis, $sectionanchor, &$flags, $revision, &$status, $baseRevId, &$redirect)
+	function onArticleSaveComplete(&$article, &$user, $text, $summary, $minoredit, $watchthis, $sectionanchor, &$flags, $revision, &$status, $baseRevId)
 	{
 		$title = $article->getTitle();
 		if ($title->getNamespace() == NS_FILE)
