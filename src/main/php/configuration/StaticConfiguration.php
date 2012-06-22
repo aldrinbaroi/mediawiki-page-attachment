@@ -36,7 +36,7 @@ class StaticConfiguration
 {
 	private static $INSTANCE;
 	private $allowAttachmentsUsingMagicWord;
-	private $disllowAttachmentsUsingMagicWord;
+	private $disallowAttachmentsUsingMagicWord;
 
 
 	private function __construct()
@@ -70,22 +70,22 @@ class StaticConfiguration
 		return $allowAttachmentsUsingMagicWord;
 	}
 	
-	function isDisllowAttachmentsUsingMagicWord()
+	function isDisallowAttachmentsUsingMagicWord()
 	{
-		if (!isset($disllowAttachmentsUsingMagicWord))
+		if (!isset($disallowAttachmentsUsingMagicWord))
 		{
 			global $wgPageAttachment_disllowAttachmentsUsingMagicWord;
 	
 			if (isset($wgPageAttachment_disllowAttachmentsUsingMagicWord) && is_bool($wgPageAttachment_disllowAttachmentsUsingMagicWord))
 			{
-				$disllowAttachmentsUsingMagicWord =  $wgPageAttachment_disllowAttachmentsUsingMagicWord;
+				$disallowAttachmentsUsingMagicWord =  $wgPageAttachment_disllowAttachmentsUsingMagicWord;
 			}
 			else
 			{
-				$disllowAttachmentsUsingMagicWord =  false;
+				$disallowAttachmentsUsingMagicWord =  false;
 			}
 		}
-		return $disllowAttachmentsUsingMagicWord;
+		return $disallowAttachmentsUsingMagicWord;
 	}
 	
 }
