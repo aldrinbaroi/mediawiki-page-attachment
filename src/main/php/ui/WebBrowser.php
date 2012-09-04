@@ -76,7 +76,7 @@ class WebBrowser
 		if ($this->isSetupAttachmentListSection($page))
 		{
 			$pageTitle = $page->getPageTitle();
-			if ($this->staticConfig->isDisllowAttachmentsUsingMagicWord())
+			if ($this->staticConfig->isDisallowAttachmentsUsingMagicWord())
 			{
 				$script = \HTML::inlineScript('  function pageAttachment_isLoadPageAttachments() { return ((typeof pageAttachment__ALLOW_ATTACHMENTS__ == "boolean") ? pageAttachment__ALLOW_ATTACHMENTS__ : true); } ');
 			}
