@@ -42,7 +42,7 @@ class CategoryManagerHelper
 	{
 		$categoriesCountChanged = false;
 		$existing = $this->getExistingCategories($linksUpdate);
-		$categoryDeletes = $this->getCategoryDeletions(&$linksUpdate, $existing );
+		$categoryDeletes = $this->getCategoryDeletions($linksUpdate, $existing );
 		$categoryInserts = array_diff_assoc( $linksUpdate->mCategories, $existing );
 		if (count($categoryInserts) > 0 || count($categoryDeletes) > 0)
 		{
