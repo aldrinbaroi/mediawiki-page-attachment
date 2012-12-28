@@ -10,6 +10,12 @@ and NOT compatible with
 
 	PHP 5.2
 
+
+Please log issue/bug report at the following link:
+
+  http://code.google.com/p/mediawiki-page-attachment/issues/list
+
+
 This release contains the following fixes/enhancements:
 
 Issue# 39 - Fatal error: Call to private method LinksUpdate::getExistingCategories() from context 
