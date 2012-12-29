@@ -1,24 +1,36 @@
 MediaWiki PageAttachment Extension Release Note
 ===============================================
 
-This is a BETA release compatible with
+This release is compatible with
 
-	 MediaWiki 1.18
+	 MediaWiki 1.19
 	 PHP 5.3
 	 
 and NOT compatible with 
 
 	PHP 5.2
 
+
+Please log issue/bug report at the following link:
+
+  http://code.google.com/p/mediawiki-page-attachment/issues/list
+
+
 This release contains the following fixes/enhancements:
 
-Issue# 26 - For Right-to-Left languages, correctly trim the description text 
-Issue# 37 - Add Watch Capability 
-Issue# 38 - When Permanent Attachment Removal is Enabled, Do Not Store Deleted File Info 
-Issue# 42 - Protected pages not taken into consideration when viewing/using attachment facility 
-Issue# 43 - Javascript Should Not Try to Load Attachment List When in Edit/Preview etc. Mode 
-Issue# 44 - Replace Deprecated "sajax_do_call" Ajax function with new jQuery function 
-Issue# 45 - Internaltionalization/Localization Not Working for Notification Message 
+Issue# 39 - Fatal error: Call to private method LinksUpdate::getExistingCategories() from context 
+            'PageAttachment\Category\CategoryManager'
+Issue# 40 - Page Attachments List Section Does Not Load    
+Issue# 41 - Catchable fatal error: Argument 1 passed to ImageListPager::__construct() must implement
+            interface IContextSource...        
+Issue# 47 - Get "No such action" error page            
+Issue# 50 - Ability to remove the attachment box on pages? __NoAttachment__ for example?
+Issue# 52 - Specify default pages to have attachments using category names 
+Issue# 53 - Specify exclusion pages through configuration settings 
+Issue# 54 - Allow attachments to a page through the use of "__ATTACHMENT__" token
+Issue# 55 - Exclude attachments to a page through the use of "__NOATTACHMENT__" token
+Issue# 57 - Removing attached files (utf8 pages)
+Issue# 62 - Attaching files works but downloading attachments come accross as 0 bytes.
 
 
 
