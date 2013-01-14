@@ -33,6 +33,7 @@ if (!defined('MEDIAWIKI'))
 class RuntimeConfiguration
 {
 	private $showUserRealName;
+	private $skin;
 	private $skinName;
 	private $rightToLeftLang;
 	private $scriptPath;
@@ -61,15 +62,22 @@ class RuntimeConfiguration
 		}
 		return $this->showUserRealName;
 	}
+	
+	function getSkin()
+	{
+		if (!isset($this->skin))
+		{
+			$this->skin =  \RequestContext::getMain()->getSkin();
+			$this->skinName = $this->skin->getSkinName();
+		}
+		return $this->skin;
+	}
 
 	function getSkinName()
 	{
 		if (!isset($this->skinName))
 		{
-			global $wgUser;
-
-			$sk = $wgUser->getSkin();
-			$this->skinName = $sk->getSkinName();
+			$this->skinName = $this->getSkin()->getSkinName();
 		}
 		return $this->skinName;
 	}
