@@ -260,11 +260,10 @@ class WebBrowser
 		$attachmentRows = array();
 		if ($this->security->isViewAttachmentsAllowed($protectedPage))
 		{
-			global $wgUser;
 			global $wgPageAttachment_colToDisplay;
 
 			$pageAttachmentDataFactory = new \PageAttachment\Attachment\AttachmentDataFactory($this->security);
-			$sk = $wgUser->getSkin();
+			$sk = $this->runtimeConfig->getSkin();
 			$aIds = $this->attachmentManager->getAttachmentIds($pageId);
 			$aCount = 0;
 			foreach($aIds as $aId)
