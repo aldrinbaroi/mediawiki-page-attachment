@@ -26,7 +26,7 @@
 	 */
 	-->
 	<property file="build.properties" />
-	<import file="build-common.xml" as="common"/>
+	<import file="build-common.xml" as="common" />
 	<target name="showProjectSettings">
 		<echo>extension.name        = ${extension.name}</echo>
 		<echo>mediawiki.install.dir = ${mediawiki.install.dir}</echo>
@@ -377,6 +377,12 @@
 			<param name="match" value=" _ImageListPager" />
 			<param name="replacement" value=" ImageListPager" />
 		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="browse-search" />
+			<param name="fileName" value="ImageListPager" />
+			<param name="match" value="\(_IContextSource" />
+			<param name="replacement" value="\(IContextSource" />
+		</antcall>
 		<!-- 
 			Directory: cache 
 		-->
@@ -476,6 +482,12 @@
 			<param name="match" value="^\$wgPageAttachment_dateFormat(.*)" />
 			<param name="replacement" value="// NOT SUPPORTED IN PHP 5.2 -- $wgPageAttachment_dateFormat\1" />
 		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="configuration" />
+			<param name="fileName" value="RuntimeConfiguration" />
+			<param name="match" value=" _RequestContext" />
+			<param name="replacement" value=" RequestContext" />
+		</antcall>
 		<antcall target="expandClassName">
 			<param name="directoryName" value="configuration" />
 			<param name="fileName" value="StaticConfiguration" />
@@ -540,7 +552,7 @@
 		</antcall>
 		<!-- 
 			Directory: localization 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="localization" />
 			<param name="namespace" value="PageAttachment_Localization" />
@@ -582,7 +594,7 @@
 		</copy>
 		<!-- 
 			Directory: notification 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="notification" />
 			<param name="namespace" value="PageAttachment_Notification" />
@@ -595,7 +607,7 @@
 		</antcall>
 		<!-- 
 			Directory: notification/email 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="notification/email" />
 			<param name="namespace" value="PageAttachment_Notification_Email" />
@@ -618,6 +630,12 @@
 		<antcall target="transformFiles">
 			<param name="directoryName" value="request" />
 			<param name="namespace" value="PageAttachment_Request" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="request" />
+			<param name="fileName" value="AttachFileAction" />
+			<param name="match" value=" _ViewAction" />
+			<param name="replacement" value=" ViewAction" />
 		</antcall>
 		<!-- 
 			Directory: security 
@@ -689,7 +707,7 @@
 		</antcall>
 		<!-- 
 			Directory: template 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="template" />
 			<param name="namespace" value="PageAttachment_Template" />
@@ -826,7 +844,7 @@
 		</antcall>
 		<!-- 
 			Directory: watcheditem 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="watcheditem" />
 			<param name="namespace" value="PageAttachment_WatchedItem" />
