@@ -175,6 +175,11 @@ class AuditLogPager extends \TablePager
 		$form .= \Xml::closeElement( 'form' ) . "\n";
 		return $form;
 	}
+	
+	function getTitle()
+	{
+		return \SpecialPage::getTitleFor( 'PageAttachmentAuditLogViewer' );
+	}
 
 }
 

@@ -383,6 +383,12 @@
 			<param name="match" value="\(_IContextSource" />
 			<param name="replacement" value="\(IContextSource" />
 		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="browse-search" />
+			<param name="fileName" value="ImageListPager" />
+			<param name="match" value=" _SpecialPage" />
+			<param name="replacement" value=" SpecialPage" />
+		</antcall>
 		<!-- 
 			Directory: cache 
 		-->
