@@ -64,14 +64,12 @@ class ListFiles extends \SpecialPage
 				$wgOut->redirect($attachToPage->getRedirectURL());
 			}
 			else
-			{
-				global $wgUser;
-				
+			{	
 				$context = $this->getContext();
-				$userName = $wgUser->getName();
-				
+				$userName = $this->getRequest()->getText( 'user', $par );
+				$search = $this->getRequest()->getText( 'ilsearch', '' );
 				$this->setHeaders();
-				$pager = new ImageListPager($context, $userName);
+				$pager = new ImageListPager($context, $userName, $search);
 				$limit = $pager->getForm();
 				$body = $pager->getBody();
 				$nav = $pager->getNavigationBar();
