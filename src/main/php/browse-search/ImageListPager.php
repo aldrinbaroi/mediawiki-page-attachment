@@ -96,6 +96,12 @@ class ImageListPager extends \ImageListPager
 		}
 		return $queryInfo;
 	}
+	
+	function getTitle()
+	{
+		return \SpecialPage::getTitleFor( 'PageAttachmentListFiles' );
+	}
+	
 }
 
 ## :: END ::

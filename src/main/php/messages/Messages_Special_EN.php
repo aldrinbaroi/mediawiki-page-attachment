@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright (C) 2011 Aldrin Edison Baroi
+ * Copyright (C) 2012 Aldrin Edison Baroi
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,20 +28,11 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-$messagesDirectory = dirname(__FILE__) . '/';
-$messages = array();
-$specialPageAliases = array();
-$fileNamePattern = "/.*Messages_.*php$/";
-if ($directory = opendir($messagesDirectory))
-{
-	while (false !== ($fileName = readdir($directory)))
-	{
-		if (preg_match($fileNamePattern, $fileName))
-		{
-			include($fileName);
-		}
-	}
-	closedir($directory);
-}
+$specialPageAliases[ 'en' ] = array(
+	'PageAttachmentListFiles'      => array( 'PageAttachmentListFiles',      'Browse/Search & Attach File' ),
+	'PageAttachmentUpload'         => array( 'PageAttachmentUpload',         'Upload & Attach File' ),
+	'PageAttachmentAuditLogViewer' => array( 'PageAttachmentAuditLogViewer', 'Page Attachment Audit Log Viewer' ),
+);
 
-## ::END::
+
+##::End::
