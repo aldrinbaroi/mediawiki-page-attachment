@@ -215,8 +215,13 @@ class AttachmentManager
 		{
 			try
 			{
+				$attachmentTitle = \Title::newFromText($attachmentName);
+				$attachmentDatabaseKey = $attachmentTitle->getDBkey();
+				$attachmentArticle = \MediaWiki::articleFromTitle($attachmentTitle);
+				$attachmentArticle->doPurge();
 				$dbw = \wfGetDB( DB_MASTER );
 				$dbw->insert('page_attachment_data', array(0 => array('attached_to_page_id' => $attachToPageId, 'attachment_page_id' => $attachmentId)));
+				$dbw->insert('imagelinks', array(0 =>array('il_from' => $attachToPageId, 'il_to' => $attachmentDatabaseKey)));
 				$this->session->setStatusMessage('AttachmentAdded', $attachmentName);
 				if ($auditLogEnabled || $notificationEnabled)
 				{
@@ -276,9 +281,11 @@ class AttachmentManager
 			$title = \Title::newFromText($attachedToPage);
 			$attachedToPageId = $title->getArticleID();
 			$attachedToPageNS = $title->getNamespace();
-			$title2 = \Title::newFromText($attachmentName, NS_FILE);
-			$attachmentId = $title2->getArticleID();
-			$attachmentNS = $title2->getNamespace();
+			$attachmentTitle = \Title::newFromText($attachmentName, NS_FILE);
+			$attachmentId = $attachmentTitle->getArticleID();
+			$attachmentNS = $attachmentTitle->getNamespace();
+			$attachmentDatabaseKey = $attachmentTitle->getDBkey();
+			$attachmentArticle = \MediaWiki::articleFromTitle($attachmentTitle);
 			if ($attachedToPageId == 0 || $attachmentId == 0)
 			{
 				$this->session->setStatusMessage('FailedToValidateAttachmentRemovalRequest');
@@ -290,15 +297,17 @@ class AttachmentManager
 			$auditLogEnabled = $this->auditLogManager->isAuditLogEnabled();
 			$notificationEnabled = $this->notificationManager->isNotificationEnabled();
 			$activityTime = time();
-			$fileName = $title2->getText();
+			$fileName = $attachmentTitle->getText();
 			$dbr = \wfGetDB( DB_SLAVE );
 			$rs = $dbr->select('page_attachment_data', '*','attached_to_page_id = ' . $attachedToPageId . ' and attachment_page_id = ' . $attachmentId );
 			if ($row = $dbr->fetchRow($rs))
 			{
 				try
 				{
+					$attachmentArticle->doPurge();
 					$dbw = \wfGetDB( DB_MASTER );
 					$dbw->delete('page_attachment_data', array('attached_to_page_id' => $attachedToPageId, 'attachment_page_id' => $attachmentId));
+					$dbw->delete('imagelinks', array('il_from' => $attachedToPageId, 'il_to' => $attachmentDatabaseKey));
 					$this->session->setStatusMessage('AttachmentRemoved', $fileName);
 					if ($removePermanently == true)
 					{
