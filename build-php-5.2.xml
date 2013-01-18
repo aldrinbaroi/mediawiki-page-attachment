@@ -297,6 +297,18 @@
 			<param name="match" value=" _Article" />
 			<param name="replacement" value=" Article" />
 		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="attachment" />
+			<param name="fileName" value="AttachmentManager" />
+			<param name="match" value=" _MediaWiki" />
+			<param name="replacement" value=" MediaWiki" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="attachment" />
+			<param name="fileName" value="AttachmentManager" />
+			<param name="match" value=" _RequestContext" />
+			<param name="replacement" value=" RequestContext" />
+		</antcall>
 		<!-- 
 			Directory: auditlog 
 		-->
