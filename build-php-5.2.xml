@@ -278,6 +278,18 @@
 			<param name="match" value=" _Article" />
 			<param name="replacement" value=" Article" />
 		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="attachment" />
+			<param name="fileName" value="AttachmentManager" />
+			<param name="match" value=" _MediaWiki" />
+			<param name="replacement" value=" MediaWiki" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="attachment" />
+			<param name="fileName" value="AttachmentManager" />
+			<param name="match" value=" _RequestContext" />
+			<param name="replacement" value=" RequestContext" />
+		</antcall>
 		<!-- 
 			Directory: auditlog 
 		-->
@@ -515,7 +527,7 @@
 		</antcall>
 		<!-- 
 			Directory: localization 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="localization" />
 			<param name="namespace" value="PageAttachment_Localization" />
@@ -557,7 +569,7 @@
 		</copy>
 		<!-- 
 			Directory: notification 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="notification" />
 			<param name="namespace" value="PageAttachment_Notification" />
@@ -570,7 +582,7 @@
 		</antcall>
 		<!-- 
 			Directory: notification/email 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="notification/email" />
 			<param name="namespace" value="PageAttachment_Notification_Email" />
@@ -664,7 +676,7 @@
 		</antcall>
 		<!-- 
 			Directory: template 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="template" />
 			<param name="namespace" value="PageAttachment_Template" />
@@ -801,7 +813,7 @@
 		</antcall>
 		<!-- 
 			Directory: watcheditem 
-		-->		
+		-->
 		<antcall target="transformFiles">
 			<param name="directoryName" value="watcheditem" />
 			<param name="namespace" value="PageAttachment_WatchedItem" />
