@@ -22,14 +22,14 @@
  *
  */
 
-namespace PageAttachment\FileLink;
+namespace PageAttachment\Maintenance;
 
 $mediaWikiBaseDir = dirname( __FILE__ ) . '/../../..';
 $preIP = $mediaWikiBaseDir; 
 
 require_once("$preIP/maintenance/Maintenance.php");
 
-$maintClass = "\PageAttachment\FileLink\AddMissingFileLinks";
+$maintClass = "\PageAttachment\Maintenance\AddMissingFileLinks";
 
 class AddMissingFileLinks extends \Maintenance
 {
