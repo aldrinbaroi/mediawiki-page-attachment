@@ -527,6 +527,31 @@
 			<param name="replacement" value="= new DateTime" />
 		</antcall>
 		<!-- 
+			Directory: maintenance 
+		-->
+		<antcall target="transformFiles">
+			<param name="directoryName" value="maintenance" />
+			<param name="namespace" value="PageAttachment_Maintenance" />
+		</antcall>	
+		<antcall target="replaceText">
+			<param name="directoryName" value="maintenance" />
+			<param name="fileName" value="AddMissingFileLinks" />
+			<param name="match" value=" _Maintenance" />
+			<param name="replacement" value=" Maintenance" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="maintenance" />
+			<param name="fileName" value="AddMissingFileLinks" />
+			<param name="match" value=" _MediaWiki" />
+			<param name="replacement" value=" MediaWiki" />
+		</antcall>
+		<antcall target="replaceText">
+			<param name="directoryName" value="maintenance" />
+			<param name="fileName" value="AddMissingFileLinks" />
+			<param name="match" value="_n" />
+			<param name="replacement" value="\\\\n" />
+		</antcall>
+		<!-- 
 			Directory: messages 
 			
 			This directory does not require any namespace related transformation.
