@@ -1,23 +1,14 @@
 MediaWiki PageAttachment Extension Release Note
 ===============================================
 
-This is a BETA release compatible with
+This is release compatible with
 
 	 MediaWiki 1.16 & 1.17
 	 PHP 5.2
-	 
-and NOT compatible with 
-
-	PHP 5.3
 
 This release contains following fixes/enhancements:
 
-Issue# 26 - For Right-to-Left languages, correctly trim the description text 
-Issue# 37 - Add Watch Capability 
-Issue# 38 - When Permanent Attachment Removal is Enabled, Do Not Store Deleted File Info 
-Issue# 42 - Protected pages not taken into consideration when viewing/using attachment facility 
-Issue# 43 - Javascript Should Not Try to Load Attachment List When in Edit/Preview etc. Mode 
-Issue# 45 - Internaltionalization/Localization Not Working for Notification Message 
+Issue# 65 - PageAttachment not setting filelinks (backlinks) 
 
 
 
