@@ -3,12 +3,8 @@ MediaWiki PageAttachment Extension Release Note
 
 This release is compatible with
 
-	 MediaWiki 1.19
-	 PHP 5.2
-	 
-and NOT compatible with 
-
-	PHP 5.3
+	 MediaWiki 1.19 and 1.20
+	 PHP 5.2.3
 
 
 Please log issue/bug report at the following link:
@@ -18,19 +14,14 @@ Please log issue/bug report at the following link:
 
 This release contains the following fixes/enhancements:
 
-Issue# 39 - Fatal error: Call to private method LinksUpdate::getExistingCategories() from context 
-            'PageAttachment\Category\CategoryManager'
-Issue# 40 - Page Attachments List Section Does Not Load    
-Issue# 41 - Catchable fatal error: Argument 1 passed to ImageListPager::__construct() must implement
-            interface IContextSource...        
-Issue# 47 - Get "No such action" error page            
-Issue# 50 - Ability to remove the attachment box on pages? __NoAttachment__ for example?
-Issue# 52 - Specify default pages to have attachments using category names 
-Issue# 53 - Specify exclusion pages through configuration settings 
-Issue# 54 - Allow attachments to a page through the use of "__ATTACHMENT__" token
-Issue# 55 - Exclude attachments to a page through the use of "__NOATTACHMENT__" token
-Issue# 57 - Removing attached files (utf8 pages)
-Issue# 62 - Attaching files works but downloading attachments come accross as 0 bytes.
+Issue# 65 - PageAttachment not setting filelinks (backlinks) 
+Issue# 67 - Browse/Search & Attach Files function returns error message...
+              Part 1) Fixed - _IContextSource issue
+                                 - impacted PHP 5.2.3 only (MediaWiki 1.19 & 1.20)
+              Part 2) Fixed - Attachment option disappears on browsing beyond first page or, executing search function
+                                 - impacted PHP 5.3 & 5.4 (MediaWiki 1.20 Only)
+              Part 3) Fixed - Search not working
+                                 
 
 
 
