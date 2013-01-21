@@ -18,13 +18,7 @@ Please log issue/bug report at the following link:
 
 This release contains the following fixes/enhancements:
 
-Issue# 50 - Ability to remove the attachment box on pages? __NoAttachment__ for example?
-Issue# 52 - Specify default pages to have attachments using category names 
-Issue# 53 - Specify exclusion pages through configuration settings 
-Issue# 54 - Allow attachments to a page through the use of "__ATTACHMENT__" token
-Issue# 55 - Exclude attachments to a page through the use of "__NOATTACHMENT__" token
-Issue# 57 - Removing attached files (utf8 pages)
-Issue# 62 - Attaching files works but downloading attachments come accross as 0 bytes.
+Issue# 65 - PageAttachment not setting filelinks (backlinks) 
 
 
 
