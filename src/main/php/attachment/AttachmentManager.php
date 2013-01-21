@@ -217,8 +217,8 @@ class AttachmentManager
 			{
 				$attachmentTitle = \Title::newFromText($attachmentName);
 				$attachmentDatabaseKey = $attachmentTitle->getDBkey();
-				$attachmentArticle = \MediaWiki::articleFromTitle($attachmentTitle, \RequestContext::getMain());
-				$attachmentArticle->doPurge();
+				$attachmentWikiPage = \WikiPage::factory($attachmentTitle);
+				$attachmentWikiPage->doPurge();
 				$dbw = \wfGetDB( DB_MASTER );
 				$dbw->insert('page_attachment_data', array(0 => array('attached_to_page_id' => $attachToPageId, 'attachment_page_id' => $attachmentId)));
 				$dbw->insert('imagelinks', array(0 =>array('il_from' => $attachToPageId, 'il_to' => $attachmentDatabaseKey)));
@@ -285,7 +285,6 @@ class AttachmentManager
 			$attachmentId = $attachmentTitle->getArticleID();
 			$attachmentNS = $attachmentTitle->getNamespace();
 			$attachmentDatabaseKey = $attachmentTitle->getDBkey();
-			$attachmentArticle = \MediaWiki::articleFromTitle($attachmentTitle, \RequestContext::getMain());
 			if ($attachedToPageId == 0 || $attachmentId == 0)
 			{
 				$this->session->setStatusMessage('FailedToValidateAttachmentRemovalRequest');
@@ -304,7 +303,8 @@ class AttachmentManager
 			{
 				try
 				{
-					$attachmentArticle->doPurge();
+					$attachmentWikiPage = \WikiPage::factory($attachmentTitle);
+					$attachmentWikiPage->doPurge();
 					$dbw = \wfGetDB( DB_MASTER );
 					$dbw->delete('page_attachment_data', array('attached_to_page_id' => $attachedToPageId, 'attachment_page_id' => $attachmentId));
 					$dbw->delete('imagelinks', array('il_from' => $attachedToPageId, 'il_to' => $attachmentDatabaseKey));
