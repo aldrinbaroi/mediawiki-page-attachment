@@ -60,5 +60,10 @@ $wgPageAttachment_messageComposers['email'] = 'PageAttachment\\Notification\\Ema
 #
 $wgPageAttachment_messageTransporters['email'] = 'PageAttachment\\Notification\\Email\\EmailTransporter';
 
+# ---------------------------------------------------------------------------
+# FileStreamer
+# ---------------------------------------------------------------------------
+#
+
 
 ## ::END ::
