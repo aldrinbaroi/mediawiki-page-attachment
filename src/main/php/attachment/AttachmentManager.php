@@ -239,8 +239,8 @@ class AttachmentManager
 			}
 			catch(Exception $e)
 			{
-				\wfErrorLog('PageAttachment', 'Failed to create attachment link');
-				\wfErrorLog('PageAttachment', 'DB Error: ' . $e.getMessage());
+				\wfDebugLog('PageAttachment', 'Failed to create attachment link');
+				\wfDebugLog('PageAttachment', 'DB Error: ' . $e.getMessage());
 				$this->session->setStatusMessage('FailedToAddAttachment', $attachmentName);
 			}
 		}
