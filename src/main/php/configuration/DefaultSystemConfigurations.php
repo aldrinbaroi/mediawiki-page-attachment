@@ -64,6 +64,12 @@ $wgPageAttachment_messageTransporters['email'] = 'PageAttachment\\Notification\\
 # FileStreamer
 # ---------------------------------------------------------------------------
 #
+$wgPageAttachment_fileStreamers['Basic']                  = 'PageAttachment\\Download\\BasicFileStreamer';
+$wgPageAttachment_fileStreamers['WithBasicAndDigestAuth'] = 'PageAttachment\\Download\\FileStreamerWithBasicAndDigestAuth';
+
+#$wgPageAttachment_fileStreamerType = 'Basic';
+$wgPageAttachment_fileStreamerType = 'WithBasicAndDigestAuth';
+
 
 
 ## ::END ::
