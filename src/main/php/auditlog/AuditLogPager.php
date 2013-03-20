@@ -93,7 +93,7 @@ class AuditLogPager extends \TablePager
 		$tables = array( 'page_attachment_audit_log' );
 		$fields = array_keys( $this->getFieldNames() );
 		$options = $join_conds = array();
-		$options = array('GROUP BY' => 'attached_to_page_id, attachment_file_name, activity_time' );
+		//$options = array('GROUP BY' => 'attached_to_page_id, attachment_file_name, activity_time' );
 		$join_conds = '';
 		return array(
 				'tables'     => $tables,
@@ -152,7 +152,7 @@ class AuditLogPager extends \TablePager
 				break;
 					
 			case 'activity_type':
-				return \wfMsg($value);
+				return \wfMsg(trim($value));
 				break;
 					
 			default:

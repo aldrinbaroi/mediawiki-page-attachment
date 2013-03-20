@@ -42,6 +42,7 @@ class FileStreamerWithBasicAndDigestAuth extends AbstractFileStreamer implements
 		parent::__construct();
 	}
 
+	// TODO Cache the authorization info for X seconds in session
 	protected function openFileStream($fileUrl)
 	{
 		$filePointer = false;
