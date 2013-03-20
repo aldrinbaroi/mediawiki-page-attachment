@@ -35,12 +35,14 @@ class DownloadManager
 	private $security;
 	private $session;
 	private $attachmentManager;
+	private $fileStreamerFactory;
 
 	function __construct($security, $session, $attachmentManager)
 	{
 		$this->security = $security;
 		$this->session = $session;
 		$this->attachmentManager = $attachmentManager;
+		$this->fileStreamerFactory = new FileStreamerFactory();
 	}
 
 	function sendRequestedFile()
@@ -56,8 +58,17 @@ class DownloadManager
 		$validAttachment = $this->attachmentManager->isAttachmentExist($downloadFileName);
 		if ($attachmentDownloadAllowed && $requestValidationTokenValid && isset($downloadFromPage) && $validAttachment)
 		{
-			$fs = new FileStreamer();
-			$fs->streamFile($downloadFileName);
+			$fs = $this->fileStreamerFactory->createFileStreamer();
+			try
+			{
+				$fs->streamFile($downloadFileName);
+			}
+			catch(FileStreamerException $e)
+			{
+				$this->session->setStatusMessage('FailedSendTheRequestedFile_ContactSystemAdministrator');
+				$redirectPage = $wgScriptPath . '/index.php/' . $downloadFromPage->getFullURL();
+				header("Location: " . $redirectPage);
+			}
 		}
 		else
 		{
@@ -97,7 +108,7 @@ class DownloadManager
 			{
 				$downloadFromPage = \wfMsgForContent('mainpage');
 			}
-			$redirectPage = $wgScriptPath . '/index.php/' . $downloadFromPage;
+			$redirectPage = $wgScriptPath . '/index.php/' . $downloadFromPage->getFullURL();
 			header("Location: " . $redirectPage);
 		}
 	}
