@@ -26,7 +26,8 @@ namespace PageAttachment\Setup;
 
 class DatabaseSetup
 {
-	function __construct() { }
+	function __construct() {
+	}
 
 	function setupDatabase()
 	{
@@ -37,17 +38,18 @@ class DatabaseSetup
 		global $wgPageAttachment_useInternalCache;
 		global $wgPageAttachment_internalCacheType;
 		global $wgPageAttachment_enableAuditLog;
-		
+
 		switch ($wgDBtype)
 		{
 			case 'mysql':
+			case 'postgres':
 				break;
 			default:
-				throw new ErrorException('Fatal Error: [' . $wgDBtype . '] is not yet supported!');
+				throw new \ErrorException('Fatal Error: [' . $wgDBtype . '] is not yet supported!');
 		}
 
-		$sqlFileDir = dirname( __FILE__ ) . '/sql/';
-		
+		$sqlFileDir = dirname( __FILE__ ) . '/sql/'. $wgDBtype . '/';
+
 		# Attachment Data Table
 		$tableName['data'] = 'page_attachment_data';
 		$tableSqlFile['data'] = $sqlFileDir . 'data.table.sql';
@@ -55,24 +57,24 @@ class DatabaseSetup
 
 		# Attacment Delete Data Table
 		$tableName['deleteData'] = 'page_attachment_delete_data';
-		$tableSqlFile['deleteData'] = $sqlFileDir . $wgDBtype . '/deletedata.table.sql';
+		$tableSqlFile['deleteData'] = $sqlFileDir . 'deletedata.table.sql';
 		$indexSqlFile['deleteData'] = $sqlFileDir . 'deletedata.index.sql';
 
 		# Cache Table
 		$tableName['cache'] = 'page_attachment_cache';
-		$tableSqlFile['cache'] = $sqlFileDir . $wgDBtype . '/cache.table.sql';
+		$tableSqlFile['cache'] = $sqlFileDir . 'cache.table.sql';
 		$indexSqlFile['cache'] = $sqlFileDir . 'cache.index.sql';
 
 		# Audit Log Table
 		$tableName['auditLog'] = 'page_attachment_audit_log';
-		$tableSqlFile['auditLog'] = $sqlFileDir . $wgDBtype . '/auditlog.table.sql';
+		$tableSqlFile['auditLog'] = $sqlFileDir . 'auditlog.table.sql';
 		$indexSqlFile['auditLog'] = $sqlFileDir . 'auditlog.index.sql';
-		
+
 		$wgExtNewTables[]  = array($tableName['data'], $tableSqlFile['data']);
 		$wgExtNewIndexes[] = array($tableName['data'], $tableName['data'], $indexSqlFile['data']);
 		$wgExtNewTables[]  = array($tableName['deleteData'], $tableSqlFile['deleteData']);
 		$wgExtNewIndexes[] = array($tableName['deleteData'], $tableName['deleteData'], $indexSqlFile['deleteData']);
-		
+
 		if (isset($wgPageAttachment_useInternalCache) && ($wgPageAttachment_useInternalCache == true))
 		{
 			if (isset($wgPageAttachment_internalCacheType) && ($wgPageAttachment_internalCacheType == 'Database'))

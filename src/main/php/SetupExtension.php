@@ -113,6 +113,11 @@ $wgAutoloadClasses['PageAttachment\\BrowseSearch\\ListFiles']                   
 $wgAutoloadClasses['PageAttachment\\Upload\\UploadHelper']                        = $dir . 'upload/UploadHelper.php';
 $wgAutoloadClasses['PageAttachment\\Upload\\Upload']                              = $dir . 'upload/Upload.php';
 $wgAutoloadClasses['PageAttachment\\Download\\FileStreamer']                      = $dir . 'download/FileStreamer.php';
+$wgAutoloadClasses['PageAttachment\\Download\\FileStreamerException']             = $dir . 'download/FileStreamerException.php';
+$wgAutoloadClasses['PageAttachment\\Download\\AbstractFileStreamer']              = $dir . 'download/AbstractFileStreamer.php';
+$wgAutoloadClasses['PageAttachment\\Download\\BasicFileStreamer']                 = $dir . 'download/BasicFileStreamer.php';
+$wgAutoloadClasses['PageAttachment\\Download\\FileStreamerWithBasicAndDigestAuth']= $dir . 'download/FileStreamerWithBasicAndDigestAuth.php';
+$wgAutoloadClasses['PageAttachment\\Download\\FileStreamerFactory']               = $dir . 'download/FileStreamerFactory.php';
 $wgAutoloadClasses['PageAttachment\\Download\\DownloadManager']                   = $dir . 'download/DownloadManager.php';
 $wgAutoloadClasses['PageAttachment\\UI\\HTML']                                    = $dir . 'ui/HTML.php';
 $wgAutoloadClasses['PageAttachment\\UI\\Command']                                 = $dir . 'ui/Command.php';

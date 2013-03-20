@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright (C) 2011 Aldrin Edison Baroi
+ * Copyright (C) 2013 Aldrin Edison Baroi
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,27 +30,46 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-interface FileStreamer 
+abstract class AbstractFileStreamer implements FileStreamer
 {
+
 	/**
-	 * 
+	 *
+	 */
+	public function __construct()
+	{
+
+	}
+
+	/**
+	 *
 	 * @param string $downloadFileName
 	 * @throws FileStreamerException
 	 */
-	public function streamFile($downloadFileName);
-}
-
-/*
-class FileStreamer
-{
-
-	function streamFile($downloadFileName)
+	public function streamFile($downloadFileName)
 	{
 		$aTitle = \Title::newFromText($downloadFileName, NS_FILE);
 		$fileName =  $aTitle->getText();
 		$file = \wfFindFile($aTitle);
 		$fileUrl = $file->getFullUrl();
 		$fileSize =  $file->getSize();
+		$filePointer = $this->openFileStream($fileUrl);
+		if (is_bool($filePointer))
+		{
+			throw new FileStreamerException();
+		}
+		else
+		{
+			$this->sendHeaders($fileName, $fileSize);
+			\fpassthru($filePointer);
+			\fclose($filePointer);
+		}
+	}
+
+	protected abstract function openFileStream($fileUrl);
+
+	private function sendHeaders($fileName, $fileSize)
+	{
 		header("Pragma: public");
 		header("Expires: 0");
 		header('Cache-Control: no-store, no-cache, must-revalidate');
@@ -66,37 +85,8 @@ class FileStreamer
 		header('Content-Type: application/x-download');
 		header('Content-Disposition: attachment; filename="' . $fileName . '"');
 		header('Content-Transfer-Encoding: binary');
-		//$username = 'aldrin';
-		//$password = 'aldrin';
-		//$cred = sprintf('Authorization: Basic %s', base64_encode("$username:$password") );
-		$allHeaders = \getallheaders();
-		foreach ($allHeaders as $key => $value)
-		{
-			if (\strtolower($key) == 'authorization')
-			{
-				$credential = $value;
-			}
-		}
-		if (isset($credential))
-		{
-			$authorization = 'Authorization: ' . $credential;
-			$opts = array(
-					'http' => array(
-							'method' => 'GET',
-							'header' => array($authorization))
-			);
-			$ctx = stream_context_create($opts);
-			$fp = \fopen($fileUrl, 'rb', false, $ctx);
-		}
-		else
-		{
-			$fp = \fopen($fileUrl, 'rb');
-		}
-		fpassthru($fp);
-		fclose($fp);
 	}
 
 }
-*/
 
 ## ::END::
