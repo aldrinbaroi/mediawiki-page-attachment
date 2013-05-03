@@ -205,11 +205,13 @@ function pageAttachment_addAttachmentListBox()
 	var attachmentListBox = document.getElementById("PageAttachment");
 	if (attachmentListBox == null)
 	{
+		var lineBreak = document.createElement("br");
 		attachmentListBox = document.createElement("div");
 		var id = document.createAttribute("id");
 		attachmentListBox.setAttributeNode(id);
 		attachmentListBox.id = "PageAttachment";
 		var pageAttachmentContainer = document.getElementById("PageAttachmentContainer");
+		pageAttachmentContainer.appendChild(lineBreak);
 		pageAttachmentContainer.appendChild(attachmentListBox);
 	}
 }

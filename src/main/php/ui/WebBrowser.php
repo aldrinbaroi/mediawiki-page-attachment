@@ -71,7 +71,7 @@ class WebBrowser
 	function setupAttachmentListSection(&$data)
 	{
 		$_data = '';
-		$attachmentContainerDiv = \HTML::element('br') . \HTML::element('div', array('id' => 'PageAttachmentContainer'));
+		$attachmentContainerDiv = \HTML::element('div', array('id' => 'PageAttachmentContainer'));
 		$page = $this->session->getCurrentPage();
 		if ($this->isSetupAttachmentListSection($page))
 		{
