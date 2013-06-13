@@ -101,7 +101,7 @@ class LocalizationHelper
 	{
 		if (!isset($this->timezone))
 		{
-			global $wgLocalTimezone;
+			global $wgLocaltimezone;
 
 			$tzUser = '';
 			$tzOffset = $this->user->getTimeCorrection();
@@ -116,13 +116,13 @@ class LocalizationHelper
 			}
 			if ($tzUser == '')
 			{
-				if ($wgLocalTimezone == null)
+				if ($wgLocaltimezone == null)
 				{
 					$tzCode = 'UTC';
 				}
 				else
 				{
-					$tzCode = $wgLocalTimezone;
+					$tzCode = $wgLocaltimezone;
 				}
 			}
 			else

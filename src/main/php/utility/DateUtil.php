@@ -87,7 +87,7 @@ class DateUtil
 		if (!isset($this->userTimezone))
 		{
 			global $wgUser;
-			global $wgLocalTimezone;
+			global $wgLocaltimezone;
 
 			$tzOffset = $wgUser->getOption( 'timecorrection' );
 			$tzInfo = explode( '|', $tzOffset);
@@ -98,13 +98,13 @@ class DateUtil
 			}
 			if ($tzUser == '')
 			{
-				if ($wgLocalTimezone == null)
+				if ($wgLocaltimezone == null)
 				{
 					$tzCode = 'UTC';
 				}
 				else
 				{
-					$tzCode = $wgLocalTimezone;
+					$tzCode = $wgLocaltimezone;
 				}
 			}
 			else
