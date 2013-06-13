@@ -76,6 +76,7 @@ $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoTitle']                      
 $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoArticle']                      = $dir . 'utility/PsuedoArticle.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\StringUtil']                         = $dir . 'utility/StringUtil.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\ICache']                               = $dir . 'cache/ICache.php';
+$wgAutoloadClasses['PageAttachment\\Cache\\Provider\\AbstractCacheProvider']      = $dir . 'cache/provider/AbstractCacheProvider.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\Provider\\MWCacheObjWrapper']          = $dir . 'cache/provider/MWCacheObjWrapper.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\Provider\\SQLiteCache']                = $dir . 'cache/provider/Sqlite3Cache.php';
 $wgAutoloadClasses['PageAttachment\\Cache\\Provider\\DatabaseCache']              = $dir . 'cache/provider/DatabaseCache.php';
