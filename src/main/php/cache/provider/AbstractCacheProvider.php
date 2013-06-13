@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright (C) 2011 Aldrin Edison Baroi
+ * Copyright (C) 2013 Aldrin Edison Baroi
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,37 +30,14 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class MWCacheObjWrapper extends AbstractCacheProvider implements \PageAttachment\Cache\ICache
+abstract class AbstractCacheProvider
 {
-	private $mwCacheObj;
-
-	function __construct($mwCacheObj)
+	protected function getQualifiedId($id)
 	{
-		$this->mwCacheObj = $mwCacheObj;
-	}
-
-	function store($id, $obj)
-	{
-		$data = serialize($obj);
-		$this->mwCacheObj->set($this->getQualifiedId($id), $data);
-	}
-
-	function retrieve($id)
-	{
-		$obj = null;
-		$data = $this->mwCacheObj->get($this->getQualifiedId($id));
-		if ($data)
-		{
-			$obj = unserialize($data);
-		}
-		return $obj;
-	}
-
-	function remove($id)
-	{
-		$this->mwCacheObj->delete($this->getQualifiedId($id));
+		$qualifiedId = \wfMemcKey('pageAttachment_') . $id;
+		return $qualifiedId;
 	}
 
 }
 
-## :: END ::
+## ::END::
