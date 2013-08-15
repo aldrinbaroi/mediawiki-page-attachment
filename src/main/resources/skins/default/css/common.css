@@ -21,6 +21,11 @@
  *
  */
 
+#PageAttachmentContainer
+{
+    clear:both;
+}
+
 #PageAttachment
 {
     border: 1px solid LightSkyBlue;
