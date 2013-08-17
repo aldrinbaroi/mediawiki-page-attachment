@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\Download;
+namespace PageAttachment\File\FileStreamer\WorkAround;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,13 +30,29 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-
-class FileStreamerException extends \Exception
+class FileStreamer_PHP_5p3 implements \PageAttachment\File\FileStreamer\IFileStreamer
 {
+	private $fileName;
+	private $title;
+	private $titleName;
+	private $file;
+	private $fileBackend;
+	private $fileStreamerObject;
 
-	public function __construct()
+	public function __construct($fileName, $title, $titleName, $file, $fileStreamerObject)
 	{
-		parent::__construct();
+		$this->fileName = $fileName;
+		$this->title = $title;
+		$this->titleName = $titleName;
+		$this->file = $file;
+		$this->fileStreamerObject = $fileStreamerObject;
+	}
+
+	public function streamFile($fileName)
+	{
+		$path = $this->file->getPath();
+		$param = array('src' => $path, 'downloadFileName' => $fileName);
+		$this->fileStreamerObject->streamFile__($param);
 	}
 
 }

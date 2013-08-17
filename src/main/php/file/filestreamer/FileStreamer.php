@@ -22,7 +22,7 @@
  *
  */
 
-namespace PageAttachment\Download;
+namespace PageAttachment\File\FileStreamer;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,30 +30,31 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-class FileStreamerFactory
+class FileStreamer implements IFileStreamer
 {
-	private static $fileStreamer;
+	private $fileName;
+	private $title;
+	private $titleName;
+	private $file;
+	private $fileBackend;
+	private $streamFunction;
 
-	/**
-	 *
-	 */
-	public function __construct()
+	public function __construct($fileName, $title, $titleName, $file, $streamFunction)
 	{
+		$this->fileName = $fileName;
+		$this->title = $title;
+		$this->titleName = $titleName;
+		$this->file = $file;
+		$this->streamFunction = $streamFunction;
 	}
 
-	/**
-	 *
-	 */
-	public function createFileStreamer()
+	public function streamFile($fileName)
 	{
-		if (!isset(FileStreamerFactory::$fileStreamer))
-		{
-			global $wgPageAttachment_fileStreamers;
-			global $wgPageAttachment_fileStreamerType;
-				
-			FileStreamerFactory::$fileStreamer = new $wgPageAttachment_fileStreamers[$wgPageAttachment_fileStreamerType];
-		}
-		return FileStreamerFactory::$fileStreamer;
+		$title = \Title::newFromText($fileName, NS_FILE);
+		$titleName =  $title->getText();
+		$file = \wfFindFile($titleName);
+		$fileBackend = $file->getRepo()->getBackend();
+		$status = $fileBackend->streamFile($params);
 	}
 
 }
