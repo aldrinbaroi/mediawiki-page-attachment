@@ -22,7 +22,8 @@
  *
  */
 
-namespace PageAttachment\Download;
+
+namespace PageAttachment\Utility;
 
 if (!defined('MEDIAWIKI'))
 {
@@ -30,32 +31,44 @@ if (!defined('MEDIAWIKI'))
 	exit( 1 );
 }
 
-
-class BasicFileStreamer extends AbstractFileStreamer implements FileStreamer
+class PHPVersion
 {
 
-	/**
-	 *
-	 */
-	public function __construct()
+	private $version;
+	private $majorVersion;
+	private $minorVersion;
+	private $patchVersion;
+
+	function __construct()
 	{
-		parent::__construct();
+		$versionString = phpversion();
+		$version = preg_replace('/[^0-9.]+.*/', '', $versionString);
+		$versionInfo = explode( '.', $version);
+		$this->majorVersion = $versionInfo[0];
+		$this->minorVersion = $versionInfo[1];
+		$this->patchVersion = $versionInfo[2];
 	}
 
-	protected function openFileStream($fileUrl)
+	function getVersion()
 	{
-		$filePointer = false;
-		try
-		{
-			$filePointer = \fopen($fileUrl, 'rb');
-		}
-		catch(Exception $e)
-		{
-			\wfDebugLog('PageAttachment', 'Failed open file stream. URL: ' . $fileUrl . '  Error: ' . $e->getMessage());
-		}
-		return $filePointer;
+		return $this->version;
+	}
+
+	function getMajorVersion()
+	{
+		return $this->majorVersion;
+	}
+
+	function getMinorVersion()
+	{
+		return $this->minorVersion;
+	}
+
+	function getPatchNumber()
+	{
+		return $this->patchNumber;
 	}
 
 }
 
-## ::END::
+## :: END ::

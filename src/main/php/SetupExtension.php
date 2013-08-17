@@ -71,6 +71,7 @@ $wgAutoloadClasses['PageAttachment\\Configuration\\StaticConfiguration']        
 $wgAutoloadClasses['PageAttachment\\Configuration\\RuntimeConfiguration']         = $dir . 'configuration/RuntimeConfiguration.php';
 $wgAutoloadClasses['PageAttachment\\Setup\\DatabaseSetup']                        = $dir . 'setup/DatabaseSetup.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\MediaWikiVersion']                   = $dir . 'utility/MediaWikiVersion.php';
+$wgAutoloadClasses['PageAttachment\\Utility\\PHPVersion']                         = $dir . 'utility/PHPVersion.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\DateUtil']                           = $dir . 'utility/DateUtil.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoTitle']                        = $dir . 'utility/PsuedoTitle.php';
 $wgAutoloadClasses['PageAttachment\\Utility\\PsuedoArticle']                      = $dir . 'utility/PsuedoArticle.php';
@@ -113,12 +114,6 @@ $wgAutoloadClasses['PageAttachment\\BrowseSearch\\ImageListPager']              
 $wgAutoloadClasses['PageAttachment\\BrowseSearch\\ListFiles']                     = $dir . 'browse-search/ListFiles.php';
 $wgAutoloadClasses['PageAttachment\\Upload\\UploadHelper']                        = $dir . 'upload/UploadHelper.php';
 $wgAutoloadClasses['PageAttachment\\Upload\\Upload']                              = $dir . 'upload/Upload.php';
-$wgAutoloadClasses['PageAttachment\\Download\\FileStreamer']                      = $dir . 'download/FileStreamer.php';
-$wgAutoloadClasses['PageAttachment\\Download\\FileStreamerException']             = $dir . 'download/FileStreamerException.php';
-$wgAutoloadClasses['PageAttachment\\Download\\AbstractFileStreamer']              = $dir . 'download/AbstractFileStreamer.php';
-$wgAutoloadClasses['PageAttachment\\Download\\BasicFileStreamer']                 = $dir . 'download/BasicFileStreamer.php';
-$wgAutoloadClasses['PageAttachment\\Download\\FileStreamerWithBasicAndDigestAuth']= $dir . 'download/FileStreamerWithBasicAndDigestAuth.php';
-$wgAutoloadClasses['PageAttachment\\Download\\FileStreamerFactory']               = $dir . 'download/FileStreamerFactory.php';
 $wgAutoloadClasses['PageAttachment\\Download\\DownloadManager']                   = $dir . 'download/DownloadManager.php';
 $wgAutoloadClasses['PageAttachment\\UI\\HTML']                                    = $dir . 'ui/HTML.php';
 $wgAutoloadClasses['PageAttachment\\UI\\Command']                                 = $dir . 'ui/Command.php';
@@ -143,6 +138,19 @@ $wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailMessageComposer'] 
 $wgAutoloadClasses['PageAttachment\\Notification\\Email\\EmailTransporter']       = $dir . 'notification/email/EmailTransporter.php';
 $wgAutoloadClasses['PageAttachment\\RequestHandler']                              = $dir . 'RequestHandler.php';
 $wgAutoloadClasses['PageAttachment\\MagicWord\\MagicWordHandler']                 = $dir . 'magicword/MagicWordHandler.php';
+//
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\IFileStreamer']                              = $dir . 'file/filestreamer/IFileStreamer.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\FileStreamer']                               = $dir . 'file/filestreamer/FileStreamer.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\FileStreamerException']                      = $dir . 'file/filestreamer/FileStreamerException.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\FileStreamerHelper']                         = $dir . 'file/filestreamer/FileStreamerHelper.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\FileStreamerFactory']                        = $dir . 'file/filestreamer/FileStreamerFactory.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\FileStreamerFactoryException']               = $dir . 'file/filestreamer/FileStreamerFactoryException.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\WorkAround\\StreamFile']                     = $dir . 'file/filestreamer/workaround/StreamFile.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\WorkAround\\FileStreamer_PHP_5p4']           = $dir . 'file/filestreamer/workaround/FileStreamer_PHP_5.4.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\WorkAround\\FileStreamer_PHP_5p3']           = $dir . 'file/filestreamer/workaround/FileStreamer_PHP_5.3.php';
+$wgAutoloadClasses['PageAttachment\\File\\FileStreamer\\WorkAround\\FSFileBackend_Override_PHP_5p3'] = $dir . 'file/filestreamer/workaround/FSFileBackend_Override_PHP_5.3.php';
+
+//
 
 ## Ajax Hooks
 $wgAjaxExportList[]                               = 'PageAttachment\\Ajax\\getPageAttachments';

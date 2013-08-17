@@ -42,7 +42,7 @@ class DownloadManager
 		$this->security = $security;
 		$this->session = $session;
 		$this->attachmentManager = $attachmentManager;
-		$this->fileStreamerFactory = new FileStreamerFactory();
+		$this->fileStreamerFactory = new \PageAttachment\File\FileStreamer\FileStreamerFactory();
 	}
 
 	function sendRequestedFile()
@@ -58,7 +58,8 @@ class DownloadManager
 		$validAttachment = $this->attachmentManager->isAttachmentExist($downloadFileName);
 		if ($attachmentDownloadAllowed && $requestValidationTokenValid && isset($downloadFromPage) && $validAttachment)
 		{
-			$fs = $this->fileStreamerFactory->createFileStreamer();
+			//$fs = $this->fileStreamerFactory->createFileStreamer();
+			$fs = $this->fileStreamerFactory->createFileStreamer($downloadFileName);
 			try
 			{
 				$fs->streamFile($downloadFileName);

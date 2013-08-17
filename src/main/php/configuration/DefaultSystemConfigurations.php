@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the 
+ * with this program; if not, write to the
  *     Free Software Foundation, Inc.,
  *     51 Franklin Street, Fifth Floor
  *     Boston, MA 02110-1301, USA.
@@ -22,14 +22,14 @@
  *
  * NOTE: *** RECOMMENDATION: DO NOT MODIFY THIS FILE ***
  *       Put your site specific system settings in the "SiteSpecificSystemConfigurations.php" file
- *       
+ *
  */
 
 if (!defined('MEDIAWIKI'))
 {
 	echo("This is an extension to the MediaWiki package and cannot be run standalone.\n");
 	exit( 1 );
-} 
+}
 
 # ---------------------------------------------------------------------------
 # MediaWiki's upload permission checker
@@ -59,17 +59,6 @@ $wgPageAttachment_messageComposers['email'] = 'PageAttachment\\Notification\\Ema
 # :: Message Transporters ::
 #
 $wgPageAttachment_messageTransporters['email'] = 'PageAttachment\\Notification\\Email\\EmailTransporter';
-
-# ---------------------------------------------------------------------------
-# FileStreamer
-# ---------------------------------------------------------------------------
-#
-$wgPageAttachment_fileStreamers['Basic']                  = 'PageAttachment\\Download\\BasicFileStreamer';
-$wgPageAttachment_fileStreamers['WithBasicAndDigestAuth'] = 'PageAttachment\\Download\\FileStreamerWithBasicAndDigestAuth';
-
-#$wgPageAttachment_fileStreamerType = 'Basic';
-$wgPageAttachment_fileStreamerType = 'WithBasicAndDigestAuth';
-
 
 
 ## ::END ::
