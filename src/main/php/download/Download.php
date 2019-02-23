@@ -29,8 +29,17 @@ $mediaWikiBaseDir = dirname( __FILE__ ) . '/../../..';
 chdir($mediaWikiBaseDir);
 $preIP = \getcwd();
 require_once( "$preIP/includes/WebStart.php" );
+# MediaWiki class source file was renamed from Wiki.php to
+# MediaWiki.php starting with version 1.24.
+# See Change-Id: I53dfa5ae98c8f45b32f911419217692cfd760cd7
+$oldVersion = version_compare( $wgVersion, '1.24', '<' );
+if ( $oldVersion ) {
+	$mediaWikiClassFile = 'Wiki.php';
+} else {
+	$mediaWikiClassFile = 'MediaWiki.php';
+}
 # Initialize MediaWiki base class
-require_once( "$preIP/includes/Wiki.php" );
+require_once( "$preIP/includes/$mediaWikiClassFile" );
 $mediaWiki = new \MediaWiki();
 // Stream the requested file
 $requestHandler = new \PageAttachment\RequestHandler();
