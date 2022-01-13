@@ -6,7 +6,8 @@ By default, attachments are only allowed to be added to pages in the "Main" name
 
 This extension adds an attachment list box on the wiki page with buttons that allow you to add, remove attachments and other functions.  See the screenshot below:
 
-![http://wiki.mediawiki-page-attachment.googlecode.com/hg/images/PageAttachmentExt_Screenshot.png](http://wiki.mediawiki-page-attachment.googlecode.com/hg/images/PageAttachmentExt_Screenshot.png)
+![Alt text](https://www.mediawiki.org/wiki/Extension:PageAttachment#/media/File:PageAttachmentExt_Screenshot_v2.png)
+
 # [News](News.md) #
 &lt;wiki:gadget url="http://wiki.mediawiki-page-attachment.googlecode.com/hg/gadgets/wikigateway.xml" height="500" width="100%" border="0"/&gt;
 # [Security](Security.md) #
